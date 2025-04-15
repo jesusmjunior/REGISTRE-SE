@@ -21,7 +21,7 @@ except Exception as e:
 with st.form("formulario"):
     st.subheader("🔢 Dados da Serventia")
 
-    nome_serventia = st.selectbox("Selecione a Serventia", options=serventias)
+    nome_serventia = st.selectbox("Selecione a Serventia", options=serventias, index=0, placeholder="Digite para buscar...", label_visibility="visible")
     email = st.text_input("Endereço de e-mail da serventia")
     telefone = st.text_input("Whatsapp de contato")
 
