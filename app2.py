@@ -1,15 +1,19 @@
 import streamlit as st
 import pandas as pd
 import requests
+import base64
 from datetime import datetime
 import json
 import uuid
 import os
+import io
 
-# Configurações da API do Google Sheets
-SHEET_ID = "1QeeLnhLhLh8VYUcahN9Dqy2DlCc3VPuqrVcqJJp-oQM"  # ID da planilha
-SHEET_NAME = "Respostas do formulário 1"  # Nome da planilha
-API_KEY = "AIzaSyAKibc0A3TerDdfQeZBLePxU01PbK_53Lw"
+# Configurações do GitHub
+GITHUB_TOKEN = st.secrets.get("GH_TOKEN")  # Token de acesso
+REPO_OWNER = "jesusmjunior"  # Usuário do GitHub
+REPO_NAME = "REGISTRE-SE"    # Nome do repositório
+FILE_PATH = "REGISTRE-SE COGEX - Página1.csv"  # Caminho do arquivo CSV
+GITHUB_API_BASE = "https://api.github.com"
 
 # Configuração da página
 st.set_page_config(page_title="Formulário de Participação COGEX", layout="centered", page_icon="📋")
@@ -22,6 +26,69 @@ def carregar_json(caminho_arquivo):
     except Exception as e:
         st.error(f"Erro ao carregar {caminho_arquivo}: {e}")
         return None
+
+# Função para salvar dados no GitHub via API
+def salvar_dados_github(dados):
+    # Validar token de acesso
+    if not GITHUB_TOKEN:
+        st.error("Token de acesso do GitHub não configurado.")
+        return False
+    
+    try:
+        # Cabeçalhos para autenticação
+        headers = {
+            "Authorization": f"token {GITHUB_TOKEN}",
+            "Accept": "application/vnd.github.v3+json"
+        }
+        
+        # URL da API do GitHub
+        url_get = f"{GITHUB_API_BASE}/repos/{REPO_OWNER}/{REPO_NAME}/contents/{FILE_PATH}"
+        
+        # Obter conteúdo atual do arquivo
+        response_get = requests.get(url_get, headers=headers)
+        
+        # Preparar DataFrame
+        if response_get.status_code == 200:
+            # Decodificar conteúdo existente
+            current_content = base64.b64decode(response_get.json()['content']).decode('utf-8')
+            df_existente = pd.read_csv(io.StringIO(current_content))
+            current_sha = response_get.json()['sha']
+        else:
+            # Criar DataFrame vazio se arquivo não existir
+            df_existente = pd.DataFrame(columns=list(dados.keys()))
+            current_sha = None
+        
+        # Adicionar novo registro
+        df_novo = pd.DataFrame([dados])
+        df_combinado = pd.concat([df_existente, df_novo], ignore_index=True)
+        
+        # Converter para CSV
+        csv_content = df_combinado.to_csv(index=False)
+        
+        # Codificar para base64
+        csv_base64 = base64.b64encode(csv_content.encode()).decode()
+        
+        # Preparar payload para atualização
+        payload = {
+            "message": f"Adicionar registro - {dados['Protocolo']}",
+            "content": csv_base64,
+            "sha": current_sha
+        }
+        
+        # Enviar atualização
+        response_put = requests.put(url_get, headers=headers, json=payload)
+        
+        # Verificar resposta
+        if response_put.status_code in [200, 201]:
+            st.success("Registro salvo com sucesso no GitHub!")
+            return True
+        else:
+            st.error(f"Falha ao salvar no GitHub. Erro: {response_put.text}")
+            return False
+    
+    except Exception as e:
+        st.error(f"Erro ao salvar dados no GitHub: {e}")
+        return False
 
 # Carregar serventias
 def carregar_serventias():
@@ -44,61 +111,6 @@ def preparar_opcoes_publicos():
 # Função para gerar protocolo único
 def gerar_protocolo():
     return str(uuid.uuid4()).split('-')[0].upper()
-
-# Função para salvar dados no Google Sheets
-def salvar_dados_google_sheets(dados):
-    try:
-        # Construir URL para enviar dados
-        url = f"https://sheets.googleapis.com/v4/spreadsheets/{SHEET_ID}/values/{SHEET_NAME}!A:Z:append"
-        
-        # Preparar parâmetros da requisição
-        params = {
-            "key": API_KEY,
-            "valueInputOption": "RAW"
-        }
-        
-        # Converter dicionário para lista de valores na ordem correta
-        ordem_colunas = [
-            "Protocolo", 
-            "Carimbo de data/hora", 
-            "Identificação da Serventia Extrajudicial", 
-            "Endereço de e-mail", 
-            "Whatsapp", 
-            "Participação na Semana Registre-se", 
-            "Motivo da não participação", 
-            "Ações realizadas", 
-            "Públicos atendidos", 
-            "2as vias emitidas", 
-            "Registros de nascimento", 
-            "Averbações de paternidade", 
-            "Retificações de registro", 
-            "Registros tardios", 
-            "Restaurações de registro", 
-            "Classificação", 
-            "Tags"
-        ]
-        
-        # Preparar lista de valores na ordem correta
-        valores = [dados.get(coluna, "") for coluna in ordem_colunas]
-        
-        # Corpo da requisição
-        body = {
-            "values": [valores]
-        }
-        
-        # Enviar requisição
-        response = requests.post(url, params=params, json=body)
-        
-        # Verificar resposta
-        if response.status_code in [200, 201]:
-            return True
-        else:
-            st.error(f"Erro ao salvar na planilha: {response.text}")
-            return False
-    
-    except Exception as e:
-        st.error(f"Erro ao enviar dados para o Google Sheets: {e}")
-        return False
 
 # Função para salvar dados localmente (backup)
 def salvar_dados_local(dados):
@@ -135,7 +147,6 @@ def gerar_html_confirmacao(dados):
     </head>
     <body>
         <div style='text-align: center;'>
-            <img src='COGEX.png' width='300' alt='Logo COGEX'/>
             <h1>COGEX - REGISTRE-SE</h1>
         </div>
         
@@ -276,8 +287,8 @@ def main():
             "Tags": tags
         }
 
-        # Tentar salvar dados no Google Sheets
-        sheets_salvo = salvar_dados_google_sheets(dados)
+        # Tentar salvar dados no GitHub
+        sheets_salvo = salvar_dados_github(dados)
         
         # Salvar backup local independentemente do resultado
         salvar_dados_local(dados)
@@ -302,7 +313,7 @@ def main():
                 help="Baixe o comprovante de participação"
             )
         else:
-            st.error("Falha ao salvar o registro na planilha. Verifique sua conexão.")
+            st.error("Falha ao salvar o registro. Verifique sua conexão.")
 
 # Execução da aplicação
 if __name__ == "__main__":
