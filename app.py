@@ -3,23 +3,19 @@ import pandas as pd
 import requests
 from datetime import datetime
 import json
+import uuid
 
 st.set_page_config(page_title="Formulário de Participação", layout="centered")
 st.title("📅 Formulário de Registro de Serventia")
 
-# --- DADOS DA SERVENTIA EM SELECTBOX ---
-serventias = [
-    "Cartório da 1ª Zona de Registro de Imóveis de São Luis",
-    "Cartório do ofício Único de Poção de Pedras",
-    "Cartório da 2ª Zona de Registro de Imóveis de São Luis",
-    "Cartório do 7º Ofício de Imperatriz",
-    "Cartório do 6º Ofício de Imperatriz",
-    "Cartório do 1º Ofício de Caxias",
-    "Cartório do 1º Ofício de São José de Ribamar",
-    "Cartório do 2º Ofício de Açailândia",
-    "Cartório do 1º Ofício de Açailândia",
-    "Cartório do 1º Ofício de Timon"
-]
+# --- CARREGAR SERVENTIAS DO JSON EXTERNO ---
+try:
+    with open("serventias_registre_se.json", "r", encoding="utf-8") as f:
+        data = json.load(f)
+        serventias = [s["nome"] for s in data["serventias"]]
+except Exception as e:
+    st.error(f"Erro ao carregar JSON de serventias: {e}")
+    serventias = []
 
 # --- FORMULÁRIO DE ENTRADA ---
 with st.form("formulario"):
@@ -51,7 +47,9 @@ with st.form("formulario"):
 # --- PROCESSAMENTO DOS DADOS ---
 if enviado:
     data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    protocolo = str(uuid.uuid4()).split('-')[0].upper()
     dados = {
+        "Protocolo": protocolo,
         "Carimbo de data/hora": data_hora,
         "Identificação da Serventia Extrajudicial": nome_serventia,
         "Endereço de e-mail": email,
@@ -76,6 +74,28 @@ if enviado:
 
     st.warning("⚠️ Para salvar na planilha pública, o sistema precisa de uma API intermediária com autenticação via chave JSON.")
 
-    # Placeholder para integração com gspread + OAuth2
-    # API_KEY = "AIzaSyAKibc0A3TerDdfQeZBLePxU01PbK_53Lw"
-    # CSV de leitura: https://docs.google.com/spreadsheets/d/e/2PACX-1vQ8DMerTOl7-0wF6sH9_Hiz7T0gUwZYhPUuDejn4k--U_Q9SuAQ2haIMcs05_LFAQ8CcN7hLAZ_ojiy/pub?output=csv
+    if st.button("✅ Finalizar Cadastro e Gerar Protocolo"):
+        html_content = f"""
+        <html>
+        <head><meta charset='utf-8'><title>COGEX REGISTRE-SE</title></head>
+        <body style='font-family:sans-serif;'>
+            <img src='https://raw.githubusercontent.com/huggingface/hub/main/logo.svg' width='200'/>
+            <h1>COGEX - REGISTRE-SE</h1>
+            <p><strong>Obrigado pela sua participação!</strong></p>
+            <p>Protocolo de envio: <strong>{protocolo}</strong></p>
+            <hr/>
+            <h3>Resumo do Cadastro</h3>
+            {df_novo.to_html(index=False)}
+        </body>
+        </html>
+        """
+        with open("cogex_registre_se_confirmacao.html", "w", encoding="utf-8") as f:
+            f.write(html_content)
+
+        with open("cogex_registre_se_confirmacao.html", "r", encoding="utf-8") as f:
+            st.download_button(
+                label="📄 Baixar Confirmação HTML",
+                data=f.read(),
+                file_name="cogex_registre_se_confirmacao.html",
+                mime="text/html"
+            )
