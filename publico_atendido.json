@@ -1,0 +1,46 @@
+{
+    "publico_atendido": {
+        "tipo": "checkbox",
+        "descricao": "Grupos sociais atendidos durante a Semana Registre-se",
+        "grupos": [
+            {
+                "nome": "Vulnerabilidade Social",
+                "valores": [
+                    "Egressos do sistema prisional",
+                    "Pessoas com deficiência",
+                    "Pessoas em situação de rua",
+                    "Pessoas privadas de liberdade",
+                    "Pessoas trans/travestis"
+                ]
+            },
+            {
+                "nome": "Diversidade Étnico-Cultural",
+                "valores": [
+                    "Comunidade quilombola",
+                    "Imigrantes",
+                    "População indígena"
+                ]
+            },
+            {
+                "nome": "Ciclos da Vida",
+                "valores": [
+                    "Crianças e adolescentes",
+                    "Gestantes",
+                    "Idosos"
+                ]
+            },
+            {
+                "nome": "População Geral",
+                "valores": [
+                    "População geral"
+                ]
+            },
+            {
+                "nome": "Outro(s)",
+                "valores": [
+                    "Outros públicos"
+                ]
+            }
+        ]
+    }
+}
