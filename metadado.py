@@ -592,4 +592,200 @@ if arquivo_uploaded is not None:
             
             if publicos is not None and not publicos.empty:
                 # Métricas
-                st.metric
+                st.metric("Total de Públicos Identificados", len(publicos))
+                
+                # Top públicos
+                st.subheader("Públicos Mais Atendidos")
+                
+                # Limitando a 15 públicos mais comuns
+                df_top = publicos.head(15)
+                
+                chart = alt.Chart(df_top).mark_bar().encode(
+                    x='Contagem:Q',
+                    y=alt.Y('Público:N', sort='-x'),
+                    tooltip=['Público', 'Contagem']
+                ).properties(
+                    height=30 * len(df_top)  # Altura dinâmica baseada no número de públicos
+                )
+                
+                st.altair_chart(chart, use_container_width=True)
+                
+                # Tabela completa
+                with st.expander("Ver todos os públicos atendidos"):
+                    st.dataframe(publicos, use_container_width=True)
+                
+                # Distribuição percentual
+                st.subheader("Distribuição Percentual dos Públicos")
+                
+                # Top 10 para gráfico de pizza
+                df_top10 = publicos.head(10).copy()
+                total = df_top10['Contagem'].sum()
+                df_top10['Percentual'] = df_top10['Contagem'] / total * 100
+                
+                chart = alt.Chart(df_top10).mark_arc().encode(
+                    theta=alt.Theta(field="Contagem", type="quantitative"),
+                    color=alt.Color(field="Público", type="nominal", scale=alt.Scale(scheme='category20')),
+                    tooltip=['Público', 'Contagem', 'Percentual:Q']
+                ).properties(
+                    width=500,
+                    height=500
+                )
+                
+                st.altair_chart(chart, use_container_width=True)
+                st.caption("Top 10 públicos mais atendidos")
+            else:
+                st.warning("Não foi possível analisar os públicos atendidos. Verifique se a coluna de públicos existe nos dados.")
+        
+        # Análise Textual
+        elif pagina == "🔠 Análise Textual":
+            st.header("🔠 Análise Textual das Ações Realizadas")
+            
+            palavras = analisar_palavras_chave(df)
+            
+            if palavras is not None and not palavras.empty:
+                # Métricas
+                st.metric("Total de Palavras-chave Únicas", len(palavras))
+                
+                # Top palavras
+                st.subheader("Palavras-chave Mais Frequentes")
+                
+                # Limitando a 20 palavras mais comuns
+                df_top = palavras.head(20)
+                
+                chart = alt.Chart(df_top).mark_bar().encode(
+                    x='Frequência:Q',
+                    y=alt.Y('Palavra:N', sort='-x'),
+                    tooltip=['Palavra', 'Frequência']
+                ).properties(
+                    height=30 * len(df_top)  # Altura dinâmica baseada no número de palavras
+                )
+                
+                st.altair_chart(chart, use_container_width=True)
+                
+                # Nuvem de palavras simulada
+                st.subheader("Principais Termos nas Ações Realizadas")
+                
+                # Criando uma visualização similar a uma nuvem de palavras usando tamanhos de texto
+                col1, col2, col3 = st.columns(3)
+                
+                # Pegando as 15 principais palavras
+                top_15_palavras = palavras.head(15)
+                
+                # Dividindo em 3 colunas
+                for i, (_, row) in enumerate(top_15_palavras.iterrows()):
+                    # Determinando o tamanho do texto baseado na frequência
+                    freq = row['Frequência']
+                    max_freq = top_15_palavras['Frequência'].max()
+                    min_freq = top_15_palavras['Frequência'].min()
+                    
+                    # Normalizando para um tamanho entre 1 e 5
+                    size = 1 + (freq - min_freq) / (max_freq - min_freq) * 4
+                    font_size = 16 + size * 6  # Convertendo para pixels
+                    
+                    # Escolhendo a coluna
+                    col_idx = i % 3
+                    if col_idx == 0:
+                        col1.markdown(f"<p style='font-size:{font_size}px; text-align:center;'>{row['Palavra']}</p>", unsafe_allow_html=True)
+                    elif col_idx == 1:
+                        col2.markdown(f"<p style='font-size:{font_size}px; text-align:center;'>{row['Palavra']}</p>", unsafe_allow_html=True)
+                    else:
+                        col3.markdown(f"<p style='font-size:{font_size}px; text-align:center;'>{row['Palavra']}</p>", unsafe_allow_html=True)
+                
+                # Tabela completa
+                with st.expander("Ver todas as palavras-chave"):
+                    st.dataframe(palavras, use_container_width=True)
+                
+                # Análise de ações por dia
+                st.subheader("Análise das Ações por Dia da Semana")
+                
+                # Contagem de menções a dias da semana
+                dias_semana = ['segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo']
+                mencoes_dias = {dia: 0 for dia in dias_semana}
+                
+                for acoes in df['acoes_realizadas'].dropna():
+                    texto = str(acoes).lower()
+                    for dia in dias_semana:
+                        if dia in texto:
+                            mencoes_dias[dia] += 1
+                
+                df_dias = pd.DataFrame({
+                    'Dia': list(mencoes_dias.keys()),
+                    'Menções': list(mencoes_dias.values())
+                })
+                
+                # Ordenando os dias da semana corretamente
+                ordem_dias = {dia: i for i, dia in enumerate(dias_semana)}
+                df_dias['ordem'] = df_dias['Dia'].map(ordem_dias)
+                df_dias = df_dias.sort_values('ordem').drop('ordem', axis=1)
+                
+                chart = alt.Chart(df_dias).mark_bar().encode(
+                    x=alt.X('Dia:N', sort=None),  # Usando None para manter a ordem personalizada
+                    y='Menções:Q',
+                    tooltip=['Dia', 'Menções'],
+                    color=alt.condition(
+                        alt.datum.Menções == alt.expr.max('Menções'),
+                        alt.value('#2ecc71'),  # Verde para o dia mais mencionado
+                        alt.value('#3498db')   # Azul para os outros dias
+                    )
+                ).properties(
+                    width=600,
+                    height=400
+                )
+                
+                st.altair_chart(chart, use_container_width=True)
+            else:
+                st.warning("Não foi possível analisar as ações realizadas. Verifique se a coluna de ações existe nos dados.")
+    else:
+        st.error("Não foi possível processar o arquivo. Verifique se o formato é válido.")
+else:
+    # Exibir página inicial quando nenhum arquivo foi carregado
+    st.info("👆 Faça o upload de um arquivo Excel com os dados da Semana Registre-se para começar a análise.")
+    
+    st.markdown("""
+    ### Sobre a Aplicação
+    
+    Esta aplicação realiza a decoupagem lógica e classificação semântica dos dados da Semana "Registre-se", 
+    oferecendo visualizações e análises detalhadas das seguintes dimensões:
+    
+    - **📊 Visão Geral**: Resumo dos principais indicadores e métricas
+    - **🔍 Decoupagem Lógica**: Estrutura semântica das colunas e atributos
+    - **📋 Análise de Participação**: Estatísticas de participação das serventias
+    - **📈 Indicadores Quantitativos**: Análise detalhada dos serviços realizados
+    - **👥 Públicos Atendidos**: Distribuição e categorização dos públicos
+    - **🔠 Análise Textual**: Extração de insights das descrições de ações
+    
+    Carregue um arquivo no formato Excel (.xlsx ou .xls) para começar.
+    """)
+    
+    # Exibindo a estrutura semântica
+    with st.expander("Ver estrutura semântica esperada"):
+        st.subheader("Estrutura Semântica dos Dados")
+        
+        # Obtendo estrutura por classe
+        classes_semanticas = obter_estrutura_por_classe()
+        
+        # Criando DataFrame para exibição
+        todas_colunas = []
+        for classe, itens in classes_semanticas.items():
+            for item in itens:
+                todas_colunas.append({
+                    'Classe': classe,
+                    'Coluna Original': item['coluna_original'],
+                    'Atributo': item['atributo'],
+                    'Tipo de Dado': item['tipo']
+                })
+        
+        df_estrutura = pd.DataFrame(todas_colunas)
+        st.dataframe(df_estrutura, use_container_width=True)
+
+# Rodapé
+st.sidebar.markdown("---")
+st.sidebar.markdown("### Sobre")
+st.sidebar.info(
+    """
+    Esta aplicação foi desenvolvida para analisar os dados da Semana "Registre-se" 
+    utilizando técnicas de decoupagem lógica e classificação semântica.
+    
+    **Versão:** 1.0
+    """
+)
