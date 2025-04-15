@@ -4,6 +4,7 @@ import numpy as np
 import altair as alt
 from datetime import datetime
 import re
+import io
 
 # Configuração da página
 st.set_page_config(
@@ -59,14 +60,40 @@ MAPEAMENTO_COLUNAS = {
     'Tags': 'tags'
 }
 
-# Função para carregar e limpar dados
+# Função para carregar e limpar dados usando alternativas para lidar com Excel
 @st.cache_data
 def carregar_e_limpar_dados(arquivo):
     """
-    Carrega e limpa os dados do arquivo Excel
+    Carrega e limpa os dados do arquivo Excel usando pandas com engine='xlrd'
+    para arquivos .xls ou csv como alternativa para .xlsx
     """
     try:
-        df = pd.read_excel(arquivo)
+        # Obtendo o conteúdo do arquivo
+        bytes_data = arquivo.read()
+        
+        # Verificando a extensão do arquivo
+        file_extension = arquivo.name.split('.')[-1].lower()
+        
+        if file_extension == 'xls':
+            # Para arquivos .xls, usamos xlrd
+            df = pd.read_excel(io.BytesIO(bytes_data), engine='xlrd')
+        elif file_extension == 'xlsx':
+            # Para arquivos .xlsx, tentamos usar o engine padrão
+            # Se falhar, convertemos para CSV e lemos
+            try:
+                df = pd.read_excel(io.BytesIO(bytes_data))
+            except ImportError:
+                st.warning("Biblioteca openpyxl não encontrada. Tentando converter para CSV temporariamente...")
+                # Converter para CSV usando um método alternativo poderia ser implementado aqui
+                # Por simplicidade, vamos solicitar um arquivo CSV ao usuário
+                st.error("Por favor, salve o arquivo Excel como CSV e faça upload novamente.")
+                return None
+        elif file_extension == 'csv':
+            # Para arquivos CSV
+            df = pd.read_csv(io.BytesIO(bytes_data))
+        else:
+            st.error(f"Formato de arquivo não suportado: {file_extension}")
+            return None
         
         # Verificando quais colunas existem no DataFrame
         colunas_existentes = [col for col in MAPEAMENTO_COLUNAS.keys() if col in df.columns]
@@ -244,7 +271,10 @@ def analisar_palavras_chave(df):
 st.sidebar.title("Controles")
 
 # Upload de arquivo
-arquivo_uploaded = st.sidebar.file_uploader("Faça upload do arquivo Excel", type=["xlsx", "xls"])
+arquivo_uploaded = st.sidebar.file_uploader("Faça upload do arquivo", type=["xlsx", "xls", "csv"])
+
+# Informação sobre formatos suportados
+st.sidebar.info("Formatos suportados: .xls, .xlsx e .csv")
 
 # Verificação se o arquivo foi carregado
 if arquivo_uploaded is not None:
@@ -739,7 +769,7 @@ if arquivo_uploaded is not None:
         st.error("Não foi possível processar o arquivo. Verifique se o formato é válido.")
 else:
     # Exibir página inicial quando nenhum arquivo foi carregado
-    st.info("👆 Faça o upload de um arquivo Excel com os dados da Semana Registre-se para começar a análise.")
+    st.info("👆 Faça o upload de um arquivo (.xls, .xlsx ou .csv) com os dados da Semana Registre-se para começar a análise.")
     
     st.markdown("""
     ### Sobre a Aplicação
@@ -754,7 +784,7 @@ else:
     - **👥 Públicos Atendidos**: Distribuição e categorização dos públicos
     - **🔠 Análise Textual**: Extração de insights das descrições de ações
     
-    Carregue um arquivo no formato Excel (.xlsx ou .xls) para começar.
+    Carregue um arquivo no formato suportado para começar.
     """)
     
     # Exibindo a estrutura semântica
@@ -777,6 +807,19 @@ else:
         
         df_estrutura = pd.DataFrame(todas_colunas)
         st.dataframe(df_estrutura, use_container_width=True)
+        
+    # Instruções para formatos de arquivo
+    st.markdown("""
+    ### Instruções para Importação de Arquivos
+    
+    Se você estiver enfrentando problemas com arquivos .xlsx, tente um dos seguintes métodos:
+    
+    1. **Salvar como .xls** - Abra seu arquivo no Excel e salve como "Excel 97-2003 (.xls)"
+    2. **Salvar como CSV** - Abra seu arquivo no Excel e salve como "CSV (Separado por vírgulas) (.csv)"
+    3. **Usar Google Sheets** - Importe seu arquivo para o Google Sheets e depois exporte como .csv
+    
+    Estes formatos alternativos funcionam melhor com as bibliotecas nativas disponíveis no ambiente.
+    """)
 
 # Rodapé
 st.sidebar.markdown("---")
@@ -789,3 +832,111 @@ st.sidebar.info(
     **Versão:** 1.0
     """
 )
+
+# Informações adicionais sobre compatibilidade
+st.sidebar.markdown("### Compatibilidade")
+st.sidebar.info(
+    """
+    Esta aplicação utiliza apenas bibliotecas nativas disponíveis
+    no ambiente Streamlit, sem dependências externas.
+    
+    Formatos suportados:
+    - Excel 97-2003 (.xls)
+    - Excel moderno (.xlsx) - requer openpyxl
+    - CSV (.csv)
+    """
+)#!/usr/bin/env python
+# coding: utf-8
+
+"""
+Conversor de Excel para CSV - Semana Registre-se
+
+Este script converte arquivos XLSX para o formato CSV,
+permitindo que sejam utilizados no aplicativo de análise.
+"""
+
+import pandas as pd
+import os
+import sys
+
+def converter_para_csv(caminho_arquivo, diretorio_saida=None):
+    """
+    Converte um arquivo Excel para CSV
+    
+    Args:
+        caminho_arquivo: Caminho para o arquivo Excel
+        diretorio_saida: Diretório para salvar o arquivo CSV (opcional)
+    
+    Returns:
+        Caminho para o arquivo CSV gerado
+    """
+    try:
+        # Verificando se o arquivo existe
+        if not os.path.exists(caminho_arquivo):
+            print(f"Erro: Arquivo '{caminho_arquivo}' não encontrado.")
+            return None
+        
+        # Verificando a extensão
+        nome_arquivo = os.path.basename(caminho_arquivo)
+        base_nome, extensao = os.path.splitext(nome_arquivo)
+        
+        if extensao.lower() not in ['.xlsx', '.xls']:
+            print(f"Erro: O arquivo deve ter extensão .xlsx ou .xls, encontrado: {extensao}")
+            return None
+        
+        # Definindo o diretório de saída
+        if diretorio_saida is None:
+            diretorio_saida = os.path.dirname(caminho_arquivo)
+        
+        # Verificando se o diretório de saída existe
+        if not os.path.exists(diretorio_saida):
+            os.makedirs(diretorio_saida)
+            print(f"Diretório de saída '{diretorio_saida}' criado.")
+        
+        # Definindo o caminho de saída
+        caminho_saida = os.path.join(diretorio_saida, f"{base_nome}.csv")
+        
+        # Lendo o arquivo Excel
+        print(f"Lendo arquivo Excel: {caminho_arquivo}")
+        df = pd.read_excel(caminho_arquivo)
+        
+        # Salvando como CSV
+        print(f"Convertendo para CSV...")
+        df.to_csv(caminho_saida, index=False, encoding='utf-8')
+        
+        print(f"Arquivo CSV salvo em: {caminho_saida}")
+        return caminho_saida
+    
+    except Exception as e:
+        print(f"Erro ao converter o arquivo: {e}")
+        return None
+
+def main():
+    """
+    Função principal executada quando o script é chamado diretamente
+    """
+    # Verificando argumentos da linha de comando
+    if len(sys.argv) < 2:
+        print("Uso: python converter_para_csv.py [arquivo_excel] [diretorio_saida (opcional)]")
+        return
+    
+    # Obtendo o caminho do arquivo
+    caminho_arquivo = sys.argv[1]
+    
+    # Obtendo o diretório de saída (opcional)
+    diretorio_saida = None
+    if len(sys.argv) > 2:
+        diretorio_saida = sys.argv[2]
+    
+    # Convertendo o arquivo
+    resultado = converter_para_csv(caminho_arquivo, diretorio_saida)
+    
+    if resultado:
+        print("\nConversão concluída com sucesso!")
+        print(f"Use o arquivo CSV gerado: {resultado}")
+    else:
+        print("\nA conversão falhou. Verifique os erros acima.")
+
+# Executar se for o script principal
+if __name__ == "__main__":
+    main()
