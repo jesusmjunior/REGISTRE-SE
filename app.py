@@ -79,7 +79,7 @@ if enviado:
         <html>
         <head><meta charset='utf-8'><title>COGEX REGISTRE-SE</title></head>
         <body style='font-family:sans-serif;'>
-            <img src='https://raw.githubusercontent.com/huggingface/hub/main/logo.svg' width='200'/>
+            <img src='COGEX.png' width='300'/>
             <h1>COGEX - REGISTRE-SE</h1>
             <p><strong>Obrigado pela sua participação!</strong></p>
             <p>Protocolo de envio: <strong>{protocolo}</strong></p>
