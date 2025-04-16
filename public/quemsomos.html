@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COGEX - Quem Somos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #800020; /* Vinho */
+            --secondary: #ffcc00; /* Amarelo */
+            --dark: #000000; /* Preto */
+            --light: #ffffff;
+            --gray: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Cabeçalho e Navegação */
+        .topbar {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .main-header {
+            background-color: var(--light);
+            padding: 15px 0;
+            border-bottom: 5px solid var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo-container img {
+            height: 70px;
+        }
+        
+        .nav-link {
+            font-weight: 600;
+            color: var(--primary) !important;
+            padding: 10px 20px !important;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--dark) !important;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 70%;
+        }
+        
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, rgba(128,0,32,0.9) 0%, rgba(0,0,0,0.8) 100%);
+            background-size: cover;
+            background-position: center;
+            color: var(--light);
+            padding: 60px 0;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1Ij48L3BhdGg+Cjwvc3ZnPg==');
+            opacity: 0.5;
+        }
+        
+        .page-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            margin-bottom: 0;
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Seção Quem Somos */
+        .quem-somos-section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .team-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+        
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .team-header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .team-header h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+        
+        .team-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background-color: var(--secondary);
+        }
+        
+        .team-body {
+            padding: 30px;
+        }
+        
+        .team-member {
+            border-bottom: 1px dashed #ddd;
+            padding: 15px 0;
+            position: relative;
+        }
+        
+        .team-member:last-child {
+            border-bottom: none;
+        }
+        
+        .team-member h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .team-member p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0;
+        }
+        
+        .member-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--light);
+            background-color: var(--primary);
+            border-radius: 20px;
+            margin-bottom: 8px;
+        }
+        
+        .supervisor-badge {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        /* Animações */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 30px 0 0;
+            position: relative;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .footer-title {
+            color: var(--secondary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .footer-bottom {
+            background-color: rgba(0,0,0,0.2);
+            padding: 15px 0;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        /* Responsivo */
+        @media (max-width: 992px) {
+            .page-header {
+                padding: 50px 0;
+            }
+            
+            .page-header h1 {
+                font-size: 2rem;
+            }
+            
+            .quem-somos-section {
+                padding: 60px 0;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .topbar {
+                display: none;
+            }
+            
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .page-header p {
+                font-size: 1rem;
+            }
+            
+            .team-header h3 {
+                font-size: 1.5rem;
+            }
+            
+            .team-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra superior -->
+    <div class="topbar d-none d-md-block">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <span class="me-3"><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</span>
+                        <span><i class="fas fa-phone me-2"></i>(98) 3198-4300</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cabeçalho principal -->
+    <header class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-md-4 col-8">
+                    <div class="logo-container">
+                        <a href="index.html">
+                            <img src="COGEX.png" alt="Logo COGEX">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-8 col-4">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="index.html">Início</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="quem-somos.html">Quem Somos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="formulario.html">Formulário</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Relatórios</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Contato</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>Quem Somos</h1>
+            <p>Conheça a equipe da Corregedoria Geral do Foro Extrajudicial</p>
+        </div>
+    </section>
+
+    <!-- Quem Somos Section -->
+    <section class="quem-somos-section">
+        <div class="container">
+            <h2 class="section-title">Nossa Equipe</h2>
+            
+            <div class="row fade-in">
+                <!-- Juízas -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-card">
+                        <div class="team-header">
+                            <h3>Juízas</h3>
+                        </div>
+                        <div class="team-body">
+                            <div class="team-member">
+                                <span class="member-badge supervisor-badge">Supervisora</span>
+                                <h4>Laysa de Jesus Paz Martins Mendes</h4>
+                                <p>Juíza de Direito</p>
+                            </div>
+                            <div class="team-member">
+                                <h4>Jaqueline Reis Caracas</h4>
+                                <p>Juíza de Direito</p>
+                            </div>
+                            <div class="team-member">
+                                <h4>Josane Araújo Farias Braga</h4>
+                                <p>Juíza de Direito</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Servidores -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-card">
+                        <div class="team-header">
+                            <h3>Servidores</h3>
+                        </div>
+                        <div class="team-body">
+                            <div class="team-member">
+                                <h4>Célia Regina Pereira da Silva</h4>
+                                <p>Servidor(a)</p>
+                            </div>
+                            <div class="team-member">
+                                <h4>Luiz Fernando de Souza Coelho</h4>
+                                <p>Servidor(a)</p>
+                            </div>
+                            <div class="team-member">
+                                <h4>Gerson Lélis Costa</h4>
+                                <p>Servidor(a)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Delegatários -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="team-card">
+                        <div class="team-header">
+                            <h3>Delegatários</h3>
+                        </div>
+                        <div class="team-body">
+                            <div class="team-member">
+                                <h4>Graciana Fernandes Gomes</h4>
+                                <p>Delegatário(a)</p>
+                            </div>
+                            <div class="team-member">
+                                <h4>João Gusmão Netto</h4>
+                                <p>Delegatário(a)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h3 class="text-center mb-4">Sobre a COGEX</h3>
+                            <p>A Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão tem a missão de fiscalizar, orientar e normatizar os serviços extrajudiciais do Estado do Maranhão, buscando a excelência na prestação de serviços notariais e registrais.</p>
+                            <p>Nossa equipe é formada por profissionais dedicados que trabalham para garantir o aprimoramento constante dos serviços prestados pelos cartórios, visando a segurança jurídica e o atendimento de qualidade à população maranhense.</p>
+                            <p>A COGEX coordena iniciativas como a Semana Registre-se, que busca combater o sub-registro civil no estado e garantir a cidadania plena através da documentação básica.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="footer-title">COGEX</h5>
+                    <p>Corregedoria Geral do Foro Extrajudicial</p>
+                    <p>Poder Judiciário do Estado do Maranhão</p>
+                    <div class="mt-3">
+                        <img src="COGEX.png" alt="Logo COGEX" height="50">
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="footer-title">Contato</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i>Av. dos Holandeses, s/n - Calhau</p>
+                    <p><i class="fas fa-phone me-2"></i>(98) 3198-4300</p>
+                    <p><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-title">Links Úteis</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="https://www.tjma.jus.br" class="text-white text-decoration-none">TJMA</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">CNJ</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Perguntas Frequentes</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 COGEX - Corregedoria Geral do Foro Extrajudicial. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
