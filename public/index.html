@@ -1,1 +1,880 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COGEX - Corregedoria Geral do Foro Extrajudicial</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #800020; /* Vinho */
+            --secondary: #ffcc00; /* Amarelo */
+            --dark: #000000; /* Preto */
+            --light: #ffffff;
+            --gray: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Cabeçalho e Navegação */
+        .topbar {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .main-header {
+            background-color: var(--light);
+            padding: 15px 0;
+            border-bottom: 5px solid var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo-container img {
+            height: 70px;
+        }
+        
+        .nav-link {
+            font-weight: 600;
+            color: var(--primary) !important;
+            padding: 10px 20px !important;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--dark) !important;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 70%;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(128,0,32,0.9) 0%, rgba(0,0,0,0.8) 100%), url('img/bg-cogex.jpg');
+            background-size: cover;
+            background-position: center;
+            color: var(--light);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: url('img/pattern.png');
+            opacity: 0.1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        .hero-title span {
+            color: var(--secondary);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            padding: 12px 30px;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 0;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transition: var(--transition);
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background-color: var(--secondary);
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .btn-primary:hover {
+            color: var(--dark);
+            border-color: var(--secondary);
+        }
+        
+        .btn-primary:hover::before {
+            left: 0;
+        }
+        
+        .hero-image img {
+            max-width: 100%;
+            transform: scale(1.1);
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1.1); }
+            50% { transform: translateY(-15px) scale(1.1); }
+        }
+        
+        /* Features Section */
+        .features-section {
+            padding: 80px 0;
+            background-color: var(--gray);
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background-color: var(--secondary);
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            transition: var(--transition);
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 0;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card:hover::before {
+            height: 100%;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: inline-block;
+            transition: var(--transition);
+        }
+        
+        .feature-card:hover .feature-icon {
+            color: var(--secondary);
+            transform: rotateY(360deg);
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* About Section */
+        .about-section {
+            padding: 100px 0;
+            position: relative;
+        }
+        
+        .about-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: -20px;
+            bottom: -20px;
+            border: 5px solid var(--secondary);
+            z-index: -1;
+        }
+        
+        .about-image img {
+            width: 100%;
+            transition: var(--transition);
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .about-content {
+            padding: 30px;
+        }
+        
+        .about-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .about-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .about-text {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        /* Counter Section */
+        .counter-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            padding: 80px 0;
+            color: var(--light);
+            position: relative;
+        }
+        
+        .counter-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('img/pattern.png');
+            opacity: 0.1;
+        }
+        
+        .counter-box {
+            text-align: center;
+            padding: 30px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .counter-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .counter-text {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Serviços Section */
+        .services-section {
+            padding: 100px 0;
+            background-color: var(--gray);
+        }
+        
+        .service-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        
+        .service-header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: moveBackground 20s linear infinite;
+        }
+        
+        @keyframes moveBackground {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(20%, 20%); }
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .service-body {
+            padding: 30px;
+        }
+        
+        .service-text {
+            margin-bottom: 20px;
+        }
+        
+        /* Formulário Section */
+        .form-section {
+            padding: 100px 0;
+        }
+        
+        .form-container {
+            background-color: var(--light);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .form-title {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .form-control {
+            border-radius: 0;
+            border: 1px solid #ddd;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-control:focus {
+            box-shadow: none;
+            border-color: var(--primary);
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .form-check-input:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .form-card {
+            border: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        
+        .form-card .card-header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 15px 20px;
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .form-card .card-header h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .form-card .card-body {
+            padding: 30px;
+        }
+        
+        /* Sucesso Message */
+        .success-message {
+            background-color: #f8f9fa;
+            border-left: 5px solid var(--secondary);
+            padding: 30px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 5rem;
+            color: var(--secondary);
+            display: block;
+            margin-bottom: 20px;
+        }
+        
+        .protocol {
+            background-color: var(--gray);
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: inline-block;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 80px 0 0;
+            position: relative;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .footer-logo img {
+            height: 60px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-title {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .footer-contact-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-contact-icon {
+            margin-right: 15px;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 204, 0, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+        
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+        
+        .footer-links a {
+            color: var(--light);
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+            padding-left: 15px;
+            display: inline-block;
+        }
+        
+        .footer-links a::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: var(--secondary);
+            border-radius: 50%;
+        }
+        
+        .footer-links a:hover {
+            color: var(--secondary);
+            padding-left: 20px;
+        }
+        
+        .footer-bottom {
+            background-color: rgba(0,0,0,0.2);
+            padding: 20px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .about-image {
+                margin-bottom: 30px;
+            }
+            
+            .counter-box {
+                margin-bottom: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 80px 0;
+                text-align: center;
+            }
+            
+            .hero-image {
+                margin-top: 50px;
+            }
+            
+            .about-content {
+                padding: 0;
+            }
+            
+            .service-card {
+                margin-bottom: 30px;
+            }
+            
+            .footer {
+                padding-top: 50px;
+            }
+            
+            .footer-widget {
+                margin-bottom: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra superior -->
+    <div class="topbar d-none d-md-block">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <span class="me-3"><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</span>
+                        <span><i class="fas fa-phone me-2"></i>(98) 3198-4300</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <!-- Cabeçalho principal -->
+    <header class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-md-4 col-8">
+                    <div class="logo-container">
+                        <a href="index.html">
+                            <img src="img/logo-cogex.png" alt="Logo COGEX">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-8 col-4">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="index.html">Início</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="sobre.html">Sobre</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="servicos.html">Serviços</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="formulario.html">Formulário</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="contato.html">Contato</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="hero-title">SEMANA <span>REGISTRE-SE</span></h1>
+                        <h2 class="hero-subtitle">Cidadania ao alcance de todos os maranhenses</h2>
+                        <p class="mb-4">A Semana Registre-se é uma iniciativa da Corregedoria Geral do Foro Extrajudicial do Estado do Maranhão para combater o sub-registro e garantir a documentação básica para toda a população.</p>
+                        <a href="formulario.html" class="btn btn-primary">Participe Agora</a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image text-center">
+                        <img src="img/cogex-hero.png" alt="COGEX Semana Registre-se">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Nossos Objetivos</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-id-card feature-icon"></i>
+                        <h3 class="feature-title">Garantia de Cidadania</h3>
+                        <p>Assegurar que todos os cidadãos maranhenses tenham acesso aos serviços de registro civil e à documentação básica.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-baby feature-icon"></i>
+                        <h3 class="feature-title">Combate ao Sub-registro</h3>
+                        <p>Reduzir os índices de sub-registro de nascimento e garantir que cada criança tenha sua certidão desde o nascimento.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-hands-helping feature-icon"></i>
+                        <h3 class="feature-title">Inclusão Social</h3>
+                        <p>Promover a inclusão social através da documentação civil, permitindo acesso a programas sociais e serviços públicos.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-users feature-icon"></i>
+                        <h3 class="feature-title">Atendimento Especializado</h3>
+                        <p>Fornecer atendimento especializado para comunidades vulneráveis, incluindo populações indígenas, quilombolas e ribeirinhas.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-map-marker-alt feature-icon"></i>
+                        <h3 class="feature-title">Ampla Cobertura</h3>
+                        <p>Garantir a presença dos serviços em todos os municípios do estado, levando cidadania a todas as regiões.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card">
+                        <i class="fas fa-handshake feature-icon"></i>
+                        <h3 class="feature-title">Parcerias Efetivas</h3>
+                        <p>Estabelecer parcerias com órgãos públicos e instituições para ampliar o alcance e a efetividade das ações.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-image">
+                        <img src="img/cogex-about.jpg" alt="Sobre a COGEX">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-content">
+                        <h2 class="about-title">Sobre a Semana Registre-se</h2>
+                        <p class="about-text">A Semana Registre-se é uma iniciativa da Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão, que busca promover o acesso à documentação civil básica para toda a população.</p>
+                        <p class="about-text">Durante uma semana, as serventias extrajudiciais de todo o estado realizam ações especiais de atendimento, com foco nas comunidades mais vulneráveis e regiões de difícil acesso.</p>
+                        <p class="about-text">O projeto visa reduzir o sub-registro de nascimento, garantir a cidadania e assegurar o acesso a direitos fundamentais por meio da documentação civil.</p>
+                        <a href="sobre.html" class="btn btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Counter Section -->
+    <section class="counter-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="counter-box">
+                        <span class="counter-number">240+</span>
+                        <span class="counter-text">Serventias Participantes</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="counter-box">
+                        <span class="counter-number">217</span>
+                        <span class="counter-text">Municípios Atendidos</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="counter-box">
+                        <span class="counter-number">5.000+</span>
+                        <span class="counter-text">Registros Realizados</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="counter-box">
+                        <span class="counter-number">15.000+</span>
+                        <span class="counter-text">Pessoas Beneficiadas</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h2 class="section-title">Nossos Serviços</h2>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <i class="fas fa-baby service-icon"></i>
+                            <h3 class="service-title">Registro de Nascimento</h3>
+                        </div>
+                        <div class="service-body">
+                            <p class="service-text">Emissão da primeira certidão de nascimento para pessoas de qualquer idade, de forma totalmente gratuita.</p>
+                            <a href="servicos.html#nascimento" class="btn btn-primary">Saiba Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="service-card">
+                        <div class="service-header">
+                            <i class="fas fa-copy service-icon"></i>
+                            <h3 class="service-title">Segunda Via</h3>
+                        </div>
+                        <div class="service-body">
+                            <p class="service-text">Emissão
