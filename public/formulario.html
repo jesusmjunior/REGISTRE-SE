@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COGEX - Formulário de Registro</title>
+    <title>COGEX - Formulário de Participação</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -13,48 +13,77 @@
             --dark: #000000; /* Preto */
             --light: #ffffff;
             --gray: #f8f9fa;
+            --dark-gray: #343a40;
             --transition: all 0.3s ease;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Roboto', sans-serif;
             line-height: 1.7;
             color: #333;
             background-color: #f5f5f5;
         }
         
-        /* Cabeçalho e Navegação */
-        .topbar {
-            background-color: var(--dark);
-            color: var(--light);
-            padding: 8px 0;
-            font-size: 14px;
-        }
-        
+        /* Header Styles */
         .main-header {
-            background-color: var(--light);
-            padding: 15px 0;
-            border-bottom: 5px solid var(--secondary);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
+            background-color: var(--dark);
+            padding: 0;
+            position: fixed;
+            width: 100%;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         
-        .logo-container img {
-            height: 70px;
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-text {
+            color: var(--secondary);
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .nav-area {
+            display: flex;
+            align-items: center;
+        }
+        
+        .main-nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-item {
+            margin: 0 5px;
         }
         
         .nav-link {
-            font-weight: 600;
-            color: var(--primary) !important;
-            padding: 10px 20px !important;
-            position: relative;
+            color: var(--light) !important;
+            font-weight: 500;
+            padding: 10px 15px !important;
+            text-decoration: none;
             transition: var(--transition);
+            position: relative;
         }
         
         .nav-link:hover, .nav-link.active {
-            color: var(--dark) !important;
+            color: var(--secondary) !important;
         }
         
         .nav-link::after {
@@ -63,7 +92,7 @@
             bottom: 0;
             left: 50%;
             width: 0;
-            height: 3px;
+            height: 2px;
             background-color: var(--secondary);
             transition: var(--transition);
             transform: translateX(-50%);
@@ -75,77 +104,79 @@
         
         /* Page Header */
         .page-header {
-            background: linear-gradient(135deg, rgba(128,0,32,0.9) 0%, rgba(0,0,0,0.8) 100%), url('img/bg-cogex.jpg');
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(to right, var(--primary), var(--dark));
             color: var(--light);
-            padding: 60px 0;
+            padding: 80px 0 60px;
+            margin-bottom: 50px;
             position: relative;
-            overflow: hidden;
-            text-align: center;
         }
         
-        .page-header::before {
+        .page-header::after {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
+            bottom: -20px;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background: url('img/pattern.png');
-            opacity: 0.1;
+            height: 40px;
+            background: var(--light);
+            clip-path: polygon(100% 0, 0% 100%, 100% 100%);
         }
         
-        .page-header h1 {
+        .page-title {
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 2;
+            text-align: center;
         }
         
-        .page-header p {
+        .page-subtitle {
             font-size: 1.2rem;
-            margin-bottom: 0;
-            position: relative;
-            z-index: 2;
+            opacity: 0.9;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
-        /* Formulário Section */
-        .form-section {
-            padding: 60px 0;
-        }
-        
+        /* Form Styles */
         .form-container {
             background-color: var(--light);
-            border-radius: 10px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.1);
-            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.05);
+            padding: 40px;
+            margin-bottom: 80px;
         }
         
-        .form-card {
-            border: none;
-            margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-radius: 10px;
-            overflow: hidden;
+        .form-section {
+            margin-bottom: 40px;
         }
         
-        .form-card .card-header {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 15px 20px;
-            border-bottom: 3px solid var(--secondary);
+        .form-section:last-child {
+            margin-bottom: 0;
         }
         
-        .form-card .card-header h3 {
-            margin: 0;
-            font-size: 1.3rem;
-            font-weight: 600;
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            position: relative;
+            border-bottom: 1px solid #eee;
         }
         
-        .form-card .card-body {
-            padding: 25px;
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--secondary);
         }
         
         .form-label {
@@ -156,395 +187,277 @@
         
         .form-control, .form-select {
             padding: 12px 15px;
-            border-radius: 5px;
+            border-radius: 8px;
             border: 1px solid #ddd;
             transition: var(--transition);
+            margin-bottom: 15px;
         }
         
         .form-control:focus, .form-select:focus {
+            box-shadow: 0 0 0 0.25rem rgba(128, 0, 32, 0.25);
             border-color: var(--primary);
-            box-shadow: 0 0 0 0.2rem rgba(128, 0, 32, 0.25);
+        }
+        
+        .form-select {
+            background-position: right 15px center;
+        }
+        
+        .form-select[multiple] {
+            padding: 8px 15px;
+            height: auto;
+            min-height: 120px;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
         }
         
         .input-group-text {
             background-color: var(--primary);
             color: var(--light);
-            border: 1px solid var(--primary);
+            border: none;
         }
         
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-            padding: 12px 30px;
+        .form-select option:checked {
+            background-color: rgba(128, 0, 32, 0.1);
+        }
+        
+        /* Button Styles */
+        .btn-primary-custom {
+            background: linear-gradient(135deg, var(--primary), #500010);
+            border: none;
+            color: var(--light);
             font-weight: 600;
-            text-transform: uppercase;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
             letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(128, 0, 32, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
             position: relative;
             overflow: hidden;
             z-index: 1;
-            transition: var(--transition);
         }
         
-        .btn-primary::before {
+        .btn-primary-custom:before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background-color: var(--secondary);
-            transition: var(--transition);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: all 0.6s;
             z-index: -1;
         }
         
-        .btn-primary:hover {
-            color: var(--dark);
-            border-color: var(--secondary);
+        .btn-primary-custom:hover:before {
+            left: 100%;
         }
         
-        .btn-primary:hover::before {
-            left: 0;
-        }
-        
-        .btn-secondary {
-            background-color: var(--secondary);
-            border-color: var(--secondary);
-            color: var(--dark);
-            padding: 12px 30px;
-            font-weight: 600;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #e0b800;
-            border-color: #e0b800;
-            color: var(--dark);
+        .btn-primary-custom:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(128, 0, 32, 0.4);
         }
         
         /* Success Message */
         .success-message {
-            background-color: #f8f9fa;
-            border-left: 5px solid var(--secondary);
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-radius: 10px;
             padding: 30px;
-            border-radius: 5px;
             text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             display: none;
+            margin-top: 30px;
         }
         
         .success-icon {
-            font-size: 5rem;
-            color: var(--secondary);
-            display: block;
+            font-size: 4rem;
+            color: var(--light);
             margin-bottom: 20px;
         }
         
         .protocol {
-            background-color: var(--gray);
-            padding: 15px;
-            border-radius: 5px;
+            background-color: rgba(255,255,255,0.2);
+            padding: 15px 25px;
+            border-radius: 50px;
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
+            margin: 20px 0;
             display: inline-block;
-            margin: 15px 0;
         }
         
-        /* Data Table */
-        .data-section {
-            padding: 60px 0;
-        }
-        
-        .data-card {
-            background-color: var(--light);
-            border-radius: 10px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-            margin-bottom: 30px;
-        }
-        
-        .data-card .card-header {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 20px;
-            border-bottom: 3px solid var(--secondary);
-        }
-        
-        .data-card .card-header h3 {
-            margin: 0;
-            font-size: 1.5rem;
+        .btn-secondary-custom {
+            background-color: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid white;
+            padding: 10px 25px;
+            border-radius: 50px;
             font-weight: 600;
-        }
-        
-        .data-card .card-body {
-            padding: 25px;
-        }
-        
-        .table {
-            width: 100%;
-            margin-bottom: 0;
-        }
-        
-        .table th {
-            background-color: var(--dark);
-            color: var(--light);
-            font-weight: 600;
-            border: none;
-        }
-        
-        .table td {
-            vertical-align: middle;
-        }
-        
-        .table-striped tbody tr:nth-of-type(odd) {
-            background-color: rgba(0,0,0,0.02);
-        }
-        
-        .action-btn {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 5px;
-            color: var(--light);
             transition: var(--transition);
+            margin-top: 15px;
         }
         
-        .btn-view {
-            background-color: #17a2b8;
+        .btn-secondary-custom:hover {
+            background-color: white;
+            color: #28a745;
         }
         
-        .btn-edit {
-            background-color: #6c757d;
-        }
-        
-        .btn-delete {
-            background-color: #dc3545;
-        }
-        
-        .action-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-            color: var(--light);
-        }
-        
-        /* Tabs */
-        .nav-tabs {
-            border-bottom: 3px solid var(--secondary);
-            margin-bottom: 30px;
-        }
-        
-        .nav-tabs .nav-link {
-            border: none;
-            color: var(--dark) !important;
-            font-weight: 600;
-            padding: 15px 30px !important;
-            border-radius: 0;
-            position: relative;
-        }
-        
-        .nav-tabs .nav-link.active {
-            color: var(--primary) !important;
-            background-color: transparent;
-        }
-        
-        .nav-tabs .nav-link.active::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
+        /* Loading Spinner */
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
             left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--secondary);
-        }
-        
-        /* Filter Section */
-        .filter-section {
-            background-color: var(--gray);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-        }
-        
-        /* Pagination */
-        .pagination {
-            margin-top: 20px;
-            justify-content: center;
-        }
-        
-        .pagination .page-item .page-link {
-            color: var(--primary);
-            border-radius: 0;
-            margin: 0 3px;
-            border: none;
-            width: 40px;
-            height: 40px;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.7);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 600;
+            z-index: 9999;
+            display: none;
+        }
+        
+        .spinner-content {
+            background-color: white;
+            padding: 30px 50px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .spinner-border {
+            color: var(--primary);
+            width: 3rem;
+            height: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Custom number input */
+        .num-control {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .num-control-btn {
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
             transition: var(--transition);
         }
         
-        .pagination .page-item.active .page-link {
-            background-color: var(--primary);
-            color: var(--light);
+        .num-control-btn:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        .num-control-input {
+            width: 60px;
+            height: 40px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            margin: 0 10px;
+            font-weight: 600;
+        }
+        
+        .num-control-label {
+            margin-left: 15px;
+            font-weight: 600;
+            color: var(--dark);
         }
         
         /* Footer */
         .footer {
             background-color: var(--dark);
             color: var(--light);
-            padding: 30px 0 0;
-            position: relative;
-        }
-        
-        .footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-        }
-        
-        .footer-title {
-            color: var(--secondary);
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-        
-        .footer-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background-color: var(--secondary);
+            padding: 80px 0 0;
         }
         
         .footer-bottom {
             background-color: rgba(0,0,0,0.2);
-            padding: 15px 0;
-            margin-top: 30px;
+            padding: 20px 0;
+            margin-top: 50px;
             text-align: center;
         }
-        
-        .footer-bottom p {
-            margin: 0;
-            font-size: 14px;
-        }
 
-        /* Responsivo */
-        @media (max-width: 992px) {
-            .page-header {
-                padding: 50px 0;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 15px 0;
             }
             
-            .page-header h1 {
+            .logo-area {
+                margin-bottom: 15px;
+            }
+            
+            .nav-area {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .main-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .page-header {
+                padding: 100px 0 60px;
+            }
+            
+            .page-title {
                 font-size: 2rem;
             }
             
-            .form-section, .data-section {
-                padding: 40px 0;
-            }
-            
-            .nav-tabs .nav-link {
-                padding: 10px 20px !important;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .topbar {
-                display: none;
-            }
-            
-            .page-header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .page-header p {
-                font-size: 1rem;
-            }
-            
-            .form-card .card-body, .data-card .card-body {
+            .form-container {
                 padding: 20px;
             }
             
-            .table-responsive {
-                font-size: 14px;
-            }
-            
-            .action-btn {
-                width: 30px;
-                height: 30px;
+            .section-title {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Barra superior -->
-    <div class="topbar d-none d-md-block">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center">
-                        <span class="me-3"><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</span>
-                        <span><i class="fas fa-phone me-2"></i>(98) 3198-4300</span>
-                    </div>
-                </div>
-                <div class="col-md-6 text-end">
-                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cabeçalho principal -->
+    <!-- Header -->
     <header class="main-header">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-3 col-md-4 col-8">
-                    <div class="logo-container">
-                        <a href="index.html">
-                            <img src="img/logo-cogex.png" alt="Logo COGEX">
-                        </a>
-                    </div>
+            <div class="header-container">
+                <div class="logo-area">
+                    <h1 class="logo-text">COGEX</h1>
                 </div>
-                <div class="col-lg-9 col-md-8 col-4">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav ms-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="index.html">Início</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="sobre.html">Sobre</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="formulario.html">Formulário</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="relatorios.html">Relatórios</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="contato.html">Contato</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
+                <nav class="nav-area">
+                    <ul class="main-nav">
+                        <li class="nav-item">
+                            <a href="index.html" class="nav-link">Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="quem-somos.html" class="nav-link">Quem Somos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="formulario.html" class="nav-link active">Formulário</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="relatorio.html" class="nav-link">Relatório</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Contato</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
@@ -552,208 +465,283 @@
     <!-- Page Header -->
     <section class="page-header">
         <div class="container">
-            <h1>Sistema de Registro e Controle</h1>
-            <p>Semana Registre-se - COGEX 2024</p>
+            <h1 class="page-title">Formulário de Participação</h1>
+            <p class="page-subtitle">Preencha os dados da sua serventia para cadastro na Semana Registre-se 2024</p>
         </div>
     </section>
 
-    <!-- Main Content -->
-    <div class="container my-5">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-tab-pane" type="button" role="tab" aria-controls="form-tab-pane" aria-selected="true">
-                    <i class="fas fa-edit me-2"></i>Formulário
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data-tab-pane" type="button" role="tab" aria-controls="data-tab-pane" aria-selected="false">
-                    <i class="fas fa-database me-2"></i>Registros
-                </button>
-            </li>
-        </ul>
-        <div class="tab-content" id="myTabContent">
-            <!-- Formulário Tab -->
-            <div class="tab-pane fade show active" id="form-tab-pane" role="tabpanel" aria-labelledby="form-tab" tabindex="0">
+    <!-- Form Section -->
+    <section class="container">
+        <div class="form-container">
+            <form id="registroForm">
+                <!-- Seção Identificação -->
                 <div class="form-section">
-                    <div class="container">
-                        <div class="form-container">
-                            <form id="registroForm">
-                                <!-- Seção de Identificação -->
-                                <div class="card form-card mb-4">
-                                    <div class="card-header">
-                                        <h3><i class="fas fa-building me-2"></i>Identificação da Serventia</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <label for="serventia" class="form-label">Selecione a Serventia</label>
-                                                <select class="form-select" id="serventia" name="serventia" required>
-                                                    <option value="" selected disabled>Escolha a serventia...</option>
-                                                    <!-- Opções serão carregadas via JavaScript -->
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="email" class="form-label">E-mail Institucional</label>
-                                                <input type="email" class="form-control" id="email" name="email" required placeholder="email@serventia.com.br">
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <label for="telefone" class="form-label">Telefone/Whatsapp</label>
-                                                <input type="tel" class="form-control" id="telefone" name="telefone" required placeholder="(XX) XXXXX-XXXX">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="responsavel" class="form-label">Responsável</label>
-                                                <input type="text" class="form-control" id="responsavel" name="responsavel" required placeholder="Nome do responsável">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <h3 class="section-title"><i class="fas fa-building"></i> Identificação da Serventia</h3>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="serventia" class="form-label">Selecione a Serventia</label>
+                            <select class="form-select" id="serventia" required>
+                                <option value="" selected disabled>Selecione a serventia...</option>
+                                <!-- Opções serão carregadas via JavaScript -->
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="regiao" class="form-label">Região</label>
+                            <select class="form-select" id="regiao" required>
+                                <option value="" selected disabled>Selecione...</option>
+                                <option value="Norte">Norte</option>
+                                <option value="Sul">Sul</option>
+                                <option value="Leste">Leste</option>
+                                <option value="Oeste">Oeste</option>
+                                <option value="Central">Central</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">E-mail institucional</label>
+                            <input type="email" class="form-control" id="email" placeholder="exemplo@cartorio.com.br" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="telefone" class="form-label">Telefone/WhatsApp</label>
+                            <input type="tel" class="form-control" id="telefone" placeholder="(00) 00000-0000" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <label for="responsavel" class="form-label">Nome do responsável</label>
+                            <input type="text" class="form-control" id="responsavel" placeholder="Nome completo" required>
+                        </div>
+                    </div>
+                </div>
 
-                                <!-- Seção de Participação -->
-                                <div class="card form-card mb-4">
-                                    <div class="card-header">
-                                        <h3><i class="fas fa-chart-line me-2"></i>Detalhes da Participação</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <label for="participacao" class="form-label">Participação na Semana Registre-se</label>
-                                                <select class="form-select" id="participacao" name="participacao" required>
-                                                    <option value="Sim">Sim</option>
-                                                    <option value="Não">Não</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="dataInicio" class="form-label">Data de Início</label>
-                                                <input type="date" class="form-control" id="dataInicio" name="dataInicio">
-                                            </div>
-                                        </div>
+                <!-- Seção Participação -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-chart-line"></i> Detalhes da Participação</h3>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="participacao" class="form-label">Participação na Semana Registre-se</label>
+                            <select class="form-select" id="participacao" required>
+                                <option value="Sim">Sim</option>
+                                <option value="Não">Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="dataInicio" class="form-label">Data de início das ações</label>
+                            <input type="date" class="form-control" id="dataInicio">
+                        </div>
+                    </div>
 
-                                        <div class="row mb-3" id="motivoNaoSection" style="display:none;">
-                                            <div class="col-12">
-                                                <label for="motivoNao" class="form-label">Motivo da não participação</label>
-                                                <textarea class="form-control" id="motivoNao" name="motivoNao" rows="3" placeholder="Explique brevemente por que não houve participação"></textarea>
-                                            </div>
-                                        </div>
+                    <div class="row mb-4" id="motivoNaoSection" style="display:none;">
+                        <div class="col-12">
+                            <label for="motivoNao" class="form-label">Motivo da não participação</label>
+                            <textarea class="form-control" id="motivoNao" rows="3" placeholder="Explique brevemente por que não poderá participar"></textarea>
+                        </div>
+                    </div>
 
-                                        <div class="row mb-3" id="acoesRealizadasSection">
-                                            <div class="col-12">
-                                                <label for="acoesRealizadas" class="form-label">Descreva as ações realizadas</label>
-                                                <textarea class="form-control" id="acoesRealizadas" name="acoesRealizadas" rows="3" placeholder="Detalhe as atividades por dia, se possível"></textarea>
-                                            </div>
-                                        </div>
+                    <div id="acoesRealizadasSection">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label for="acoesRealizadas" class="form-label">Descreva as ações que serão realizadas</label>
+                                <textarea class="form-control" id="acoesRealizadas" rows="4" placeholder="Detalhe as atividades que serão desenvolvidas durante a semana"></textarea>
+                            </div>
+                        </div>
 
-                                        <div class="row mb-3">
-                                            <div class="col-12">
-                                                <label for="publicosAtendidos" class="form-label">Públicos atendidos durante o evento</label>
-                                                <select class="form-select" id="publicosAtendidos" name="publicosAtendidos" multiple size="5">
-                                                    <!-- Opções serão carregadas via JavaScript -->
-                                                </select>
-                                                <small class="form-text text-muted">Segure CTRL para selecionar múltiplas opções</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <label for="publicosAtendidos" class="form-label">Públicos que serão atendidos (selecione todas as opções aplicáveis)</label>
+                                <select class="form-select" id="publicosAtendidos" multiple>
+                                    <option value="Comunidades indígenas">Comunidades indígenas</option>
+                                    <option value="Comunidades quilombolas">Comunidades quilombolas</option>
+                                    <option value="Comunidades ribeirinhas">Comunidades ribeirinhas</option>
+                                    <option value="Pessoas em situação de rua">Pessoas em situação de rua</option>
+                                    <option value="Idosos">Idosos</option>
+                                    <option value="Pessoas com deficiência">Pessoas com deficiência</option>
+                                    <option value="Imigrantes e refugiados">Imigrantes e refugiados</option>
+                                    <option value="Áreas rurais">Áreas rurais</option>
+                                    <option value="Periferia urbana">Periferia urbana</option>
+                                    <option value="Distritos afastados">Distritos afastados</option>
+                                </select>
+                                <small class="form-text text-muted">Segure CTRL (ou Command ⌘ no Mac) para selecionar múltiplas opções</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                <!-- Seção de Métricas -->
-                                <div class="card form-card mb-4">
-                                    <div class="card-header">
-                                        <h3><i class="fas fa-chart-bar me-2"></i>Métricas de Atendimento</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row g-3">
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><i class="fas fa-copy"></i></span>
-                                                    <input type="number" class="form-control" id="viasEmitidas" name="viasEmitidas" min="0" value="0" aria-label="2ª Vias emitidas">
-                                                    <span class="input-group-text">2ª Vias</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><i class="fas fa-baby"></i></span>
-                                                    <input type="number" class="form-control" id="registrosNascimento" name="registrosNascimento" min="0" value="0" aria-label="Registros de Nascimento">
-                                                    <span class="input-group-text">Nascimentos</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><i class="fas fa-male"></i></span>
-                                                    <input type="number" class="form-control" id="averacoesPaternidade" name="averacoesPaternidade" min="0" value="0" aria-label="Averbações de Paternidade">
-                                                    <span class="input-group-text">Paternidade</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="row g-3 mt-2">
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><i class="fas fa-edit"></i></span>
-                                                    <input type="number" class="form-control" id="retificacoes" name="retificacoes" min="0" value="0" aria-label="Retificações de registro">
-                                                    <span class="input-group-text">Retificações</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><i class="fas fa-history"></i></span>
-                                                    <input type="number" class="form-control" id="registrosTardios" name="registrosTardios" min="0" value="0" aria-label="Registros Tardios">
-                                                    <span class="input-group-text">Reg. Tardios</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><i class="fas fa-redo"></i></span>
-                                                    <input type="number" class="form-control" id="restauracoes" name="restauracoes" min="0" value="0" aria-label="Restaurações de registro">
-                                                    <span class="input-group-text">Restaurações</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <!-- Seção Métricas -->
+                <div class="form-section" id="metricasSection">
+                    <h3 class="section-title"><i class="fas fa-chart-bar"></i> Métricas Estimadas</h3>
+                    <p class="mb-4">Informe a quantidade estimada de atendimentos que serão realizados:</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="num-control">
+                                <button type="button" class="num-control-btn minus" data-target="registrosNascimento">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="registrosNascimento" class="num-control-input" value="0" min="0">
+                                <button type="button" class="num-control-btn plus" data-target="registrosNascimento">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <span class="num-control-label">Registros de Nascimento</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="num-control">
+                                <button type="button" class="num-control-btn minus" data-target="segundasVias">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="segundasVias" class="num-control-input" value="0" min="0">
+                                <button type="button" class="num-control-btn plus" data-target="segundasVias">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <span class="num-control-label">2ª Vias</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="num-control">
+                                <button type="button" class="num-control-btn minus" data-target="averPat">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="averPat" class="num-control-input" value="0" min="0">
+                                <button type="button" class="num-control-btn plus" data-target="averPat">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <span class="num-control-label">Averbações de Paternidade</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="num-control">
+                                <button type="button" class="num-control-btn minus" data-target="retificacoes">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="retificacoes" class="num-control-input" value="0" min="0">
+                                <button type="button" class="num-control-btn plus" data-target="retificacoes">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <span class="num-control-label">Retificações</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="num-control">
+                                <button type="button" class="num-control-btn minus" data-target="registrosTardios">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="registrosTardios" class="num-control-input" value="0" min="0">
+                                <button type="button" class="num-control-btn plus" data-target="registrosTardios">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <span class="num-control-label">Registros Tardios</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="num-control">
+                                <button type="button" class="num-control-btn minus" data-target="restauracoes">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <input type="number" id="restauracoes" class="num-control-input" value="0" min="0">
+                                <button type="button" class="num-control-btn plus" data-target="restauracoes">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                                <span class="num-control-label">Restaurações</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                <!-- Classificação e Tags -->
-                                <div class="card form-card mb-4">
-                                    <div class="card-header">
-                                        <h3><i class="fas fa-tags me-2"></i>Classificação e Observações</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row mb-3">
-                                            <div class="col-md-6">
-                                                <label for="classificacao" class="form-label">Classificação da Participação</label>
-                                                <select class="form-select" id="classificacao" name="classificacao" required>
-                                                    <option value="Infraestrutura">Infraestrutura</option>
-                                                    <option value="Engajamento">Engajamento</option>
-                                                    <option value="Participação">Participação</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="tags" class="form-label">Tags adicionais</label>
-                                                <input type="text" class="form-control" id="tags" name="tags" placeholder="Palavras-chave separadas por vírgula">
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <div class="col-12">
-                                                <label for="observacoes" class="form-label">Observações adicionais</label>
-                                                <textarea class="form-control" id="observacoes" name="observacoes" rows="3" placeholder="Qualquer observação adicional sobre o registro"></textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <!-- Seção Classificação -->
+                <div class="form-section">
+                    <h3 class="section-title"><i class="fas fa-tags"></i> Classificação e Observações</h3>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="classificacao" class="form-label">Classificação da Participação</label>
+                            <select class="form-select" id="classificacao" required>
+                                <option value="" selected disabled>Selecione...</option>
+                                <option value="Infraestrutura">Infraestrutura</option>
+                                <option value="Engajamento">Engajamento</option>
+                                <option value="Participação">Participação</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="tags" class="form-label">Tags (palavras-chave separadas por vírgula)</label>
+                            <input type="text" class="form-control" id="tags" placeholder="Ex: registro civil, cidadania, documentação">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <label for="observacoes" class="form-label">Observações adicionais</label>
+                            <textarea class="form-control" id="observacoes" rows="3" placeholder="Informe detalhes adicionais que considere importantes"></textarea>
+                        </div>
+                    </div>
+                </div>
 
-                                <!-- Botões de ação -->
-                                <div class="row">
-                                    <div class="col-md-6 mb-3 mb-md-0">
-                                        <button type="reset" class="btn btn-secondary w-100">
-                                            <i class="fas fa-sync-alt me-2"></i>Limpar Formulário
-                                        </button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button type="submit" class="btn btn-primary w-100">
-                                            <i class="fas fa-paper-plane me-2"></i>Registrar Participação
-                                        </button>
-                                    </div>
-                                </div>
+                <!-- Botão de Envio -->
+                <div class="text-center mt-5">
+                    <button type="submit" class="btn btn-primary-custom">
+                        <i class="fas fa-paper-plane me-2"></i>Registrar Participação
+                    </button>
+                </div>
+            </form>
 
-                                <!-- Campo oculto para ID em caso de edição -->
-                                <input type="hidden" id="registroId"
+            <!-- Mensagem de Sucesso -->
+            <div class="success-message" id="successMessage">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h3>Registro realizado com sucesso!</h3>
+                <p>Seu cadastro para a Semana Registre-se foi efetuado com sucesso.</p>
+                <div id="protocol" class="protocol">COGEX-2024-123456</div>
+                <p>Um comprovante foi enviado para o e-mail cadastrado.</p>
+                <button type="button" id="downloadComprovante" class="btn btn-secondary-custom">
+                    <i class="fas fa-download me-2"></i>Baixar Comprovante
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Loading Spinner -->
+    <div class="spinner-overlay" id="spinnerOverlay">
+        <div class="spinner-content">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Carregando...</span>
+            </div>
+            <p>Processando, aguarde...</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="logo-text mb-4">COGEX</h5>
+                    <p>Corregedoria Geral do Foro Extrajudicial</p>
+                    <p>Poder Judiciário do Estado do Maranhão</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Contato</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> Av. dos Holandeses, s/n - Calhau</p>
+                    <p><i class="fas fa-phone me-2"></i> (98) 3198-4300</p>
+                    <p><i class="fas fa-envelope me-2"></i> cogex@tjma.jus.br</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="footer-title">Links Úteis</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="https://www.tjma.jus.br" class="text-light" target="_blank">TJMA</a></li>
+                        <li class="mb-2"><a href="#" class="text-light">Perguntas Frequentes</a></li>
+                        <li class="mb-2"><a href="#" class="text-light">Política de Privacidade</a></li>
+                        <li class="mb-2"><a href="#" class="text-light">Mapa do Site</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 COGEX - Corregedoria Geral do Foro Extrajudicial. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0
