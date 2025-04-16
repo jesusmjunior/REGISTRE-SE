@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COGEX - Formulário de Registro</title>
+    <title>COGEX - Semana Registre-se</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         :root {
             --primary: #800020; /* Vinho */
@@ -73,19 +74,18 @@
             width: 70%;
         }
         
-        /* Page Header */
-        .page-header {
+        /* Hero Section */
+        .hero-section {
             background: linear-gradient(135deg, rgba(128,0,32,0.9) 0%, rgba(0,0,0,0.8) 100%);
             background-size: cover;
             background-position: center;
             color: var(--light);
-            padding: 60px 0;
+            padding: 100px 0;
             position: relative;
             overflow: hidden;
-            text-align: center;
         }
         
-        .page-header::before {
+        .hero-section::before {
             content: '';
             position: absolute;
             top: 0;
@@ -96,80 +96,25 @@
             opacity: 0.5;
         }
         
-        .page-header h1 {
-            font-size: 2.5rem;
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
             font-weight: 700;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 2;
+            margin-bottom: 20px;
+            text-transform: uppercase;
         }
         
-        .page-header p {
-            font-size: 1.2rem;
-            margin-bottom: 0;
-            position: relative;
-            z-index: 2;
+        .hero-title span {
+            color: var(--secondary);
         }
         
-        /* Formulário Section */
-        .form-section {
-            padding: 60px 0;
-        }
-        
-        .form-container {
-            background-color: var(--light);
-            border-radius: 10px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .form-card {
-            border: none;
+        .hero-subtitle {
+            font-size: 1.5rem;
             margin-bottom: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .form-card .card-header {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 15px 20px;
-            border-bottom: 3px solid var(--secondary);
-        }
-        
-        .form-card .card-header h3 {
-            margin: 0;
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-        
-        .form-card .card-body {
-            padding: 25px;
-        }
-        
-        .form-label {
-            font-weight: 600;
-            color: var(--dark);
-            margin-bottom: 8px;
-        }
-        
-        .form-control, .form-select {
-            padding: 12px 15px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            transition: var(--transition);
-        }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 0.2rem rgba(128, 0, 32, 0.25);
-        }
-        
-        .input-group-text {
-            background-color: var(--primary);
-            color: var(--light);
-            border: 1px solid var(--primary);
         }
         
         .btn-primary {
@@ -178,7 +123,7 @@
             padding: 12px 30px;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            border-radius: 0;
             position: relative;
             overflow: hidden;
             z-index: 1;
@@ -212,6 +157,7 @@
             color: var(--dark);
             padding: 12px 30px;
             font-weight: 600;
+            text-transform: uppercase;
         }
         
         .btn-secondary:hover {
@@ -220,32 +166,315 @@
             color: var(--dark);
         }
         
-        /* Success Message */
-        .success-message {
-            background-color: #f8f9fa;
-            border-left: 5px solid var(--secondary);
-            padding: 30px;
-            border-radius: 5px;
-            text-align: center;
-            display: none;
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 80px 0;
+            background-color: var(--gray);
         }
         
-        .success-icon {
-            font-size: 5rem;
-            color: var(--secondary);
-            display: block;
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .stats-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .stats-header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .stats-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .stats-body {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            line-height: 1;
+            margin-bottom: 15px;
+        }
+        
+        .stat-text {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 0;
+        }
+        
+        .chart-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            height: 100%;
+        }
+        
+        .chart-header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 15px 20px;
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .chart-header h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        .chart-body {
+            padding: 30px;
+            position: relative;
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+        
+        /* About Section */
+        .about-section {
+            padding: 80px 0;
+        }
+        
+        .about-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .about-image::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: -20px;
+            bottom: -20px;
+            border: 5px solid var(--secondary);
+            z-index: -1;
+        }
+        
+        .about-image img {
+            width: 100%;
+            transition: var(--transition);
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .about-content {
+            padding: 30px;
+        }
+        
+        .about-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: var(--primary);
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .about-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .about-text {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        /* Services Section */
+        .services-section {
+            padding: 80px 0;
+            background-color: var(--gray);
+        }
+        
+        .service-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .service-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            color: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 20px;
+            transition: var(--transition);
+        }
+        
+        .service-card:hover .service-icon {
+            background-color: var(--secondary);
+            color: var(--dark);
+            transform: rotateY(360deg);
+        }
+        
+        .service-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .service-body {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, rgba(128,0,32,0.9) 0%, rgba(0,0,0,0.8) 100%);
+            color: var(--light);
+            text-align: center;
+            position: relative;
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1Ij48L3BhdGg+Cjwvc3ZnPg==');
+            opacity: 0.5;
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
             margin-bottom: 20px;
         }
         
-        .protocol {
-            background-color: var(--gray);
-            padding: 15px;
-            border-radius: 5px;
-            font-size: 1.5rem;
-            font-weight: 700;
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Relatório Section */
+        .report-section {
+            padding: 80px 0;
+        }
+        
+        .report-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: var(--transition);
+            height: 100%;
+            text-align: center;
+            padding: 40px 30px;
+        }
+        
+        .report-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        .report-icon {
+            font-size: 3rem;
             color: var(--primary);
-            display: inline-block;
-            margin: 15px 0;
+            margin-bottom: 20px;
+        }
+        
+        .report-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .report-text {
+            margin-bottom: 25px;
+            color: #666;
+        }
+        
+        /* Animações */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         /* Footer */
@@ -296,36 +525,35 @@
             margin: 0;
             font-size: 14px;
         }
-
-        /* Elementos visuais adicionais */
-        .form-divider {
-            height: 1px;
-            background: linear-gradient(to right, var(--primary), var(--secondary), transparent);
-            margin: 30px 0;
-        }
-
-        /* Animações */
-        .fade-in {
-            animation: fadeIn 1s ease-in-out;
-        }
         
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
         /* Responsivo */
         @media (max-width: 992px) {
-            .page-header {
-                padding: 50px 0;
+            .hero-section {
+                padding: 80px 0;
             }
             
-            .page-header h1 {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+            
+            .about-image {
+                margin-bottom: 30px;
+            }
+            
+            .about-content {
+                padding: 0;
+            }
+            
+            .section-title {
                 font-size: 2rem;
             }
             
-            .form-section {
-                padding: 40px 0;
+            .chart-container {
+                height: 250px;
             }
         }
         
@@ -334,16 +562,49 @@
                 display: none;
             }
             
-            .page-header h1 {
+            .hero-section {
+                padding: 60px 0;
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            
+            .dashboard-section, .about-section, .services-section, .report-section {
+                padding: 60px 0;
+            }
+            
+            .section-title {
                 font-size: 1.8rem;
             }
             
-            .page-header p {
-                font-size: 1rem;
+            .stats-header h3, .chart-header h3 {
+                font-size: 1.2rem;
             }
             
-            .form-card .card-body {
+            .stats-body, .chart-body {
                 padding: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .chart-container {
+                height: 200px;
+            }
+            
+            .cta-title {
+                font-size: 2rem;
+            }
+            
+            .cta-text {
+                font-size: 1rem;
             }
         }
     </style>
@@ -388,16 +649,16 @@
                         <div class="collapse navbar-collapse" id="navbarNav">
                             <ul class="navbar-nav ms-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="index.html">Início</a>
+                                    <a class="nav-link active" href="index.html">Início</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Sobre</a>
+                                    <a class="nav-link" href="quem-somos.html">Quem Somos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="formulario.html">Formulário</a>
+                                    <a class="nav-link" href="formulario.html">Formulário</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Relatórios</a>
+                                    <a class="nav-link" href="relatorio.html">Relatório</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Contato</a>
@@ -410,299 +671,164 @@
         </div>
     </header>
 
-    <!-- Page Header -->
-    <section class="page-header">
+    <!-- Hero Section -->
+    <section class="hero-section">
         <div class="container">
-            <h1>Formulário de Registro de Serventia</h1>
-            <p>Semana Registre-se - Maio de 2024</p>
-        </div>
-    </section>
-
-    <!-- Formulário Section -->
-    <section class="form-section">
-        <div class="container">
-            <div class="form-container fade-in">
-                <form id="registroForm">
-                    <!-- Seção de Identificação -->
-                    <div class="card form-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-building me-2"></i>Identificação da Serventia</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="serventia" class="form-label">Selecione a Serventia</label>
-                                    <select class="form-select" id="serventia" required>
-                                        <option value="" selected disabled>Escolha a serventia...</option>
-                                        <!-- Opções carregadas via JavaScript -->
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="email" class="form-label">E-mail de contato</label>
-                                    <input type="email" class="form-control" id="email" required placeholder="email@serventia.com.br">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="telefone" class="form-label">Whatsapp para contato</label>
-                                    <input type="tel" class="form-control" id="telefone" required placeholder="(XX) XXXXX-XXXX">
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="responsavel" class="form-label">Responsável</label>
-                                    <input type="text" class="form-control" id="responsavel" required placeholder="Nome do responsável">
-                                </div>
-                            </div>
-                        </div>
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <h1 class="hero-title">Semana <span>Registre-se</span></h1>
+                        <h2 class="hero-subtitle">Cidadania ao alcance de todos</h2>
+                        <p class="mb-4">A Semana Registre-se é uma iniciativa da Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão, que visa promover o acesso à documentação civil básica para toda a população.</p>
+                        <a href="formulario.html" class="btn btn-primary me-3 mb-2">
+                            <i class="fas fa-edit me-2"></i>Participar Agora
+                        </a>
+                        <a href="relatorio.html" class="btn btn-secondary mb-2">
+                            <i class="fas fa-chart-bar me-2"></i>Ver Relatórios
+                        </a>
                     </div>
-
-                    <div class="form-divider"></div>
-
-                    <!-- Seção de Participação -->
-                    <div class="card form-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-chart-line me-2"></i>Detalhes da Participação</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="participacao" class="form-label">Participação na Semana Registre-se</label>
-                                    <select class="form-select" id="participacao" required>
-                                        <option value="Sim">Sim</option>
-                                        <option value="Não">Não</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3" id="motivoNaoSection" style="display:none;">
-                                <div class="col-12">
-                                    <label for="motivoNao" class="form-label">Motivo da não participação</label>
-                                    <textarea class="form-control" id="motivoNao" rows="3" placeholder="Explique brevemente por que não houve participação"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3" id="acoesRealizadasSection">
-                                <div class="col-12">
-                                    <label for="acoesRealizadas" class="form-label">Descreva as ações realizadas</label>
-                                    <textarea class="form-control" id="acoesRealizadas" rows="3" placeholder="Detalhe as atividades por dia, se possível"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <label for="publicosAtendidos" class="form-label">Públicos atendidos durante o evento</label>
-                                    <select class="form-select" id="publicosAtendidos" multiple size="5">
-                                        <!-- Opções carregadas via JavaScript -->
-                                    </select>
-                                    <small class="form-text text-muted">Segure CTRL para selecionar múltiplas opções</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-divider"></div>
-
-                    <!-- Seção de Métricas -->
-                    <div class="card form-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-chart-bar me-2"></i>Métricas de Atendimento</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row g-3">
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-copy"></i></span>
-                                        <input type="number" class="form-control" id="viasEmitidas" min="0" value="0" aria-label="2ª Vias emitidas">
-                                        <span class="input-group-text">2ª Vias</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-baby"></i></span>
-                                        <input type="number" class="form-control" id="registrosNascimento" min="0" value="0" aria-label="Registros de Nascimento">
-                                        <span class="input-group-text">Nascimentos</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-male"></i></span>
-                                        <input type="number" class="form-control" id="averacoesPaternidade" min="0" value="0" aria-label="Averbações de Paternidade">
-                                        <span class="input-group-text">Paternidade</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="row g-3 mt-3">
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-edit"></i></span>
-                                        <input type="number" class="form-control" id="retificacoes" min="0" value="0" aria-label="Retificações de registro">
-                                        <span class="input-group-text">Retificações</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-history"></i></span>
-                                        <input type="number" class="form-control" id="registrosTardios" min="0" value="0" aria-label="Registros Tardios">
-                                        <span class="input-group-text">Reg. Tardios</span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-redo"></i></span>
-                                        <input type="number" class="form-control" id="restauracoes" min="0" value="0" aria-label="Restaurações de registro">
-                                        <span class="input-group-text">Restaurações</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-divider"></div>
-
-                    <!-- Classificação e Tags -->
-                    <div class="card form-card">
-                        <div class="card-header">
-                            <h3><i class="fas fa-tags me-2"></i>Classificação</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="classificacao" class="form-label">Classificação da Participação</label>
-                                    <select class="form-select" id="classificacao" required>
-                                        <option value="Infraestrutura">Infraestrutura</option>
-                                        <option value="Engajamento">Engajamento</option>
-                                        <option value="Participação">Participação</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="tags" class="form-label">Tags adicionais</label>
-                                    <input type="text" class="form-control" id="tags" placeholder="Palavras-chave separadas por vírgula">
-                                </div>
-                            </div>
-                            <div class="row mb-3">
-                                <div class="col-12">
-                                    <label for="observacoes" class="form-label">Observações</label>
-                                    <textarea class="form-control" id="observacoes" rows="3" placeholder="Informações adicionais relevantes"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Botão de Submissão -->
-                    <div class="d-grid gap-2 mt-4">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="fas fa-paper-plane me-2"></i>Registrar Participação
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Mensagem de Sucesso -->
-                <div class="success-message mt-4" id="successMessage">
-                    <div class="text-center">
-                        <i class="fas fa-check-circle success-icon"></i>
-                        <h3>Registro realizado com sucesso!</h3>
-                        <div class="protocol my-3" id="protocol">COGEX-2024-12345</div>
-                        <p>Um comprovante foi gerado para seu registro.</p>
-                        <button class="btn btn-secondary mt-3" id="downloadComprovante">
-                            <i class="fas fa-download me-2"></i>Baixar Comprovante
-                        </button>
+                </div>
+                <div class="col-lg-6 mt-5 mt-lg-0">
+                    <div class="hero-image text-center">
+                        <img src="COGEX.png" alt="COGEX Logo" class="img-fluid" style="max-height: 300px;">
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="footer">
+    <!-- Dashboard Section -->
+    <section class="dashboard-section">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5 class="footer-title">COGEX</h5>
-                    <p>Corregedoria Geral do Foro Extrajudicial</p>
-                    <p>Poder Judiciário do Estado do Maranhão</p>
-                    <div class="mt-3">
-                        <img src="COGEX.png" alt="Logo COGEX" height="50">
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4 mb-md-0">
-                    <h5 class="footer-title">Contato</h5>
-                    <p><i class="fas fa-map-marker-alt me-2"></i>Av. dos Holandeses, s/n - Calhau</p>
-                    <p><i class="fas fa-phone me-2"></i>(98) 3198-4300</p>
-                    <p><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</p>
-                </div>
-                <div class="col-md-4">
-                    <h5 class="footer-title">Links Úteis</h5>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a href="https://www.tjma.jus.br" class="text-white text-decoration-none">TJMA</a></li>
-                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">CNJ</a></li>
-                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Perguntas Frequentes</a></li>
-                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Política de Privacidade</a></li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 COGEX - Corregedoria Geral do Foro Extrajudicial. Todos os direitos reservados.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Carregar dados das serventias a partir do JSON
-        document.addEventListener('DOMContentLoaded', function() {
-            // Preencher select de serventias
-            fetch('serventias_registre_se.json')
-                .then(response => response.json())
-                .then(data => {
-                    const serventiaSelect = document.getElementById('serventia');
-                    
-                    data.serventias.forEach(serventia => {
-                        const option = document.createElement('option');
-                        option.value = serventia.nome;
-                        option.textContent = serventia.nome;
-                        serventiaSelect.appendChild(option);
-                    });
-                })
-                .catch(error => console.error('Erro ao carregar serventias:', error));
-                
-            // Preencher select de públicos atendidos
-            fetch('publico_atendido.json')
-                .then(response => response.json())
-                .then(data => {
-                    const publicosSelect = document.getElementById('publicosAtendidos');
-                    
-                    data.publico_atendido.grupos.forEach(grupo => {
-                        grupo.valores.forEach(valor => {
-                            const option = document.createElement('option');
-                            option.value = `${grupo.nome}: ${valor}`;
-                            option.textContent = `${grupo.nome}: ${valor}`;
-                            publicosSelect.appendChild(option);
-                        });
-                    });
-                })
-                .catch(error => console.error('Erro ao carregar públicos atendidos:', error));
-                
-            // Alternar exibição de motivo ou ações realizadas
-            document.getElementById('participacao').addEventListener('change', function() {
-                const motivoNaoSection = document.getElementById('motivoNaoSection');
-                const acoesRealizadasSection = document.getElementById('acoesRealizadasSection');
-                
-                if (this.value === 'Não') {
-                    motivoNaoSection.style.display = 'block';
-                    acoesRealizadasSection.style.display = 'none';
-                } else {
-                    motivoNaoSection.style.display = 'none';
-                    acoesRealizadasSection.style.display = 'block';
-                }
-            });
+            <h2 class="section-title">Dashboard Estatístico</h2>
             
-            // Processar envio do formulário
-            document.getElementById('registroForm').addEventListener('submit', function(e) {
-                e.preventDefault();
+            <!-- Cards de Estatísticas -->
+            <div class="row fade-in">
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <h3>Total de Serventias</h3>
+                        </div>
+                        <div class="stats-body">
+                            <div class="stat-number">243</div>
+                            <div class="stat-text">Serventias participantes</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <h3>Registros Realizados</h3>
+                        </div>
+                        <div class="stats-body">
+                            <div class="stat-number">5.847</div>
+                            <div class="stat-text">Novos registros</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <h3>Pessoas Atendidas</h3>
+                        </div>
+                        <div class="stats-body">
+                            <div class="stat-number">15.682</div>
+                            <div class="stat-text">Atendimentos realizados</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <h3>Municípios Alcançados</h3>
+                        </div>
+                        <div class="stats-body">
+                            <div class="stat-number">217</div>
+                            <div class="stat-text">De 217 municípios no estado</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos Principais -->
+            <div class="row fade-in">
+                <!-- Gráfico 1: Registros por Tipo -->
+                <div class="col-lg-6 mb-4">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-pie me-2"></i>Registros por Tipo</h3>
+                        </div>
+                        <div class="chart-body">
+                            <div class="chart-container">
+                                <canvas id="registrosPorTipoChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
-                // Gerar protocolo (simulado)
-                const protocolo = 'COGEX-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+                <!-- Gráfico 2: Registros por Região -->
+                <div class="col-lg-6 mb-4">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3><i class="fas fa-chart-bar me-2"></i>Registros por Região</h3>
+                        </div>
+                        <div class="chart-body">
+                            <div class="chart-container">
+                                <canvas id="registrosPorRegiaoChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="relatorio.html" class="btn btn-primary">
+                    <i class="fas fa-chart-line me-2"></i>Ver Relatório Completo
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="about-image">
+                        <img src="https://via.placeholder.com/600x400?text=COGEX" alt="Sobre a COGEX" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-content">
+                        <h2 class="about-title">Sobre a Semana Registre-se</h2>
+                        <p class="about-text">A Semana Registre-se é uma iniciativa da Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão. Durante uma semana, as serventias extrajudiciais de todo o estado realizam ações especiais de atendimento, focando nas comunidades mais vulneráveis e regiões de difícil acesso.</p>
+                        <p class="about-text">O projeto visa reduzir o sub-registro de nascimento, garantir a cidadania e assegurar o acesso a direitos fundamentais por meio da documentação civil.</p>
+                        <a href="quem-somos.html" class="btn btn-primary">
+                            <i class="fas fa-users me-2"></i>Conheça Nossa Equipe
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section">
+        <div class="container">
+            <h2 class="section-title">Nossos Serviços</h2>
+            
+            <div class="row fade-in">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="service-card">
+                        <div class="service-body">
+                            <div class="service-icon">
+                                <i class="fas fa-baby"></i>
+                            </div>
+                            <h3 class="service-title">Registro de Nascimento</h3>
+                            <p>Emissão da primeira certidão de nascimento de forma gratuita, para pessoas de qualquer idade.</p>
+                        </div>
+                    </div>
+                </div>
                 
-                // Mostrar mensagem de sucesso
-                document.getElementById('protocol').textContent = 'Protocolo: ' + protocolo;
-                document.getElementById('successMessage
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="service-card">
