@@ -14,6 +14,7 @@
             --dark: #000000; /* Preto */
             --light: #ffffff;
             --gray: #f8f9fa;
+            --dark-gray: #343a40;
             --transition: all 0.3s ease;
         }
         
@@ -22,40 +23,69 @@
             line-height: 1.7;
             color: #333;
             background-color: #f5f5f5;
+            overflow-x: hidden;
         }
         
-        /* Cabeçalho e Navegação */
-        .topbar {
-            background-color: var(--dark);
-            color: var(--light);
-            padding: 8px 0;
-            font-size: 14px;
-        }
-        
+        /* Header Styles */
         .main-header {
-            background-color: var(--light);
-            padding: 15px 0;
-            border-bottom: 5px solid var(--secondary);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
+            background-color: var(--dark);
+            padding: 0;
+            position: fixed;
+            width: 100%;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
         }
         
-        .logo-container img {
-            height: 70px;
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 0;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-text {
+            color: var(--secondary);
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        
+        .nav-area {
+            display: flex;
+            align-items: center;
+        }
+        
+        .main-nav {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .nav-item {
+            margin: 0 5px;
         }
         
         .nav-link {
-            font-weight: 600;
-            color: var(--primary) !important;
-            padding: 10px 20px !important;
-            position: relative;
+            color: var(--light) !important;
+            font-weight: 500;
+            padding: 10px 15px;
+            text-decoration: none;
             transition: var(--transition);
+            position: relative;
+            display: block;
         }
         
         .nav-link:hover, .nav-link.active {
-            color: var(--dark) !important;
+            color: var(--secondary) !important;
         }
         
         .nav-link::after {
@@ -64,7 +94,7 @@
             bottom: 0;
             left: 50%;
             width: 0;
-            height: 3px;
+            height: 2px;
             background-color: var(--secondary);
             transition: var(--transition);
             transform: translateX(-50%);
@@ -74,111 +104,176 @@
             width: 70%;
         }
         
+        /* Main Content */
+        main {
+            margin-top: 80px;
+            padding: 0;
+        }
+        
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(135deg, rgba(128,0,32,0.9) 0%, rgba(0,0,0,0.8) 100%);
-            background-size: cover;
-            background-position: center;
+            background: linear-gradient(to right, var(--dark) 0%, var(--primary) 100%);
             color: var(--light);
-            padding: 100px 0;
+            padding: 80px 0;
             position: relative;
             overflow: hidden;
         }
         
-        .hero-section::before {
+        .hero-section::after {
             content: '';
             position: absolute;
-            top: 0;
-            right: 0;
+            bottom: -10px;
+            left: 0;
             width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1Ij48L3BhdGg+Cjwvc3ZnPg==');
-            opacity: 0.5;
+            height: 20px;
+            background: var(--secondary);
+            transform: skewY(-0.5deg);
         }
         
         .hero-content {
-            position: relative;
-            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .hero-text {
+            flex: 1;
+            padding-right: 50px;
         }
         
         .hero-title {
-            font-size: 3rem;
-            font-weight: 700;
+            font-size: 3.5rem;
+            font-weight: 800;
             margin-bottom: 20px;
-            text-transform: uppercase;
+            line-height: 1.2;
         }
         
         .hero-title span {
             color: var(--secondary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero-title span::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--secondary);
         }
         
         .hero-subtitle {
             font-size: 1.5rem;
             margin-bottom: 30px;
+            font-weight: 300;
         }
         
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
+        .hero-description {
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        
+        .hero-visual {
+            flex: 1;
+            text-align: center;
+        }
+        
+        .hero-cogex {
+            font-size: 7rem;
+            font-weight: 900;
+            color: var(--secondary);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+            display: inline-block;
+            position: relative;
+            transform: perspective(500px) rotateY(15deg);
+        }
+        
+        .hero-cogex::after {
+            content: 'COGEX';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            color: rgba(255,255,255,0.1);
+            z-index: -1;
+        }
+        
+        .hero-subtext {
+            font-size: 1.4rem;
+            color: var(--light);
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        /* Buttons */
+        .btn-custom {
             padding: 12px 30px;
             font-weight: 600;
             text-transform: uppercase;
-            border-radius: 0;
+            border-radius: 50px;
+            transition: var(--transition);
+            letter-spacing: 1px;
             position: relative;
             overflow: hidden;
             z-index: 1;
-            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         
-        .btn-primary::before {
+        .btn-primary-custom {
+            background-color: var(--secondary);
+            border: none;
+            color: var(--dark);
+        }
+        
+        .btn-primary-custom::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background-color: var(--secondary);
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: var(--transition);
             z-index: -1;
         }
         
-        .btn-primary:hover {
-            color: var(--dark);
-            border-color: var(--secondary);
+        .btn-primary-custom:hover::before {
+            left: 100%;
+            transition: 0.7s;
         }
         
-        .btn-primary:hover::before {
-            left: 0;
+        .btn-secondary-custom {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--light);
         }
         
-        .btn-secondary {
+        .btn-secondary-custom:hover {
             background-color: var(--secondary);
-            border-color: var(--secondary);
-            color: var(--dark);
-            padding: 12px 30px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #e0b800;
-            border-color: #e0b800;
             color: var(--dark);
         }
         
         /* Dashboard Section */
         .dashboard-section {
-            padding: 80px 0;
-            background-color: var(--gray);
+            padding: 100px 0;
+            background-color: var(--light);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
         }
         
         .section-title {
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             color: var(--primary);
-            margin-bottom: 50px;
-            text-align: center;
+            margin-bottom: 15px;
             position: relative;
+            display: inline-block;
             padding-bottom: 15px;
         }
         
@@ -186,135 +281,213 @@
             content: '';
             position: absolute;
             bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background-color: var(--secondary);
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
         }
         
-        .stats-card {
+        .section-subtitle {
+            color: var(--dark-gray);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        
+        .stat-card {
             background-color: var(--light);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            transition: var(--transition);
-            height: 100%;
-        }
-        
-        .stats-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-        
-        .stats-header {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 20px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .stats-header h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 0;
-        }
-        
-        .stats-body {
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.05);
             padding: 30px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
             text-align: center;
+            border-bottom: 4px solid var(--primary);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .stat-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
         }
         
         .stat-number {
             font-size: 3rem;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--primary);
+            margin-bottom: 10px;
             line-height: 1;
-            margin-bottom: 15px;
         }
         
-        .stat-text {
+        .stat-label {
             font-size: 1rem;
-            color: #666;
-            margin-bottom: 0;
+            color: var(--dark-gray);
+            font-weight: 500;
         }
         
-        .chart-card {
+        /* Chart Section */
+        .charts-container {
+            display: grid;
+            grid-template-columns: 5fr 7fr;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .chart-wrapper {
             background-color: var(--light);
-            border-radius: 10px;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.05);
+            padding: 30px;
+            transition: var(--transition);
+            position: relative;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            height: 100%;
         }
         
-        .chart-header {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 15px 20px;
-            border-bottom: 3px solid var(--secondary);
+        .chart-wrapper:hover {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
         }
         
-        .chart-header h3 {
+        .chart-title {
             font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 0;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            position: relative;
         }
         
-        .chart-body {
-            padding: 30px;
-            position: relative;
+        .chart-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary);
         }
         
         .chart-container {
             position: relative;
             width: 100%;
-            height: 300px;
+            height: 350px;
+        }
+        
+        /* Advanced Chart - Map View */
+        .map-chart {
+            height: 100%;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+        
+        .map-legend {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255,255,255,0.9);
+            padding: 10px 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            font-size: 0.9rem;
+        }
+        
+        .map-legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .map-legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 3px;
         }
         
         /* About Section */
         .about-section {
-            padding: 80px 0;
-        }
-        
-        .about-image {
+            padding: 100px 0;
+            background-color: var(--gray);
             position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         
-        .about-image::after {
+        .about-section::before {
             content: '';
             position: absolute;
-            top: 20px;
-            left: 20px;
-            right: -20px;
-            bottom: -20px;
-            border: 5px solid var(--secondary);
-            z-index: -1;
-        }
-        
-        .about-image img {
+            top: -10px;
+            left: 0;
             width: 100%;
-            transition: var(--transition);
-        }
-        
-        .about-image:hover img {
-            transform: scale(1.05);
+            height: 20px;
+            background: var(--light);
+            transform: skewY(0.5deg);
         }
         
         .about-content {
-            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+        
+        .about-image-area {
+            flex: 1;
+            position: relative;
+        }
+        
+        .about-image {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .about-image-area::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: -20px;
+            width: 100%;
+            height: 100%;
+            border: 4px solid var(--secondary);
+            border-radius: 15px;
+            z-index: 1;
+        }
+        
+        .about-info {
+            flex: 1;
         }
         
         .about-title {
             font-size: 2.5rem;
             font-weight: 700;
-            margin-bottom: 30px;
             color: var(--primary);
+            margin-bottom: 20px;
             position: relative;
             padding-bottom: 15px;
         }
@@ -325,7 +498,7 @@
             bottom: 0;
             left: 0;
             width: 80px;
-            height: 4px;
+            height: 3px;
             background-color: var(--secondary);
         }
         
@@ -335,38 +508,59 @@
             line-height: 1.8;
         }
         
-        /* Services Section */
+        /* Service Features */
         .services-section {
-            padding: 80px 0;
-            background-color: var(--gray);
+            padding: 100px 0;
+            background-color: var(--light);
+            position: relative;
+        }
+        
+        .services-section::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: var(--gray);
+            transform: skewY(0.5deg);
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
         }
         
         .service-card {
             background-color: var(--light);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.05);
+            padding: 40px 30px;
             transition: var(--transition);
-            height: 100%;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            border-bottom: 4px solid transparent;
         }
         
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            border-bottom-color: var(--secondary);
         }
         
         .service-icon {
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
             background-color: var(--primary);
             color: var(--light);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
-            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            margin: 0 auto 25px;
             transition: var(--transition);
         }
         
@@ -377,129 +571,111 @@
         }
         
         .service-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 600;
-            margin-bottom: 15px;
             color: var(--primary);
+            margin-bottom: 15px;
         }
         
-        .service-body {
-            padding: 30px;
-            text-align: center;
+        .service-text {
+            color: var(--dark-gray);
+            font-size: 1rem;
+            line-height: 1.6;
         }
         
         /* CTA Section */
         .cta-section {
             padding: 100px 0;
-            background: linear-gradient(135deg, rgba(128,0,32,0.9) 0%, rgba(0,0,0,0.8) 100%);
+            background: linear-gradient(to right, var(--primary) 0%, var(--dark) 100%);
             color: var(--light);
             text-align: center;
             position: relative;
         }
         
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1Ij48L3BhdGg+Cjwvc3ZnPg==');
-            opacity: 0.5;
-        }
-        
         .cta-content {
-            position: relative;
-            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
         }
         
         .cta-title {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 20px;
         }
         
+        .cta-title span {
+            color: var(--secondary);
+        }
+        
         .cta-text {
             font-size: 1.2rem;
-            margin-bottom: 30px;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        
-        /* Relatório Section */
-        .report-section {
-            padding: 80px 0;
-        }
-        
-        .report-card {
-            background-color: var(--light);
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-            transition: var(--transition);
-            height: 100%;
-            text-align: center;
-            padding: 40px 30px;
-        }
-        
-        .report-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-        
-        .report-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 20px;
-        }
-        
-        .report-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        
-        .report-text {
-            margin-bottom: 25px;
-            color: #666;
-        }
-        
-        /* Animações */
-        .fade-in {
-            animation: fadeIn 1s ease-in-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            margin-bottom: 40px;
+            font-weight: 300;
+            line-height: 1.8;
         }
         
         /* Footer */
         .footer {
+            padding: 80px 0 0;
             background-color: var(--dark);
             color: var(--light);
-            padding: 30px 0 0;
             position: relative;
         }
         
         .footer::before {
             content: '';
             position: absolute;
-            top: 0;
+            top: -10px;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            height: 20px;
+            background: linear-gradient(to right, var(--primary) 0%, var(--dark) 100%);
+            transform: skewY(0.5deg);
+        }
+        
+        .footer-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        
+        .footer-text {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            color: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .social-icon:hover {
+            background-color: var(--secondary);
+            color: var(--dark);
+            transform: translateY(-3px);
         }
         
         .footer-title {
-            color: var(--secondary);
             font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 20px;
+            color: var(--secondary);
+            margin-bottom: 25px;
             position: relative;
             padding-bottom: 10px;
         }
@@ -509,326 +685,284 @@
             position: absolute;
             bottom: 0;
             left: 0;
-            width: 40px;
-            height: 3px;
+            width: 50px;
+            height: 2px;
             background-color: var(--secondary);
         }
         
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .footer-link {
+            margin-bottom: 15px;
+        }
+        
+        .footer-link a {
+            color: var(--light);
+            opacity: 0.8;
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-block;
+            position: relative;
+        }
+        
+        .footer-link a:hover {
+            opacity: 1;
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+        
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255,255,255,0.1);
+            color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .contact-text {
+            opacity: 0.8;
+        }
+        
         .footer-bottom {
+            margin-top: 50px;
             background-color: rgba(0,0,0,0.2);
-            padding: 15px 0;
-            margin-top: 30px;
+            padding: 20px 0;
             text-align: center;
         }
         
-        .footer-bottom p {
-            margin: 0;
-            font-size: 14px;
+        .footer-copyright {
+            opacity: 0.7;
+            font-size: 0.9rem;
         }
         
-        /* Responsivo */
+        /* Media Queries */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+            
+            .services-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
         @media (max-width: 992px) {
-            .hero-section {
-                padding: 80px 0;
+            .hero-content {
+                flex-direction: column;
             }
             
-            .hero-title {
-                font-size: 2.5rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.3rem;
-            }
-            
-            .about-image {
-                margin-bottom: 30px;
+            .hero-text {
+                padding-right: 0;
+                margin-bottom: 40px;
+                text-align: center;
             }
             
             .about-content {
-                padding: 0;
+                flex-direction: column;
             }
             
-            .section-title {
-                font-size: 2rem;
+            .about-image-area {
+                margin-bottom: 40px;
             }
             
-            .chart-container {
-                height: 250px;
+            .about-image-area::before {
+                left: 0;
             }
         }
         
         @media (max-width: 768px) {
-            .topbar {
-                display: none;
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
             
-            .hero-section {
-                padding: 60px 0;
-                text-align: center;
+            .services-grid {
+                grid-template-columns: 1fr;
             }
             
             .hero-title {
-                font-size: 2rem;
-            }
-            
-            .hero-subtitle {
-                font-size: 1.1rem;
-            }
-            
-            .dashboard-section, .about-section, .services-section, .report-section {
-                padding: 60px 0;
-            }
-            
-            .section-title {
-                font-size: 1.8rem;
-            }
-            
-            .stats-header h3, .chart-header h3 {
-                font-size: 1.2rem;
-            }
-            
-            .stats-body, .chart-body {
-                padding: 20px;
-            }
-            
-            .stat-number {
                 font-size: 2.5rem;
             }
             
-            .chart-container {
-                height: 200px;
-            }
-            
-            .cta-title {
+            .about-title, .section-title, .cta-title {
                 font-size: 2rem;
             }
             
-            .cta-text {
-                font-size: 1rem;
+            .hero-cogex {
+                font-size: 5rem;
+            }
+            
+            .hero-subtext {
+                font-size: 1.2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Barra superior -->
-    <div class="topbar d-none d-md-block">
-        <div class="container">
-            <div class="row justify-content-between">
-                <div class="col-md-6">
-                    <div class="d-flex align-items-center">
-                        <span class="me-3"><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</span>
-                        <span><i class="fas fa-phone me-2"></i>(98) 3198-4300</span>
-                    </div>
-                </div>
-                <div class="col-md-6 text-end">
-                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
-                    <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cabeçalho principal -->
     <header class="main-header">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-3 col-md-4 col-8">
-                    <div class="logo-container">
-                        <a href="index.html">
-                            <img src="COGEX.png" alt="Logo COGEX">
-                        </a>
-                    </div>
+            <div class="header-container">
+                <div class="logo-area">
+                    <h1 class="logo-text">COGEX</h1>
                 </div>
-                <div class="col-lg-9 col-md-8 col-4">
-                    <nav class="navbar navbar-expand-lg navbar-light">
-                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav ms-auto">
-                                <li class="nav-item">
-                                    <a class="nav-link active" href="index.html">Início</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="quem-somos.html">Quem Somos</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="formulario.html">Formulário</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="relatorio.html">Relatório</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Contato</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
+                <div class="nav-area">
+                    <ul class="main-nav">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link active">Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="quem-somos.html" class="nav-link">Quem Somos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="formulario.html" class="nav-link">Formulário</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="relatorio.html" class="nav-link">Relatório</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">Contato</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6">
-                    <div class="hero-content">
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="hero-content">
+                    <div class="hero-text">
                         <h1 class="hero-title">Semana <span>Registre-se</span></h1>
                         <h2 class="hero-subtitle">Cidadania ao alcance de todos</h2>
-                        <p class="mb-4">A Semana Registre-se é uma iniciativa da Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão, que visa promover o acesso à documentação civil básica para toda a população.</p>
-                        <a href="formulario.html" class="btn btn-primary me-3 mb-2">
-                            <i class="fas fa-edit me-2"></i>Participar Agora
-                        </a>
-                        <a href="relatorio.html" class="btn btn-secondary mb-2">
-                            <i class="fas fa-chart-bar me-2"></i>Ver Relatórios
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-6 mt-5 mt-lg-0">
-                    <div class="hero-image text-center">
-                        <img src="COGEX.png" alt="COGEX Logo" class="img-fluid" style="max-height: 300px;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Dashboard Section -->
-    <section class="dashboard-section">
-        <div class="container">
-            <h2 class="section-title">Dashboard Estatístico</h2>
-            
-            <!-- Cards de Estatísticas -->
-            <div class="row fade-in">
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="stats-card">
-                        <div class="stats-header">
-                            <h3>Total de Serventias</h3>
-                        </div>
-                        <div class="stats-body">
-                            <div class="stat-number">243</div>
-                            <div class="stat-text">Serventias participantes</div>
+                        <p class="hero-description">A Semana Registre-se é uma iniciativa da Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão, que visa promover o acesso à documentação civil básica para toda a população.</p>
+                        <div>
+                            <a href="formulario.html" class="btn btn-custom btn-primary-custom me-3">
+                                <i class="fas fa-edit me-2"></i>Participar Agora
+                            </a>
+                            <a href="relatorio.html" class="btn btn-custom btn-secondary-custom">
+                                <i class="fas fa-chart-bar me-2"></i>Ver Relatórios
+                            </a>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="stats-card">
-                        <div class="stats-header">
-                            <h3>Registros Realizados</h3>
-                        </div>
-                        <div class="stats-body">
-                            <div class="stat-number">5.847</div>
-                            <div class="stat-text">Novos registros</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="stats-card">
-                        <div class="stats-header">
-                            <h3>Pessoas Atendidas</h3>
-                        </div>
-                        <div class="stats-body">
-                            <div class="stat-number">15.682</div>
-                            <div class="stat-text">Atendimentos realizados</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <div class="stats-card">
-                        <div class="stats-header">
-                            <h3>Municípios Alcançados</h3>
-                        </div>
-                        <div class="stats-body">
-                            <div class="stat-number">217</div>
-                            <div class="stat-text">De 217 municípios no estado</div>
-                        </div>
+                    <div class="hero-visual">
+                        <div class="hero-cogex">COGEX</div>
+                        <div class="hero-subtext">CORREGEDORIA GERAL DO FORO EXTRAJUDICIAL</div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Gráficos Principais -->
-            <div class="row fade-in">
-                <!-- Gráfico 1: Registros por Tipo -->
-                <div class="col-lg-6 mb-4">
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3><i class="fas fa-chart-pie me-2"></i>Registros por Tipo</h3>
+        <!-- Dashboard Section -->
+        <section class="dashboard-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title">Dashboard Estatístico</h2>
+                    <p class="section-subtitle">Dados e estatísticas da Semana Registre-se 2024</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-building"></i>
                         </div>
-                        <div class="chart-body">
-                            <div class="chart-container">
-                                <canvas id="registrosPorTipoChart"></canvas>
+                        <div class="stat-number">243</div>
+                        <div class="stat-label">Serventias Participantes</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-number">5.847</div>
+                        <div class="stat-label">Registros Realizados</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-number">15.682</div>
+                        <div class="stat-label">Pessoas Atendidas</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <div class="stat-number">217</div>
+                        <div class="stat-label">Municípios Alcançados</div>
+                    </div>
+                </div>
+                
+                <div class="charts-container">
+                    <div class="chart-wrapper">
+                        <h3 class="chart-title">Registros por Tipo</h3>
+                        <div class="chart-container">
+                            <canvas id="registrosPorTipoChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-wrapper">
+                        <h3 class="chart-title">Participação por Região</h3>
+                        <div class="chart-container">
+                            <div class="map-chart">
+                                <img src="https://via.placeholder.com/800x400?text=Mapa+do+Maranhão" alt="Mapa de Participação" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div class="map-legend">
+                                    <div class="map-legend-item">
+                                        <div class="map-legend-color" style="background-color: #800020;"></div>
+                                        <span>Alta Participação</span>
+                                    </div>
+                                    <div class="map-legend-item">
+                                        <div class="map-legend-color" style="background-color: #d14d72;"></div>
+                                        <span>Média Participação</span>
+                                    </div>
+                                    <div class="map-legend-item">
+                                        <div class="map-legend-color" style="background-color: #ffb4b4;"></div>
+                                        <span>Baixa Participação</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Gráfico 2: Registros por Região -->
-                <div class="col-lg-6 mb-4">
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3><i class="fas fa-chart-bar me-2"></i>Registros por Região</h3>
-                        </div>
-                        <div class="chart-body">
-                            <div class="chart-container">
-                                <canvas id="registrosPorRegiaoChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
+                <div class="text-center">
+                    <a href="relatorio.html" class="btn btn-custom btn-primary-custom">
+                        <i class="fas fa-chart-line me-2"></i>Ver Relatório Completo
+                    </a>
                 </div>
             </div>
+        </section>
 
-            <div class="text-center mt-3">
-                <a href="relatorio.html" class="btn btn-primary">
-                    <i class="fas fa-chart-line me-2"></i>Ver Relatório Completo
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 mb-4 mb-lg-0">
-                    <div class="about-image">
-                        <img src="https://via.placeholder.com/600x400?text=COGEX" alt="Sobre a COGEX" class="img-fluid">
+        <!-- About Section -->
+        <section class="about-section">
+            <div class="container">
+                <div class="about-content">
+                    <div class="about-image-area">
+                        <img src="https://via.placeholder.com/600x400?text=Sobre+a+COGEX" alt="Sobre a COGEX" class="about-image">
                     </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="about-content">
+                    <div class="about-info">
                         <h2 class="about-title">Sobre a Semana Registre-se</h2>
-                        <p class="about-text">A Semana Registre-se é uma iniciativa da Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão. Durante uma semana, as serventias extrajudiciais de todo o estado realizam ações especiais de atendimento, focando nas comunidades mais vulneráveis e regiões de difícil acesso.</p>
-                        <p class="about-text">O projeto visa reduzir o sub-registro de nascimento, garantir a cidadania e assegurar o acesso a direitos fundamentais por meio da documentação civil.</p>
-                        <a href="quem-somos.html" class="btn btn-primary">
-                            <i class="fas fa-users me-2"></i>Conheça Nossa Equipe
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services-section">
-        <div class="container">
-            <h2 class="section-title">Nossos Serviços</h2>
-            
-            <div class="row fade-in">
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="service-card">
-                        <div class="service-body">
-                            <div class="service-icon">
-                                <i class="fas fa-baby"></i>
-                            </div>
-                            <h3 class="service-title">Registro de Nascimento</h3>
-                            <p>Emissão da primeira certidão de nascimento de forma gratuita, para pessoas de qualquer idade.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="service-card">
+                        <p class="about-text">A Semana Registre-se é uma iniciativa da Corregedoria Geral do Foro Extraju
