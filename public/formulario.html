@@ -789,4 +789,52 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
 </body>
+    <script>
+  // Função de salvamento
+  document.getElementById("registroForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const dados = {
+      serventia: document.getElementById("serventia").value,
+      email: document.getElementById("email").value,
+      telefone: document.getElementById("telefone").value,
+      responsavel: document.getElementById("responsavel").value,
+      participacao: document.getElementById("participacao").value,
+      dataInicio: document.getElementById("dataInicio").value,
+      motivoNao: document.getElementById("motivoNao").value,
+      acoesRealizadas: document.getElementById("acoesRealizadas").value,
+      publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
+      viasEmitidas: document.getElementById("viasEmitidas").value,
+      registrosNascimento: document.getElementById("registrosNascimento").value,
+      averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
+      retificacoes: document.getElementById("retificacoes").value,
+      registrosTardios: document.getElementById("registrosTardios").value,
+      restauracoes: document.getElementById("restauracoes").value,
+      classificacao: document.getElementById("classificacao").value,
+      tags: document.getElementById("tags").value,
+      observacoes: document.getElementById("observacoes").value,
+      dataRegistro: new Date().toISOString()
+    };
+
+    // Recupera o array atual ou inicia novo
+    const registros = JSON.parse(localStorage.getItem("registrosCogex") || "[]");
+    registros.push(dados);
+    localStorage.setItem("registrosCogex", JSON.stringify(registros));
+
+    alert("✅ Registro salvo localmente!");
+    this.reset();
+  });
+
+  // Exportar como JSON
+  function exportarJSON() {
+    const dados = localStorage.getItem("registrosCogex");
+    const blob = new Blob([dados], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "registros_cogex.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+</script>
 </html>
