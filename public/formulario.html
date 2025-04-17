@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COGEX - Formulário de Registro</title>
+    <title>COGEX - Corregedoria Geral do Foro Extrajudicial</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        /* Todos os estilos originais mantidos aqui */
         :root {
-            --primary: #800020;
-            --secondary: #ffcc00;
-            --dark: #000000;
+            --primary: #800020; /* Vinho */
+            --secondary: #ffcc00; /* Amarelo */
+            --dark: #000000; /* Preto */
             --light: #ffffff;
             --gray: #f8f9fa;
             --transition: all 0.3s ease;
@@ -24,184 +23,757 @@
             background-color: #f5f5f5;
         }
         
-        /* ... (manter todo o CSS original) ... */
+        /* Cabeçalho e Navegação */
+        .topbar {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .main-header {
+            background-color: var(--light);
+            padding: 15px 0;
+            border-bottom: 5px solid var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-link {
+            font-weight: 600;
+            color: var(--primary) !important;
+            padding: 10px 20px !important;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--dark) !important;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 70%;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1563807894768-f28bee0d37b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--light);
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-content {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .hero-btn {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            color: var(--dark);
+        }
+        
+        /* Features Section */
+        .features-section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 50px;
+            text-align: center;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        .feature-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            color: var(--light);
+            font-size: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .feature-body {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        /* Sobre Section */
+        .about-section {
+            padding: 80px 0;
+            background-color: var(--gray);
+            position: relative;
+        }
+        
+        .about-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1Ij48L3BhdGg+Cjwvc3ZnPg==');
+            opacity: 0.5;
+        }
+        
+        .about-image {
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            transition: var(--transition);
+        }
+        
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+        
+        .about-text {
+            padding: 30px;
+        }
+        
+        .about-text h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .about-text h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: var(--light);
+            padding: 60px 0;
+            position: relative;
+        }
+        
+        .stats-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1IiBoZWlnaHQ9IjUiPgo8cmVjdCB3aWR0aD0iNSIgaGVpZ2h0PSI1IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMDUiPjwvcmVjdD4KPHBhdGggZD0iTTAgNUw1IDAiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIwLjUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1Ij48L3BhdGg+Cjwvc3ZnPg==');
+            opacity: 0.2;
+        }
+        
+        .stat-item {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .stat-text {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+        
+        /* Call to Action */
+        .cta-section {
+            padding: 80px 0;
+            background-color: var(--gray);
+            text-align: center;
+        }
+        
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Notícias Section */
+        .news-section {
+            padding: 80px 0;
+        }
+        
+        .news-card {
+            background-color: var(--light);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            transition: var(--transition);
+            height: 100%;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .news-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .news-body {
+            padding: 25px;
+        }
+        
+        .news-date {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .news-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .news-text {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .read-more {
+            color: var(--primary);
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .read-more:hover {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 30px 0 0;
+            position: relative;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+        
+        .footer-title {
+            color: var(--secondary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .footer-bottom {
+            background-color: rgba(0,0,0,0.2);
+            padding: 15px 0;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        /* Animações */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsivo */
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .feature-card, .news-card {
+                margin-bottom: 20px;
+            }
+            
+            .about-text {
+                margin-top: 30px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .topbar {
+                display: none;
+            }
+            
+            .hero-section {
+                padding: 80px 0;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+            
+            .stat-item {
+                margin-bottom: 30px;
+            }
+        }
     </style>
 </head>
 <body>
-    <!-- Topbar -->
+    <!-- Barra superior -->
     <div class="topbar d-none d-md-block">
-        <!-- Conteúdo original da topbar -->
-    </div>
-
-    <!-- Header -->
-    <header class="main-header">
-        <!-- Estrutura original do header -->
-    </header>
-
-    <!-- Page Header -->
-    <section class="page-header">
-        <!-- Cabeçalho da página -->
-    </section>
-
-    <!-- Main Content -->
-    <div class="container my-5">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-tab-pane" type="button" role="tab" aria-controls="form-tab-pane" aria-selected="true">
-                    <i class="fas fa-edit me-2"></i>Formulário
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="data-tab" data-bs-toggle="tab" data-bs-target="#data-tab-pane" type="button" role="tab" aria-controls="data-tab-pane" aria-selected="false">
-                    <i class="fas fa-database me-2"></i>Registros
-                </button>
-            </li>
-        </ul>
-        
-        <div class="tab-content" id="myTabContent">
-            <!-- Formulário Tab -->
-            <div class="tab-pane fade show active" id="form-tab-pane" role="tabpanel">
-                <div class="form-section">
-                    <div class="container">
-                        <div class="form-container">
-                            <form id="registroForm">
-                                <!-- Seções do formulário mantidas intactas -->
-                                
-                                <!-- Botões de Ação Corrigidos -->
-                                <div class="row">
-                                    <div class="col-md-6 mb-3 mb-md-0">
-                                        <button type="reset" class="btn btn-secondary w-100">
-                                            <i class="fas fa-sync-alt me-2"></i>Limpar Formulário
-                                        </button>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <button type="submit" class="btn btn-primary w-100">
-                                            <i class="fas fa-paper-plane me-2"></i>Registrar Participação
-                                        </button>
-                                    </div>
-                                </div>
-                                <input type="hidden" id="registroId">
-                            </form>
-                        </div>
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <span class="me-3"><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</span>
+                        <span><i class="fas fa-phone me-2"></i>(98) 3198-4300</span>
                     </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Cabeçalho principal -->
+    <header class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <a class="navbar-brand text-primary fw-bold fs-4" href="index.html">COGEX</a>
+                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="index.html">Início</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="quem-somos.html">Quem Somos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="formulario.html">Formulário</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="dashboard.html">Relatórios</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#">Contato</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Corregedoria Geral do Foro Extrajudicial</h1>
+                <p class="hero-subtitle">Fiscalizando, orientando e normatizando os serviços extrajudiciais do Maranhão</p>
+                <div class="d-flex justify-content-center">
+                    <a href="formulario.html" class="btn btn-primary hero-btn me-3">
+                        <i class="fas fa-edit me-2"></i>Participar da Semana Registre-se
+                    </a>
+                    <a href="dashboard.html" class="btn btn-light hero-btn">
+                        <i class="fas fa-chart-bar me-2"></i>Ver Estatísticas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+        <div class="container">
+            <h2 class="section-title">Nossas Atividades</h2>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-gavel"></i>
+                            </div>
+                            <h3 class="feature-title">Fiscalização</h3>
+                            <p>Realizamos a fiscalização constante dos serviços notariais e registrais, garantindo o cumprimento das normas e a qualidade do atendimento à população.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <h3 class="feature-title">Normatização</h3>
+                            <p>Elaboramos normas e diretrizes para padronizar e aprimorar os serviços extrajudiciais, promovendo a segurança jurídica e a eficiência dos procedimentos.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                            <h3 class="feature-title">Capacitação</h3>
+                            <p>Promovemos cursos, workshops e eventos de capacitação para os profissionais do foro extrajudicial, visando a constante atualização e aperfeiçoamento.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <h3 class="feature-title">Semana Registre-se</h3>
+                            <p>Coordenamos a Semana Registre-se, iniciativa que busca combater o sub-registro civil e garantir o acesso à documentação básica para todos os cidadãos maranhenses.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <h3 class="feature-title">Monitoramento</h3>
+                            <p>Realizamos o monitoramento contínuo dos indicadores de desempenho das serventias extrajudiciais, identificando oportunidades de melhoria e boas práticas.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-body">
+                            <div class="feature-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3 class="feature-title">Atendimento ao Cidadão</h3>
+                            <p>Atendemos às dúvidas e reclamações dos cidadãos, buscando solucionar conflitos e garantir a qualidade dos serviços prestados pelas serventias extrajudiciais.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-image">
+                        <img src="https://www.tjma.jus.br/midia/tj/publicacao/510050/fachada_tjma.jpg" alt="Tribunal de Justiça do Maranhão">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-text">
+                        <h2>Sobre a COGEX</h2>
+                        <p>A Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão tem a missão de fiscalizar, orientar e normatizar os serviços extrajudiciais do Estado do Maranhão, buscando a excelência na prestação de serviços notariais e registrais.</p>
+                        <p>Nossa equipe é formada por profissionais dedicados que trabalham para garantir o aprimoramento constante dos serviços prestados pelos cartórios, visando a segurança jurídica e o atendimento de qualidade à população maranhense.</p>
+                        <p>A COGEX coordena iniciativas como a Semana Registre-se, que busca combater o sub-registro civil no estado e garantir a cidadania plena através da documentação básica.</p>
+                        <a href="quem-somos.html" class="btn btn-primary mt-3">
+                            <i class="fas fa-users me-2"></i>Conheça Nossa Equipe
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
+                        <div class="stat-number">245</div>
+                        <div class="stat-text">Serventias Fiscalizadas</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
+                        <div class="stat-number">217</div>
+                        <div class="stat-text">Municípios Atendidos</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
+                        <div class="stat-number">15.682</div>
+                        <div class="stat-text">Pessoas Beneficiadas</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
+                        <div class="stat-number">5.847</div>
+                        <div class="stat-text">Registros Realizados</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Participe da Semana Registre-se</h2>
+            <p class="cta-text">A Semana Registre-se é uma iniciativa da COGEX que busca garantir o acesso à documentação básica para todos os cidadãos maranhenses. Participe conosco e ajude a combater o sub-registro civil no estado.</p>
+            <a href="formulario.html" class="btn btn-primary btn-lg">
+                <i class="fas fa-edit me-2"></i>Acessar Formulário
+            </a>
+        </div>
+    </section>
+
+    <!-- Notícias Section -->
+    <section class="news-section">
+        <div class="container">
+            <h2 class="section-title">Últimas Notícias</h2>
+            
+            <div class="row">
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="news-card">
+                        <div class="news-img" style="background-image: url('https://www.tjma.jus.br/midia/tj/noticia/510050/registre-se.jpg');"></div>
+                        <div class="news-body">
+                            <span class="news-date">15 de Maio, 2024</span>
+                            <h3 class="news-title">Semana Registre-se 2024 supera expectativas</h3>
+                            <p class="news-text">A edição 2024 da Semana Registre-se alcançou números recordes, com mais de 5.800 registros realizados em todo o estado.</p>
+                            <a href="#" class="read-more">Leia mais <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="news-card">
+                        <div class="news-img" style="background-image: url('https://www.tjma.jus.br/midia/tj/noticia/510051/capacitacao.jpg');"></div>
+                        <div class="news-body">
+                            <span class="news-date">10 de Maio, 2024</span>
+                            <h3 class="news-title">COGEX promove capacitação para cartórios</h3>
+                            <p class="news-text">Curso de atualização em práticas cartorárias foi realizado para mais de 100 profissionais do foro extrajudicial.</p>
+                            <a href="#" class="read-more">Leia mais <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="news-card">
+                        <div class="news-img" style="background-image: url('https://www.tjma.jus.br/midia/tj/noticia/510052/normativa.jpg');"></div>
+                        <div class="news-body">
+                            <span class="news-date">02 de Maio, 2024</span>
+                            <h3 class="news-title">Nova normativa para registro civil é publicada</h3>
+                            <p class="news-text">COGEX divulga atualização das normas para registro civil, visando a simplificação e modernização dos procedimentos.</p>
+                            <a href="#" class="read-more">Leia mais <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-4">
+                <a href="#" class="btn btn-outline-primary">
+                    <i class="fas fa-newspaper me-2"></i>Ver Todas as Notícias
+                </a><div class="text-center mt-4">
+                <a href="#" class="btn btn-outline-primary">
+                    <i class="fas fa-newspaper me-2"></i>Ver Todas as Notícias
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="footer">
-        <!-- Estrutura original do footer -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="footer-title">COGEX</h5>
+                    <p>Corregedoria Geral do Foro Extrajudicial</p>
+                    <p>Poder Judiciário do Estado do Maranhão</p>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <h5 class="footer-title">Contato</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i>Av. dos Holandeses, s/n - Calhau</p>
+                    <p><i class="fas fa-phone me-2"></i>(98) 3198-4300</p>
+                    <p><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</p>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="footer-title">Links Úteis</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="https://www.tjma.jus.br" class="text-white text-decoration-none">TJMA</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">CNJ</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Perguntas Frequentes</a></li>
+                        <li class="mb-2"><a href="#" class="text-white text-decoration-none">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 COGEX - Corregedoria Geral do Foro Extrajudicial. Todos os direitos reservados.</p>
+            </div>
+        </div>
     </footer>
 
-    <!-- Scripts Unificados -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby4XaPI4n8bzhs-_O8ogDpdT-VxZ0YaQ06MEccbotf-WWuwjsC2dlhq5ZioYllwnQmP/exec";
-
-        document.addEventListener("DOMContentLoaded", function() {
-            // Carregar dados das serventias
-            fetch('serventias_registre_se.json')
-                .then(response => response.json())
-                .then(data => {
-                    const selectServentia = document.getElementById('serventia');
-                    const selectPublicos = document.getElementById('publicosAtendidos');
-                    
-                    // Preencher Serventias
-                    data.serventias.forEach(item => {
-                        selectServentia.add(new Option(item.nome, item.nome));
-                    });
-
-                    // Preencher Públicos (exemplo)
-                    const publicos = ['Crianças', 'Adolescentes', 'Adultos', 'Idosos', 'PCD'];
-                    publicos.forEach(publico => {
-                        selectPublicos.add(new Option(publico, publico));
-                    });
-                })
-                .catch(error => console.error('Erro ao carregar dados:', error));
-
-            // Controle dinâmico de campos
-            document.getElementById('participacao').addEventListener('change', function() {
-                document.getElementById('motivoNaoSection').style.display = 
-                    this.value === 'Não' ? 'block' : 'none';
-            });
-
-            // Envio do formulário
-            document.getElementById("registroForm").addEventListener("submit", async (e) => {
-                e.preventDefault();
-
-                // Coletar dados
-                const formData = {
-                    serventia: document.getElementById("serventia").value,
-                    email: document.getElementById("email").value,
-                    telefone: document.getElementById("telefone").value,
-                    responsavel: document.getElementById("responsavel").value,
-                    participacao: document.getElementById("participacao").value,
-                    dataInicio: document.getElementById("dataInicio").value,
-                    motivoNao: document.getElementById("motivoNao").value,
-                    acoesRealizadas: document.getElementById("acoesRealizadas").value,
-                    publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions)
-                                        .map(opt => opt.value),
-                    viasEmitidas: document.getElementById("viasEmitidas").value,
-                    registrosNascimento: document.getElementById("registrosNascimento").value,
-                    averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
-                    retificacoes: document.getElementById("retificacoes").value,
-                    registrosTardios: document.getElementById("registrosTardios").value,
-                    restauracoes: document.getElementById("restauracoes").value,
-                    classificacao: document.getElementById("classificacao").value,
-                    tags: document.getElementById("tags").value,
-                    observacoes: document.getElementById("observacoes").value,
-                    dataRegistro: new Date().toISOString()
-                };
-
-                try {
-                    // Envio para Google Sheets
-                    const response = await fetch(WEBAPP_URL, {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify(formData)
-                    });
-
-                    if (!response.ok) throw new Error(`Erro HTTP! status: ${response.status}`);
-                    
-                    // Salvamento local
-                    const registros = JSON.parse(localStorage.getItem("registrosCogex") || "[]");
-                    registros.push(formData);
-                    localStorage.setItem("registrosCogex", JSON.stringify(registros));
-
-                    alert('✅ Registro salvo com sucesso!');
-                    document.getElementById("registroForm").reset();
-
-                } catch (error) {
-                    console.error('Erro:', error);
-                    alert(`❌ Falha no envio: ${error.message}`);
-                }
-            });
-        });
-
-        // Função de exportação
-        function exportarJSON() {
-            const dados = localStorage.getItem("registrosCogex");
-            if (!dados || dados === "[]") {
-                alert("⚠️ Nenhum dado encontrado!");
-                return;
-            }
-            
-            const blob = new Blob([dados], {type: "application/json"});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "backup_registros.json";
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-    </script>
-
-    <!-- Botão de Exportação -->
-    <div class="container text-end my-3">
-        <button type="button" class="btn btn-secondary" onclick="exportarJSON()">
-            📤 Exportar Dados Locais (JSON)
-        </button>
-    </div>
 </body>
 </html>
