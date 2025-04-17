@@ -369,7 +369,7 @@
                                     <a class="nav-link" href="formulario.html">Formulário</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#">Relatórios</a>
+                                    <a class="nav-link" href="dashboard.html">Relatórios</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="#">Contato</a>
