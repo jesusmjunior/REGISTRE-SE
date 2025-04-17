@@ -755,21 +755,38 @@
                                     </div>
                                 </div>
   <input type="hidden" id="registroId"
-                                    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        fetch('serventias_registre_se (3).json')
-            .then(response => response.json())
-            .then(data => {
-                const select = document.getElementById('serventia');
-                data.serventias.forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.nome;
-                    option.textContent = item.nome;
-                    select.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Erro ao carregar o JSON de serventias:', error));
-    });
-</script>
-                                <!-- Campo oculto para ID em caso de edição -->
-                               
+                                    <!-- Campo oculto para ID em caso de edição -->
+    <input type="hidden" id="registroId">
+
+    <!-- SCRIPT DE CARREGAMENTO DAS SERVENTIAS -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        fetch('serventias_registre_se (4).json')
+          .then(response => response.json())
+          .then(data => {
+            const select = document.getElementById('serventia');
+            data.serventias.forEach(item => {
+              const option = document.createElement('option');
+              option.value = item.nome;
+              option.textContent = item.nome;
+              select.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.error('Erro ao carregar os cartórios:', error);
+          });
+      });
+    </script>
+  </form> <!-- Fecha o formulário iniciado antes -->
+</div> <!-- Fecha .form-container -->
+</div> <!-- Fecha .container da section -->
+</div> <!-- Fecha .form-section -->
+</div> <!-- Fecha tab-pane -->
+</div> <!-- Fecha tab-content -->
+</div> <!-- Fecha .container my-5 -->
+
+<!-- RODAPÉ E SCRIPTS EXTERNOS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
