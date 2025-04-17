@@ -861,6 +861,27 @@ document.getElementById("registroForm").addEventListener("submit", async functio
   }
 });
 </script>
+                                <script>
+async function carregarServentias() {
+  try {
+    const response = await fetch("serventias_registre_se.json");
+    const json = await response.json();
+    const select = document.getElementById("serventia");
+
+    json.serventias.forEach(s => {
+      const option = document.createElement("option");
+      option.value = s.nome;
+      option.textContent = s.nome;
+      select.appendChild(option);
+    });
+  } catch (erro) {
+    console.error("Erro ao carregar serventias:", erro);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", carregarServentias);
+</script>
+
 </body>
 
 </html>
