@@ -759,224 +759,55 @@
     <input type="hidden" id="registroId">
 
     <!-- SCRIPT DE CARREGAMENTO DAS SERVENTIAS -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        fetch('serventias_registre_se.json')
-          .then(response => response.json())
-          .then(data => {
-            const select = document.getElementById('serventia');
-            data.serventias.forEach(item => {
-              const option = document.createElement('option');
-              option.value = item.nome;
-              option.textContent = item.nome;
-              select.appendChild(option);
-            });
-          })
-          .catch(error => {
-            console.error('Erro ao carregar os cartórios:', error);
-          });
-      });
-    </script>
-  </form> <!-- Fecha o formulário iniciado antes -->
-</div> <!-- Fecha .form-container -->
-</div> <!-- Fecha .container da section -->
-</div> <!-- Fecha .form-section -->
-</div> <!-- Fecha tab-pane -->
-</div> <!-- Fecha tab-content -->
-</div> <!-- Fecha .container my-5 -->
+    
 
-<!-- RODAPÉ E SCRIPTS EXTERNOS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 <script>
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwBLuarR_LKl7gO3sVQVD2zR8FatKh2f0AsxC4kLQ2ZvT6r-QcOqXxmOAIi1rj5b753qw/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyfCQ4FrXu3l6eBMPN22z-NP7nj7flC4lQuUDXrstLjOB2iE6xN3fsB6mq0n0hJa8XwEA/exec";
 
-  document.getElementById("registroForm").addEventListener("submit", function(event) {
-    event.preventDefault();
+document.getElementById("registroForm").addEventListener("submit", async function(event) {
+  event.preventDefault();
 
-    const dados = {
-      serventia: document.getElementById("serventia").value,
-      email: document.getElementById("email").value,
-      telefone: document.getElementById("telefone").value,
-      responsavel: document.getElementById("responsavel").value,
-      participacao: document.getElementById("participacao").value,
-      dataInicio: document.getElementById("dataInicio").value,
-      motivoNao: document.getElementById("motivoNao").value,
-      acoesRealizadas: document.getElementById("acoesRealizadas").value,
-      publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
-      viasEmitidas: document.getElementById("viasEmitidas").value,
-      registrosNascimento: document.getElementById("registrosNascimento").value,
-      averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
-      retificacoes: document.getElementById("retificacoes").value,
-      registrosTardios: document.getElementById("registrosTardios").value,
-      restauracoes: document.getElementById("restauracoes").value,
-      classificacao: document.getElementById("classificacao").value,
-      tags: document.getElementById("tags").value,
-      observacoes: document.getElementById("observacoes").value,
-      dataRegistro: new Date().toISOString()
-    };
+  const dados = {
+    serventia: document.getElementById("serventia").value,
+    email: document.getElementById("email").value,
+    telefone: document.getElementById("telefone").value,
+    responsavel: document.getElementById("responsavel").value,
+    participacao: document.getElementById("participacao").value,
+    dataInicio: document.getElementById("dataInicio").value,
+    motivoNao: document.getElementById("motivoNao").value,
+    acoesRealizadas: document.getElementById("acoesRealizadas").value,
+    publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
+    viasEmitidas: document.getElementById("viasEmitidas").value,
+    registrosNascimento: document.getElementById("registrosNascimento").value,
+    averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
+    retificacoes: document.getElementById("retificacoes").value,
+    registrosTardios: document.getElementById("registrosTardios").value,
+    restauracoes: document.getElementById("restauracoes").value,
+    classificacao: document.getElementById("classificacao").value,
+    tags: document.getElementById("tags").value,
+    observacoes: document.getElementById("observacoes").value,
+    dataRegistro: new Date().toISOString()
+  };
 
-    fetch(WEBAPP_URL, {
+  try {
+    const response = await fetch(WEBAPP_URL, {
       method: "POST",
       body: JSON.stringify(dados),
       headers: { "Content-Type": "application/json" }
-    })
-    .then(response => response.text())
-    .then(msg => {
-      alert("✅ Registro enviado com sucesso!");
-      console.log("📥 Resposta do GAS:", msg);
-      this.reset();
-    })
-    .catch(err => {
-      alert("❌ Erro ao salvar: " + err);
     });
-  });
-
-  // OPCIONAL: Exportação local em JSON
-  function exportarJSON() {
-    const dados = localStorage.getItem("registrosCogex");
-    if (!dados || dados === "[]") {
-      alert("⚠️ Nenhum dado salvo localmente.");
-      return;
-    }
-    const blob = new Blob([dados], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "registros_cogex.json";
-    a.click();
-    URL.revokeObjectURL(url);
+    const resultado = await response.text();
+    alert("✅ Registro enviado com sucesso!");
+    this.reset();
+    console.log("🧾 GAS resposta:", resultado);
+  } catch (erro) {
+    console.error("❌ Erro:", erro);
+    alert("Erro ao salvar no Drive: " + erro.message);
   }
+});
 </script>
 </body>
-    <script>
-  // Função de salvamento
-  document.getElementById("registroForm").addEventListener("submit", function(event) {
-    event.preventDefault();
 
-    const dados = {
-      serventia: document.getElementById("serventia").value,
-      email: document.getElementById("email").value,
-      telefone: document.getElementById("telefone").value,
-      responsavel: document.getElementById("responsavel").value,
-      participacao: document.getElementById("participacao").value,
-      dataInicio: document.getElementById("dataInicio").value,
-      motivoNao: document.getElementById("motivoNao").value,
-      acoesRealizadas: document.getElementById("acoesRealizadas").value,
-      publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
-      viasEmitidas: document.getElementById("viasEmitidas").value,
-      registrosNascimento: document.getElementById("registrosNascimento").value,
-      averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
-      retificacoes: document.getElementById("retificacoes").value,
-      registrosTardios: document.getElementById("registrosTardios").value,
-      restauracoes: document.getElementById("restauracoes").value,
-      classificacao: document.getElementById("classificacao").value,
-      tags: document.getElementById("tags").value,
-      observacoes: document.getElementById("observacoes").value,
-      dataRegistro: new Date().toISOString()
-    };
-
-    // Recupera o array atual ou inicia novo
-    const registros = JSON.parse(localStorage.getItem("registrosCogex") || "[]");
-    registros.push(dados);
-    localStorage.setItem("registrosCogex", JSON.stringify(registros));
-
-    alert("✅ Registro salvo localmente!");
-    this.reset();
-  });
-
-  // Exportar como JSON
-  function exportarJSON() {
-    const dados = localStorage.getItem("registrosCogex");
-    const blob = new Blob([dados], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "registros_cogex.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-</script>
-<button type="button" class="btn btn-secondary mt-3" onclick="exportarJSON()">
-  📤 Exportar Dados (JSON)
-</button>
-</html>
-<script>
-  const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwBLuarR_LKl7gO3sVQVD2zR8FatKh2f0AsxC4kLQ2ZvT6r-QcOqXxmOAIi1rj5b753qw/exec";
-
-  document.addEventListener("DOMContentLoaded", function () {
-    // Carregamento de serventias
-    fetch('serventias_registre_se.json')
-      .then(response => response.json())
-      .then(data => {
-        const select = document.getElementById('serventia');
-        data.serventias.forEach(item => {
-          const option = document.createElement('option');
-          option.value = item.nome;
-          option.textContent = item.nome;
-          select.appendChild(option);
-        });
-      })
-      .catch(error => console.error('Erro ao carregar os cartórios:', error));
-
-    // Salvamento do formulário
-    document.getElementById("registroForm").addEventListener("submit", async function (event) {
-      event.preventDefault();
-
-      const dados = {
-        serventia: document.getElementById("serventia").value,
-        email: document.getElementById("email").value,
-        telefone: document.getElementById("telefone").value,
-        responsavel: document.getElementById("responsavel").value,
-        participacao: document.getElementById("participacao").value,
-        dataInicio: document.getElementById("dataInicio").value,
-        motivoNao: document.getElementById("motivoNao").value,
-        acoesRealizadas: document.getElementById("acoesRealizadas").value,
-        publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
-        viasEmitidas: document.getElementById("viasEmitidas").value,
-        registrosNascimento: document.getElementById("registrosNascimento").value,
-        averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
-        retificacoes: document.getElementById("retificacoes").value,
-        registrosTardios: document.getElementById("registrosTardios").value,
-        restauracoes: document.getElementById("restauracoes").value,
-        classificacao: document.getElementById("classificacao").value,
-        tags: document.getElementById("tags").value,
-        observacoes: document.getElementById("observacoes").value,
-        dataRegistro: new Date().toISOString()
-      };
-
-      try {
-        const response = await fetch(WEBAPP_URL, {
-          method: "POST",
-          body: JSON.stringify(dados),
-          headers: { "Content-Type": "application/json" }
-        });
-        const resultado = await response.text();
-        alert("✅ Registro enviado com sucesso!");
-        this.reset();
-        console.log("🧾 GAS resposta:", resultado);
-      } catch (erro) {
-        console.error("❌ Erro:", erro);
-        alert("Erro ao salvar no Drive: " + erro.message);
-      }
-    });
-  });
-
-  // Exportar localmente se quiser
-  function exportarJSON() {
-    const dados = localStorage.getItem("registrosCogex");
-    if (!dados || dados === "[]") {
-      alert("⚠️ Nenhum dado salvo localmente.");
-      return;
-    }
-    const blob = new Blob([dados], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "registros_cogex.json";
-    a.click();
-    URL.revokeObjectURL(url);
-  }
-</script>
+    
 
 <!-- Botão de exportação local opcional -->
 <div class="container text-end my-3">
@@ -985,5 +816,51 @@
   </button>
 </div>
 
+
+<script>
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbyfCQ4FrXu3l6eBMPN22z-NP7nj7flC4lQuUDXrstLjOB2iE6xN3fsB6mq0n0hJa8XwEA/exec";
+
+document.getElementById("registroForm").addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const dados = {
+    serventia: document.getElementById("serventia").value,
+    email: document.getElementById("email").value,
+    telefone: document.getElementById("telefone").value,
+    responsavel: document.getElementById("responsavel").value,
+    participacao: document.getElementById("participacao").value,
+    dataInicio: document.getElementById("dataInicio").value,
+    motivoNao: document.getElementById("motivoNao").value,
+    acoesRealizadas: document.getElementById("acoesRealizadas").value,
+    publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
+    viasEmitidas: document.getElementById("viasEmitidas").value,
+    registrosNascimento: document.getElementById("registrosNascimento").value,
+    averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
+    retificacoes: document.getElementById("retificacoes").value,
+    registrosTardios: document.getElementById("registrosTardios").value,
+    restauracoes: document.getElementById("restauracoes").value,
+    classificacao: document.getElementById("classificacao").value,
+    tags: document.getElementById("tags").value,
+    observacoes: document.getElementById("observacoes").value,
+    dataRegistro: new Date().toISOString()
+  };
+
+  try {
+    const response = await fetch(WEBAPP_URL, {
+      method: "POST",
+      body: JSON.stringify(dados),
+      headers: { "Content-Type": "application/json" }
+    });
+    const resultado = await response.text();
+    alert("✅ Registro enviado com sucesso!");
+    this.reset();
+    console.log("🧾 GAS resposta:", resultado);
+  } catch (erro) {
+    console.error("❌ Erro:", erro);
+    alert("Erro ao salvar no Drive: " + erro.message);
+  }
+});
+</script>
 </body>
+
 </html>
