@@ -762,7 +762,7 @@
     
 
 <script>
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz15gpTuP9IhpJJgT6Vtu_lf-X7DSGs7N2o6A6OPLf9-PmBxGD0LnL0309vSMy4XrVMGA/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxFNnCRh1FdViZmI7mIlSBK1Ghmly9Y0tUa7q8Rd5YdxVQntJ3o-0SpEwKEoEXuo4BS/exec";
 
 document.getElementById("registroForm").addEventListener("submit", async function(event) {
   event.preventDefault();
@@ -792,16 +792,18 @@ document.getElementById("registroForm").addEventListener("submit", async functio
   try {
     const response = await fetch(WEBAPP_URL, {
       method: "POST",
-      body: JSON.stringify(dados),
-      headers: { "Content-Type": "application/json" }
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dados)
     });
-    const resultado = await response.text();
+    const result = await response.text();
     alert("✅ Registro enviado com sucesso!");
     this.reset();
-    console.log("🧾 GAS resposta:", resultado);
+    console.log("📬 Resposta do GAS:", result);
   } catch (erro) {
-    console.error("❌ Erro:", erro);
-    alert("Erro ao salvar no Drive: " + erro.message);
+    console.error("❌ Erro ao enviar:", erro);
+    alert("❌ Falha ao salvar no Google Sheets.");
   }
 });
 </script>
@@ -818,7 +820,7 @@ document.getElementById("registroForm").addEventListener("submit", async functio
 
 
 <script>
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbz15gpTuP9IhpJJgT6Vtu_lf-X7DSGs7N2o6A6OPLf9-PmBxGD0LnL0309vSMy4XrVMGA/exec";
+const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxFNnCRh1FdViZmI7mIlSBK1Ghmly9Y0tUa7q8Rd5YdxVQntJ3o-0SpEwKEoEXuo4BS/exec";
 
 document.getElementById("registroForm").addEventListener("submit", async function(event) {
   event.preventDefault();
@@ -848,38 +850,21 @@ document.getElementById("registroForm").addEventListener("submit", async functio
   try {
     const response = await fetch(WEBAPP_URL, {
       method: "POST",
-      body: JSON.stringify(dados),
-      headers: { "Content-Type": "application/json" }
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dados)
     });
-    const resultado = await response.text();
+    const result = await response.text();
     alert("✅ Registro enviado com sucesso!");
     this.reset();
-    console.log("🧾 GAS resposta:", resultado);
+    console.log("📬 Resposta do GAS:", result);
   } catch (erro) {
-    console.error("❌ Erro:", erro);
-    alert("Erro ao salvar no Drive: " + erro.message);
+    console.error("❌ Erro ao enviar:", erro);
+    alert("❌ Falha ao salvar no Google Sheets.");
   }
 });
-<script>
-async function carregarServentias() {
-  try {
-    const response = await fetch("serventias_registre_se.json");
-    const json = await response.json();
-    const select = document.getElementById("serventia");
-
-    json.serventias.forEach(s => {
-      const option = document.createElement("option");
-      option.value = s.nome;
-      option.textContent = s.nome;
-      select.appendChild(option);
-    });
-  } catch (erro) {
-    console.error("Erro ao carregar serventias:", erro);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", carregarServentias);
 </script>
-
 </body>
+
 </html>
