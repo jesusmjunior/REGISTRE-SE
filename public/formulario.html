@@ -860,8 +860,7 @@ document.getElementById("registroForm").addEventListener("submit", async functio
     alert("Erro ao salvar no Drive: " + erro.message);
   }
 });
-</script>
-                                <script>
+<script>
 async function carregarServentias() {
   try {
     const response = await fetch("serventias_registre_se.json");
@@ -883,5 +882,4 @@ document.addEventListener("DOMContentLoaded", carregarServentias);
 </script>
 
 </body>
-
 </html>
