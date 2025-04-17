@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulário COGEX - Completo</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container py-4">
+    <h2 class="text-center mb-4">📋 Formulário COGEX - Semana Registre-se</h2>
+    <form id="registroForm" class="bg-white p-4 rounded shadow">
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="serventia" class="form-label">Serventia</label>
+          <select id="serventia" class="form-select" required>
+            <option value="">Carregando serventias...</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="email" class="form-label">Email Institucional</label>
+          <input type="email" class="form-control" id="email" required />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="telefone" class="form-label">Telefone/Whatsapp</label>
+          <input type="tel" class="form-control" id="telefone" required />
+        </div>
+        <div class="col-md-6">
+          <label for="responsavel" class="form-label">Responsável</label>
+          <input type="text" class="form-control" id="responsavel" required />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-6">
+          <label for="participacao" class="form-label">Participação</label>
+          <select class="form-select" id="participacao" required>
+            <option value="">Selecione...</option>
+            <option value="Sim">Sim</option>
+            <option value="Não">Não</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="dataInicio" class="form-label">Data de Início</label>
+          <input type="date" class="form-control" id="dataInicio" />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="motivoNao" class="form-label">Motivo da não participação</label>
+        <textarea class="form-control" id="motivoNao" rows="2"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="acoesRealizadas" class="form-label">Ações Realizadas</label>
+        <textarea class="form-control" id="acoesRealizadas" rows="3"></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label for="publicosAtendidos" class="form-label">Públicos Atendidos</label>
+        <select id="publicosAtendidos" class="form-select" multiple>
+          <option value="Pessoas em situação de rua">Pessoas em situação de rua</option>
+          <option value="Imigrantes">Imigrantes</option>
+          <option value="Ribeirinhos">Ribeirinhos</option>
+          <option value="Indígenas">Indígenas</option>
+          <option value="Povos tradicionais">Povos tradicionais</option>
+        </select>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+          <label for="viasEmitidas" class="form-label">2ª Vias Emitidas</label>
+          <input type="number" class="form-control" id="viasEmitidas" value="0" />
+        </div>
+        <div class="col">
+          <label for="registrosNascimento" class="form-label">Registros de Nascimento</label>
+          <input type="number" class="form-control" id="registrosNascimento" value="0" />
+        </div>
+        <div class="col">
+          <label for="averacoesPaternidade" class="form-label">Averbações de Paternidade</label>
+          <input type="number" class="form-control" id="averacoesPaternidade" value="0" />
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col">
+          <label for="retificacoes" class="form-label">Retificações</label>
+          <input type="number" class="form-control" id="retificacoes" value="0" />
+        </div>
+        <div class="col">
+          <label for="registrosTardios" class="form-label">Registros Tardios</label>
+          <input type="number" class="form-control" id="registrosTardios" value="0" />
+        </div>
+        <div class="col">
+          <label for="restauracoes" class="form-label">Restaurações</label>
+          <input type="number" class="form-control" id="restauracoes" value="0" />
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="classificacao" class="form-label">Classificação</label>
+        <select class="form-select" id="classificacao">
+          <option value="Infraestrutura">Infraestrutura</option>
+          <option value="Engajamento">Engajamento</option>
+          <option value="Participação">Participação</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label for="tags" class="form-label">Tags</label>
+        <input type="text" class="form-control" id="tags" />
+      </div>
+
+      <div class="mb-3">
+        <label for="observacoes" class="form-label">Observações</label>
+        <textarea class="form-control" id="observacoes" rows="3"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 mb-3">Registrar Participação</button>
+      <button type="button" class="btn btn-secondary w-100" onclick="exportarJSON()">📤 Exportar Dados Locais (JSON)</button>
+    </form>
+  </div>
+
+  <script>
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycby4XaPI4n8bzhs-_O8ogDpdT-VxZ0YaQ06MEccbotf-WWuwjsC2dlhq5ZioYllwnQmP/exec";
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Carregar serventias
+      fetch("serventias_registre_se.json")
+        .then(response => response.json())
+        .then(data => {
+          const select = document.getElementById("serventia");
+          select.innerHTML = '<option value="">Selecione uma serventia...</option>';
+          data.serventias.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.nome;
+            option.textContent = item.nome;
+            select.appendChild(option);
+          });
+        });
+
+      document.getElementById("registroForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        const dados = {
+          serventia: document.getElementById("serventia").value,
+          email: document.getElementById("email").value,
+          telefone: document.getElementById("telefone").value,
+          responsavel: document.getElementById("responsavel").value,
+          participacao: document.getElementById("participacao").value,
+          dataInicio: document.getElementById("dataInicio").value,
+          motivoNao: document.getElementById("motivoNao").value,
+          acoesRealizadas: document.getElementById("acoesRealizadas").value,
+          publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
+          viasEmitidas: document.getElementById("viasEmitidas").value,
+          registrosNascimento: document.getElementById("registrosNascimento").value,
+          averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
+          retificacoes: document.getElementById("retificacoes").value,
+          registrosTardios: document.getElementById("registrosTardios").value,
+          restauracoes: document.getElementById("restauracoes").value,
+          classificacao: document.getElementById("classificacao").value,
+          tags: document.getElementById("tags").value,
+          observacoes: document.getElementById("observacoes").value,
+          dataRegistro: new Date().toISOString()
+        };
+
+        fetch(WEBAPP_URL, {
+          method: "POST",
+          body: JSON.stringify(dados),
+          headers: { "Content-Type": "application/json" }
+        })
+        .then(response => response.text())
+        .then(msg => {
+          alert("✅ Registro enviado com sucesso!");
+          console.log("📥 GAS:", msg);
+          this.reset();
+        })
+        .catch(err => {
+          alert("❌ Erro ao salvar: " + err);
+        });
+      });
+    });
+
+    function exportarJSON() {
+      const dados = localStorage.getItem("registrosCogex");
+      if (!dados || dados === "[]") {
+        alert("⚠️ Nenhum dado salvo localmente.");
+        return;
+      }
+      const blob = new Blob([dados], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "registros_cogex.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
