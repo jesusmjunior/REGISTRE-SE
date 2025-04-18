@@ -802,5 +802,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 </script>
+                                <script>
+document.addEventListener('DOMContentLoaded', function () {
+  fetch('serventia_registre_se.json')
+    .then(res => res.json())
+    .then(data => {
+      const select = document.getElementById("serventia");
+      data.serventias.forEach(item => {
+        const option = document.createElement("option");
+        option.value = item.nome;
+        option.textContent = item.nome;
+        select.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error("Erro ao carregar serventias JSON:", error);
+    });
+});
+</script>
+
 </body>
 </html>
