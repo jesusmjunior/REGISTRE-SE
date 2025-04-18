@@ -757,18 +757,6 @@
   <input type="hidden" id="registroId">
                                     <!-- Campo oculto para ID em caso de edição -->
     <input type="hidden" id="registroId">
-
-    <!-- SCRIPT DE CARREGAMENTO DAS SERVENTIAS -->
-    
-
-
-
-
-</body>
-
-
-    
-
 <!-- Botão de exportação local opcional -->
 <div class="container text-end my-3">
   <button type="button" class="btn btn-secondary" onclick="exportarJSON()">
@@ -778,27 +766,21 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS3fqGBwxKXqGckgSC_S4jBBTQQPmdVTESqFWodxockmo3Yk4bEyoxMKIyPrbaYz7SR3_uHE7DdmQwP/pub?output=csv";
+  const JSON_URL = "./serventia_registre_se.json";
 
-  fetch(CSV_URL)
-    .then(res => res.text())
-    .then(csv => {
-      const linhas = csv.split("
-").slice(1);
+  fetch(JSON_URL)
+    .then(res => res.json())
+    .then(data => {
       const select = document.getElementById("serventia");
-      linhas.forEach(linha => {
-        const cols = linha.split("
-");
-        if (cols[0]) {
-          const option = document.createElement("option");
-          option.value = cols[0].trim();
-          option.textContent = cols[0].trim();
-          select.appendChild(option);
-        }
+      data.serventias.forEach(item => {
+        const option = document.createElement("option");
+        option.value = item.nome;
+        option.textContent = item.nome;
+        select.appendChild(option);
       });
     })
     .catch(error => {
-      console.error("Erro ao carregar serventias da planilha:", error);
+      console.error("Erro ao carregar serventias do JSON:", error);
     });
 });
 </script>
