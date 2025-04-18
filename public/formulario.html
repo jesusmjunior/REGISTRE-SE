@@ -761,53 +761,35 @@
     <!-- SCRIPT DE CARREGAMENTO DAS SERVENTIAS -->
     
 
+
+
 <script>
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxFNnCRh1FdViZmI7mIlSBK1Ghmly9Y0tUa7q8Rd5YdxVQntJ3o-0SpEwKEoEXuo4BS/exec";
+document.addEventListener('DOMContentLoaded', function () {
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS3fqGBwxKXqGckgSC_S4jBBTQQPmdVTESqFWodxockmo3Yk4bEyoxMKIyPrbaYz7SR3_uHE7DdmQwP/pub?output=csv";
 
-document.getElementById("registroForm").addEventListener("submit", async function(event) {
-  event.preventDefault();
-
-  const dados = {
-    serventia: document.getElementById("serventia").value,
-    email: document.getElementById("email").value,
-    telefone: document.getElementById("telefone").value,
-    responsavel: document.getElementById("responsavel").value,
-    participacao: document.getElementById("participacao").value,
-    dataInicio: document.getElementById("dataInicio").value,
-    motivoNao: document.getElementById("motivoNao").value,
-    acoesRealizadas: document.getElementById("acoesRealizadas").value,
-    publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
-    viasEmitidas: document.getElementById("viasEmitidas").value,
-    registrosNascimento: document.getElementById("registrosNascimento").value,
-    averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
-    retificacoes: document.getElementById("retificacoes").value,
-    registrosTardios: document.getElementById("registrosTardios").value,
-    restauracoes: document.getElementById("restauracoes").value,
-    classificacao: document.getElementById("classificacao").value,
-    tags: document.getElementById("tags").value,
-    observacoes: document.getElementById("observacoes").value,
-    dataRegistro: new Date().toISOString()
-  };
-
-  try {
-    const response = await fetch(WEBAPP_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(dados)
+  fetch(CSV_URL)
+    .then(res => res.text())
+    .then(csv => {
+      const linhas = csv.split("
+").slice(1);
+      const select = document.getElementById("serventia");
+      linhas.forEach(linha => {
+        const cols = linha.split(",");
+        if (cols[0]) {
+          const option = document.createElement("option");
+          option.value = cols[0].trim();
+          option.textContent = cols[0].trim();
+          select.appendChild(option);
+        }
+      });
+    })
+    .catch(error => {
+      console.error("Erro ao carregar serventias da planilha:", error);
     });
-    const result = await response.text();
-    alert("✅ Registro enviado com sucesso!");
-    this.reset();
-    console.log("📬 Resposta do GAS:", result);
-  } catch (erro) {
-    console.error("❌ Erro ao enviar:", erro);
-    alert("❌ Falha ao salvar no Google Sheets.");
-  }
 });
 </script>
 </body>
+
 
     
 
@@ -819,52 +801,34 @@ document.getElementById("registroForm").addEventListener("submit", async functio
 </div>
 
 
+
+
 <script>
-const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxFNnCRh1FdViZmI7mIlSBK1Ghmly9Y0tUa7q8Rd5YdxVQntJ3o-0SpEwKEoEXuo4BS/exec";
+document.addEventListener('DOMContentLoaded', function () {
+  const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS3fqGBwxKXqGckgSC_S4jBBTQQPmdVTESqFWodxockmo3Yk4bEyoxMKIyPrbaYz7SR3_uHE7DdmQwP/pub?output=csv";
 
-document.getElementById("registroForm").addEventListener("submit", async function(event) {
-  event.preventDefault();
-
-  const dados = {
-    serventia: document.getElementById("serventia").value,
-    email: document.getElementById("email").value,
-    telefone: document.getElementById("telefone").value,
-    responsavel: document.getElementById("responsavel").value,
-    participacao: document.getElementById("participacao").value,
-    dataInicio: document.getElementById("dataInicio").value,
-    motivoNao: document.getElementById("motivoNao").value,
-    acoesRealizadas: document.getElementById("acoesRealizadas").value,
-    publicosAtendidos: Array.from(document.getElementById("publicosAtendidos").selectedOptions).map(opt => opt.value),
-    viasEmitidas: document.getElementById("viasEmitidas").value,
-    registrosNascimento: document.getElementById("registrosNascimento").value,
-    averacoesPaternidade: document.getElementById("averacoesPaternidade").value,
-    retificacoes: document.getElementById("retificacoes").value,
-    registrosTardios: document.getElementById("registrosTardios").value,
-    restauracoes: document.getElementById("restauracoes").value,
-    classificacao: document.getElementById("classificacao").value,
-    tags: document.getElementById("tags").value,
-    observacoes: document.getElementById("observacoes").value,
-    dataRegistro: new Date().toISOString()
-  };
-
-  try {
-    const response = await fetch(WEBAPP_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(dados)
+  fetch(CSV_URL)
+    .then(res => res.text())
+    .then(csv => {
+      const linhas = csv.split("
+").slice(1);
+      const select = document.getElementById("serventia");
+      linhas.forEach(linha => {
+        const cols = linha.split(",");
+        if (cols[0]) {
+          const option = document.createElement("option");
+          option.value = cols[0].trim();
+          option.textContent = cols[0].trim();
+          select.appendChild(option);
+        }
+      });
+    })
+    .catch(error => {
+      console.error("Erro ao carregar serventias da planilha:", error);
     });
-    const result = await response.text();
-    alert("✅ Registro enviado com sucesso!");
-    this.reset();
-    console.log("📬 Resposta do GAS:", result);
-  } catch (erro) {
-    console.error("❌ Erro ao enviar:", erro);
-    alert("❌ Falha ao salvar no Google Sheets.");
-  }
 });
 </script>
 </body>
+
 
 </html>
