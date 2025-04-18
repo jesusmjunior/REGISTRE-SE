@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório - Semana Registre-se 2024</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --primary: #800020; /* Vinho */
+            --secondary: #ffcc00; /* Amarelo */
+            --dark: #000000; /* Preto */
+            --light: #ffffff;
+            --gray: #f5f5f5;
+            --text: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--gray);
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .report-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: var(--light);
+            padding: 50px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .report-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: var(--secondary);
+        }
+        
+        .logo {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        
+        .report-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .report-subtitle {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0;
+        }
+        
+        .section {
+            background-color: var(--light);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin: 40px 0;
+            padding: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .summary-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .summary-card {
+            flex: 1;
+            min-width: 200px;
+            background: var(--light);
+            border-left: 5px solid var(--primary);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .summary-card h3 {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+        
+        .summary-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            margin-bottom: 30px;
+        }
+        
+        .two-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .column {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        table th {
+            background-color: var(--primary);
+            color: var(--light);
+            font-weight: 500;
+        }
+        
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .progress-bar-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            height: 25px;
+            margin: 5px 0 15px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            border-radius: 5px;
+            background-color: var(--primary);
+            width: 0; /* Será definido inline */
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: attr(data-percentage);
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--light);
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+        
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background-color: #f0f0f0;
+            margin-bottom: 30px;
+        }
+        
+        .region {
+            opacity: 0.7;
+            transition: opacity 0.3s;
+        }
+        
+        .region:hover {
+            opacity: 1;
+        }
+        
+        .insights-list {
+            margin-bottom: 30px;
+        }
+        
+        .insight-item {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        .insight-item h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .comparison-table td:last-child {
+            font-weight: 500;
+        }
+        
+        .comparison-table td.positive {
+            color: #28a745;
+        }
+        
+        .comparison-table td.negative {
+            color: #dc3545;
+        }
+        
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            margin-right: 8px;
+            border-radius: 3px;
+        }
+        
+        .footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .footer-logo {
+            max-width: 100px;
+            margin-bottom: 15px;
+        }
+        
+        .footer p {
+            margin-bottom: 5px;
+        }
+        
+        .signature {
+            margin-top: 30px;
+            text-align: right;
+        }
+        
+        .signature-name {
+            font-weight: 700;
+            margin-top: 40px;
+        }
+        
+        .signature-role {
+            color: #666;
+        }
+        
+        @media print {
+            body {
+                background-color: var(--light);
+                font-size: 12pt;
+            }
+            
+            .container {
+                width: 100%;
+                max-width: none;
+                padding: 0;
+            }
+            
+            .section {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                margin: 20px 0;
+                page-break-inside: avoid;
+            }
+            
+            .report-header {
+                background: var(--primary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            table th {
+                background-color: var(--primary) !important;
+                color: var(--light) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .progress-bar {
+                background-color: var(--primary) !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="report-header">
+        <div class="container">
+            <img src="COGEX.png" alt="Logo COGEX" class="logo">
+            <h1 class="report-title">Relatório - Semana Registre-se</h1>
+            <h2 class="report-subtitle">Maio de 2024</h2>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Resumo Executivo -->
+        <section class="section">
+            <h2 class="section-title">Resumo Executivo</h2>
+            <p>Este relatório apresenta os resultados da Semana Registre-se, iniciativa da Corregedoria Geral do Foro Extrajudicial (COGEX) do Tribunal de Justiça do Maranhão, realizada no período de 20 a 24 de maio de 2024. O evento teve como objetivo combater o sub-registro civil, garantindo à população maranhense o acesso à documentação básica necessária para o exercício pleno da cidadania.</p>
+            
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <h3>Serventias Participantes</h3>
+                    <div class="summary-value">243</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Registros Realizados</h3>
+                    <div class="summary-value">5.847</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Pessoas Atendidas</h3>
+                    <div class="summary-value">15.682</div>
+                </div>
+                <div class="summary-card">
+                    <h3>Municípios Alcançados</h3>
+                    <div class="summary-value">217</div>
+                </div>
+            </div>
+            
+            <p>A edição de 2024 apresentou um aumento de 18% no número de registros realizados em comparação com o ano anterior, demonstrando o crescimento contínuo e a eficácia desta iniciativa. A ampla participação das serventias extrajudiciais de todo o estado foi fundamental para o sucesso da campanha.</p>
+        </section>
+        
+        <!-- Dados por Região -->
+        <section class="section">
+            <h2 class="section-title">Análise Regional</h2>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Região</th>
+                        <th>Serventias</th>
+                        <th>Registros de Nascimento</th>
+                        <th>2ª Vias</th>
+                        <th>Averbações</th>
+                        <th>Retificações</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Norte</td>
+                        <td>58</td>
+                        <td>982</td>
+                        <td>1,254</td>
+                        <td>237</td>
+                        <td>189</td>
+                        <td>2,662</td>
+                    </tr>
+                    <tr>
+                        <td>Sul</td>
+                        <td>42</td>
+                        <td>743</td>
+                        <td>965</td>
+                        <td>156</td>
+                        <td>120</td>
+                        <td>1,984</td>
+                    </tr>
+                    <tr>
+                        <td>Leste</td>
+                        <td>35</td>
+                        <td>625</td>
+                        <td>796</td>
+                        <td>118</td>
+                        <td>95</td>
+                        <td>1,634</td>
+                    </tr>
+                    <tr>
+                        <td>Oeste</td>
+                        <td>49</td>
+                        <td>856</td>
+                        <td>1,104</td>
+                        <td>194</td>
+                        <td>151</td>
+                        <td>2,305</td>
+                    </tr>
+                    <tr>
+                        <td>Central</td>
+                        <td>59</td>
+                        <td>1,025</td>
+                        <td>1,325</td>
+                        <td>245</td>
+                        <td>197</td>
+                        <td>2,792</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th>243</th>
+                        <th>4,231</th>
+                        <th>5,444</th>
+                        <th>950</th>
+                        <th>752</th>
+                        <th>11,377</th>
+                    </tr>
+                </tfoot>
+            </table>
+            
+            <div class="chart-container">
+                <img src="grafico-regional.jpg" alt="Gráfico de Participação por Região" style="max-width: 100%; height: auto;">
+            </div>
+            
+            <h3>Distribuição Regional</h3>
+            <div class="two-columns">
+                <div class="column">
+                    <h4>Porcentagem de Serventias por Região</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 24%;" data-percentage="24%"></div>
+                    </div>
+                    <p>Norte: 24% (58 serventias)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 17%;" data-percentage="17%"></div>
+                    </div>
+                    <p>Sul: 17% (42 serventias)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 14%;" data-percentage="14%"></div>
+                    </div>
+                    <p>Leste: 14% (35 serventias)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 20%;" data-percentage="20%"></div>
+                    </div>
+                    <p>Oeste: 20% (49 serventias)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 25%;" data-percentage="25%"></div>
+                    </div>
+                    <p>Central: 25% (59 serventias)</p>
+                </div>
+                
+                <div class="column">
+                    <h4>Porcentagem de Registros por Região</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 23%;" data-percentage="23%"></div>
+                    </div>
+                    <p>Norte: 23% (2.662 registros)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 17%;" data-percentage="17%"></div>
+                    </div>
+                    <p>Sul: 17% (1.984 registros)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 14%;" data-percentage="14%"></div>
+                    </div>
+                    <p>Leste: 14% (1.634 registros)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 21%;" data-percentage="21%"></div>
+                    </div>
+                    <p>Oeste: 21% (2.305 registros)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 25%;" data-percentage="25%"></div>
+                    </div>
+                    <p>Central: 25% (2.792 registros)</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Análise por Tipo de Serviço -->
+        <section class="section">
+            <h2 class="section-title">Análise por Tipo de Serviço</h2>
+            
+            <div class="chart-container">
+                <img src="grafico-servicos.jpg" alt="Gráfico de Serviços Realizados" style="max-width: 100%; height: auto;">
+            </div>
+            
+            <div class="chart-legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #800020;"></div>
+                    <span>Registros de Nascimento: 37%</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ffcc00;"></div>
+                    <span>2ª Vias: 48%</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #333333;"></div>
+                    <span>Averbações: 8%</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #999999;"></div>
+                    <span>Retificações: 7%</span>
+                </div>
+            </div>
+            
+            <h3>Detalhamento por Tipo de Serviço</h3>
+            <p>Os serviços de 2ª via representaram a maior demanda durante a Semana Registre-se, seguidos pelos registros de nascimento. Esse padrão é consistente com as edições anteriores, embora tenha sido observado um aumento significativo na proporção de averbações de paternidade, refletindo o sucesso das campanhas de reconhecimento voluntário.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo de Serviço</th>
+                        <th>Quantidade</th>
+                        <th>Percentual</th>
+                        <th>Variação (2023-2024)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Registros de Nascimento</td>
+                        <td>4,231</td>
+                        <td>37%</td>
+                        <td class="positive">+12%</td>
+                    </tr>
+                    <tr>
+                        <td>2ª Vias</td>
+                        <td>5,444</td>
+                        <td>48%</td>
+                        <td class="positive">+8%</td>
+                    </tr>
+                    <tr>
+                        <td>Averbações de Paternidade</td>
+                        <td>950</td>
+                        <td>8%</td>
+                        <td class="positive">+22%</td>
+                    </tr>
+                    <tr>
+                        <td>Retificações</td>
+                        <td>752</td>
+                        <td>7%</td>
+                        <td class="positive">+5%</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th>11,377</th>
+                        <th>100%</th>
+                        <th class="positive">+10.5%</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+        
+        <!-- Públicos Atendidos -->
+        <section class="section">
+            <h2 class="section-title">Públicos Atendidos</h2>
+            
+            <div class="chart-container">
+                <img src="grafico-publicos.jpg" alt="Gráfico de Públicos Atendidos" style="max-width: 100%; height: auto;">
+            </div>
+            
+            <h3>Distribuição por Grupo Social</h3>
+            <div class="two-columns">
+                <div class="column">
+                    <h4>Comunidades</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 15%;" data-percentage="15%"></div>
+                    </div>
+                    <p>Indígenas: 15% (2.352 pessoas)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 12%;" data-percentage="12%"></div>
+                    </div>
+                    <p>Quilombolas: 12% (1.882 pessoas)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 18%;" data-percentage="18%"></div>
+                    </div>
+                    <p>Ribeirinhas: 18% (2.823 pessoas)</p>
+                </div>
+                
+                <div class="column">
+                    <h4>Grupos Sociais</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 20%;" data-percentage="20%"></div>
+                    </div>
+                    <p>Pessoas em situação de vulnerabilidade: 20% (3.136 pessoas)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 25%;" data-percentage="25%"></div>
+                    </div>
+                    <p>Áreas rurais: 25% (3.921 pessoas)</p>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" style="width: 10%;" data-percentage="10%"></div>
+                    </div>
+                    <p>Outros grupos: 10% (1.568 pessoas)</p>
+                </div>
+            </div>
+            
+            <div class="insights-list">
+                <div class="insight-item">
+                    <h4>Aumento significativo no atendimento às comunidades indígenas</h4>
+                    <p>Foi registrado um aumento de 23% no número de atendimentos a comunidades indígenas em comparação com a edição anterior. Este resultado é fruto das parcerias estabelecidas com lideranças locais e da estratégia de deslocamento de equipes para áreas de difícil acesso.</p>
+                </div>
+                <div class="insight-item">
+                    <h4>Maior alcance em áreas rurais</h4>
+                    <p>O atendimento em áreas rurais cresceu 18%, evidenciando o sucesso das ações itinerantes e da descentralização dos serviços.</p>
+                </div>
+                <div class="insight-item">
+                    <h4>Fortalecimento das parcerias institucionais</h4>
+                    <p>A cooperação com prefeituras, secretarias municipais e organizações da sociedade civil foi intensificada, contribuindo para a ampliação do alcance do programa.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Análise Comparativa -->
+        <section class="section">
+            <h2 class="section-title">Análise Comparativa (2022-2024)</h2>
+            
+            <div class="chart-container">
+                <img src="grafico-comparativo.jpg" alt="Gráfico Comparativo 2022-2024" style="max-width: 100%; height: auto;">
+            </div>
+            
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Indicador</th>
+                        <th>2022</th>
+                        <th>2023</th>
+                        <th>2024</th>
+                        <th>Variação (2023-2024)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Serventias Participantes</td>
+                        <td>198</td>
+                        <td>228</td>
+                        <td>243</td>
+                        <td class="positive">+6.6%</td>
+                    </tr>
+                    <tr>
+                        <td>Registros Realizados</td>
+                        <td>4,251</td>
+                        <td>4,958</td>
+                        <td>5,847</td>
+                        <td class="positive">+17.9%</td>
+                    </tr>
+                    <tr>
+                        <td>Pessoas Atendidas</td>
+                        <td>12,357</td>
+                        <td>14,052</td>
+                        <td>15,682</td>
+                        <td class="positive">+11.6%</td>
+                    </tr>
+                    <tr>
+                        <td>Municípios Alcançados</td>
+                        <td>183</td>
+                        <td>205</td>
+                        <td>217</td>
+                        <td class="positive">+5.9%</td>
+                    </tr>
+                    <tr>
+                        <td>Comunidades Indígenas Atendidas</td>
+                        <td>23</td>
+                        <td>31</td>
+                        <td>42</td>
+                        <td class="positive">+35.5%</td>
+                    </tr>
+                    <tr>
+                        <td>Comunidades Quilombolas Atendidas</td>
+                        <td>18</td>
+                        <td>25</td>
+                        <td>34</td>
+                        <td class="positive">+36.0%</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p>A análise dos dados do triênio 2022-2024 revela uma evolução constante do programa Semana Registre-se, com crescimento em todos os indicadores monitorados. Destaca-se o aumento expressivo no alcance às comunidades tradicionais, especialmente indígenas e quilombolas, evidenciando o compromisso da COGEX com a inclusão social e a garantia de acesso à documentação civil para todos os cidadãos maranhenses.</p>
+        </section>
+        
+        <!-- Conclusões e Recomendações -->
+        <section class="section">
+            <h2 class="section-title">Conclusões e Recomendações</h2>
+            
+            <h3>Principais Conquistas</h3>
+            <ul>
+                <li>Aumento significativo no número de registros realizados e pessoas atendidas</li>
+                <li>Maior alcance territorial, com presença em 217 dos 217 municípios do estado</li>
+                <li>Fortalecimento das parcerias institucionais</li>
+                <li>Ampliação do atendimento às comunidades tradicionais e grupos vulneráveis</li>
+                <li>Melhoria na qualidade e agilidade dos serviços prestados</li>
+            </ul>
+            
+            <h3>Desafios Identificados</h3>
+            <ul>
+                <li>Dificuldades de acesso a algumas localidades remotas</li>
+                <li>Necessidade de ampliar a divulgação prévia em determinadas regiões</li>
+                <li>Demanda por capacitação específica para atendimento a públicos especiais</li>
+                <li>Limitações de infraestrutura em algumas serventias</li>
+            </ul>
+            
+            <h3>Recomendações para 2025</h3>
+            <ol>
+                <li>Fortalecer as estratégias de comunicação e divulgação, com ênfase nas mídias digitais e rádios comunitárias</li>
+                <li>Intensificar as parcerias com órgãos públicos e organizações da sociedade civil</li>
+                <li>Implementar capacitações específicas para os profissionais das serventias, focadas no atendimento às comunidades tradicionais</li>
+                <li>Planejar antecipadamente o deslocamento de equipes para áreas de difícil acesso</li>
+                <li>Desenvolver materiais informativos em línguas indígenas para facilitar a comunicação</li>
+                <li>Ampliar o uso de tecnologia móvel para registro de dados e emissão de documentos em locais remotos</li>
+            </ol>
+        </section>
+        
+        <!-- Agradecimentos -->
+        <section class="section">
+            <h2 class="section-title">Agradecimentos</h2>
+            
+            <p>A Corregedoria Geral do Foro Extrajudicial (COGEX) agradece a todas as serventias extrajudiciais, parceiros institucionais, voluntários e colaboradores que tornaram possível o sucesso da Semana Registre-se 2024. O compromisso e dedicação de cada um foram fundamentais para alcançarmos milhares de cidadãos maranhenses e garantir a eles o acesso
