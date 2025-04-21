@@ -673,120 +673,8 @@
         }
         
         // Configuração da URL da API
-        const API_URL = 'https://script.google.com/macros/s/AKfycbxwy2sf37lve--aFRg6jZ8JWyb5ziPfdk4XtUBQnEEw0W_NYANzPBBMdOwxE5DsxFdeRg/exec'';
+const API_URL = 'https://script.google.com/macros/s/AKfycbzOGs-MY6Jm9ZcqGs1U5y0xf8RJ6hjtMFLodd_qFvZppMjyMWztBHWjfUaRR10XWYyMQg/exec';
         // Configuração da API Google Apps Script
-const API_CONFIG = {
-  // URL da implantação do Google Apps Script
-  URL: 'https://script.google.com/macros/s/AKfycbwRjX5DOrbMGKeEbxGB7tHJ2IsSi6zaUOUqXZ13b02mlIeP8OxziECpJMx46MLYRpGiHg/exec',
-};
-
-// Funções para comunicação com a API
-const API = {
-  // Obter todos os registros
-  getAllRegistros: async function() {
-    try {
-      const response = await fetch(`${API_CONFIG.URL}?action=getAll`, {
-        method: 'GET',
-        mode: 'cors'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Erro ao obter registros:', error);
-      throw error;
-    }
-  },
-  
-  // Obter um registro por ID
-  getRegistroPorId: async function(id) {
-    try {
-      const response = await fetch(`${API_CONFIG.URL}?action=getRegistro&id=${id}`, {
-        method: 'GET',
-        mode: 'cors'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Erro ao obter registro:', error);
-      throw error;
-    }
-  },
-  
-  // Salvar novo registro
-  saveRegistro: async function(data) {
-    try {
-      const response = await fetch(API_CONFIG.URL, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Erro ao salvar registro:', error);
-      throw error;
-    }
-  },
-  
-  // Atualizar registro existente
-  updateRegistro: async function(id, data) {
-    try {
-      data.id = id; // Adicionar ID aos dados
-      
-      const response = await fetch(`${API_CONFIG.URL}?action=atualizarRegistro`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Erro ao atualizar registro:', error);
-      throw error;
-    }
-  },
-  
-  // Excluir registro
-  deleteRegistro: async function(id) {
-    try {
-      const response = await fetch(`${API_CONFIG.URL}?action=excluirRegistro&id=${id}`, {
-        method: 'GET',
-        mode: 'cors'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`Erro HTTP: ${response.status}`);
-      }
-      
-      return await response.json();
-    } catch (error) {
-      console.error('Erro ao excluir registro:', error);
-      throw error;
-    }
-  }
-};
         // Elementos do DOM
         const registroForm = document.getElementById('registroForm');
         const participacaoSim = document.getElementById('participacaoSim');
@@ -1404,122 +1292,237 @@ const API = {
             
             modalBody.innerHTML = html;
         }
+       async function saveRegistro(data) {
+    try {
+        showAlert('Enviando dados...', 'info');
         
-        async function saveRegistroEdit(id) {
-            try {
-                // Coletar dados do formulário de edição
-                const form = document.getElementById('editForm');
-                const formData = new FormData(form);
-                const data = {};
-                
-                for (let [key, value] of formData.entries()) {
-                    // Converter campos numéricos para números
-                    if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
-                         'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
-                        value = parseInt(value) || 0;
-                    }
-                    data[key] = value;
-                }
-                
-                // Adicionar ID para atualização
-                data.id = id;
-                
-                showAlert('Atualizando registro...', 'info');
-                
-                // Enviar para a API
-                const response = await fetch(`${API_URL}?action=atualizarRegistro`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showAlert('Registro atualizado com sucesso!', 'success');
-                    
-                    // Fechar o modal
-                    const registroModal = bootstrap.Modal.getInstance(document.getElementById('registroModal'));
-                    registroModal.hide();
-                    
-                    // Recarregar lista de registros
-                    loadRegistros();
-                } else {
-                    throw new Error(result.message || 'Erro ao atualizar registro');
-                }
-            } catch (error) {
-                console.error('Erro ao atualizar registro:', error);
-                showAlert(`Erro ao atualizar registro: ${error.message}`, 'danger');
+        // Preparar dados para envio
+        const jsonData = JSON.stringify(data);
+        
+        // Enviar para a API do Google Apps Script
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonData
+        });
+        
+        // Verificar se a resposta é válida
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('Registro salvo com sucesso!', 'success');
+            resetForm();
+            
+            // Se tiver um ID de registro, oferecer link para visualização
+            if (result.data && result.data.id) {
+                showAlert(`Registro #${result.data.id} criado com sucesso!`, 'success');
             }
+        } else {
+            throw new Error(result.message || 'Erro ao salvar registro');
         }
-        
-        function showDeleteConfirmation(id) {
-            // Configurar modal de confirmação
-            document.getElementById('confirmDeleteBtn').setAttribute('data-id', id);
-            
-            // Mostrar modal
-            const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            confirmDeleteModal.show();
-        }
-        
-        async function deleteRegistro(id) {
-            try {
-                showAlert('Excluindo registro...', 'info');
-                
-                // Enviar para a API
-                const response = await fetch(`${API_URL}?action=excluirRegistro&id=${id}`, {
-                    method: 'GET'
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    showAlert('Registro excluído com sucesso!', 'success');
-                    
-                    // Fechar o modal
-                    const confirmDeleteModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
-                    confirmDeleteModal.hide();
-                    
-                    // Recarregar lista de registros
-                    loadRegistros();
-                } else {
-                    throw new Error(result.message || 'Erro ao excluir registro');
-                }
-            } catch (error) {
-                console.error('Erro ao excluir registro:', error);
-                showAlert(`Erro ao excluir registro: ${error.message}`, 'danger');
-            }
-        }
-        
-        function showAlert(message, type) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-            alertDiv.innerHTML = `
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-            `;
-            
-            alertMessages.appendChild(alertDiv);
-            
-            // Auto-remover após 5 segundos
-            setTimeout(() => {
-                alertDiv.classList.remove('show');
-                setTimeout(() => {
-                    alertDiv.remove();
-                }, 150);
-            }, 5000);
-        }
-    </script>
+    } catch (error) {
+        console.error('Erro ao salvar registro:', error);
+        showAlert(`Erro ao salvar registro: ${error.message}`, 'danger');
+    }
+}
 
+async function loadRegistros() {
+    try {
+        // Mostrar spinner de carregamento
+        loadingSpinner.classList.remove('d-none');
+        registrosTableBody.innerHTML = '';
+        noRecordsMessage.classList.add('d-none');
+        
+        // Fazer requisição para a API
+        const response = await fetch(`${API_URL}?action=getAll`);
+        
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        // Esconder spinner
+        loadingSpinner.classList.add('d-none');
+        
+        if (result.success) {
+            if (result.data && result.data.length > 0) {
+                // Renderizar registros na tabela
+                renderRegistros(result.data);
+            } else {
+                // Mostrar mensagem de nenhum registro
+                noRecordsMessage.classList.remove('d-none');
+            }
+        } else {
+            throw new Error(result.message || 'Erro ao carregar registros');
+        }
+    } catch (error) {
+        console.error('Erro ao carregar registros:', error);
+        loadingSpinner.classList.add('d-none');
+        showAlert(`Erro ao carregar registros: ${error.message}`, 'danger');
+    }
+}
+
+async function viewRegistro(id) {
+    try {
+        // Fazer requisição para a API para obter os detalhes do registro
+        const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
+        
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            // Preencher o modal com os dados do registro (somente leitura)
+            fillModalWithData(result.data, true);
+            
+            // Atualizar título do modal
+            document.getElementById('registroModalLabel').textContent = `Visualizar Registro #${id}`;
+            
+            // Esconder botão de salvar
+            document.getElementById('salvarEdicaoBtn').style.display = 'none';
+            
+            // Mostrar o modal
+            const registroModal = new bootstrap.Modal(document.getElementById('registroModal'));
+            registroModal.show();
+        } else {
+            throw new Error(result.message || 'Erro ao carregar registro');
+        }
+    } catch (error) {
+        console.error('Erro ao visualizar registro:', error);
+        showAlert(`Erro ao visualizar registro: ${error.message}`, 'danger');
+    }
+}
+
+async function editRegistro(id) {
+    try {
+        // Fazer requisição para a API para obter os detalhes do registro
+        const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
+        
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success && result.data) {
+            // Preencher o modal com os dados do registro (editável)
+            fillModalWithData(result.data, false);
+            
+            // Atualizar título do modal
+            document.getElementById('registroModalLabel').textContent = `Editar Registro #${id}`;
+            
+            // Mostrar botão de salvar e adicionar ID para uso posterior
+            const salvarBtn = document.getElementById('salvarEdicaoBtn');
+            salvarBtn.style.display = 'block';
+            salvarBtn.setAttribute('data-id', id);
+            
+            // Mostrar o modal
+            const registroModal = new bootstrap.Modal(document.getElementById('registroModal'));
+            registroModal.show();
+        } else {
+            throw new Error(result.message || 'Erro ao carregar registro');
+        }
+    } catch (error) {
+        console.error('Erro ao editar registro:', error);
+        showAlert(`Erro ao editar registro: ${error.message}`, 'danger');
+    }
+}
+
+async function saveRegistroEdit(id) {
+    try {
+        // Coletar dados do formulário de edição
+        const form = document.getElementById('editForm');
+        const formData = new FormData(form);
+        const data = {};
+        
+        for (let [key, value] of formData.entries()) {
+            // Converter campos numéricos para números
+            if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
+                 'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
+                value = parseInt(value) || 0;
+            }
+            data[key] = value;
+        }
+        
+        // Adicionar ID para atualização
+        data.id = id;
+        
+        showAlert('Atualizando registro...', 'info');
+        
+        // Enviar para a API
+        const response = await fetch(`${API_URL}?action=atualizarRegistro`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('Registro atualizado com sucesso!', 'success');
+            
+            // Fechar o modal
+            const registroModal = bootstrap.Modal.getInstance(document.getElementById('registroModal'));
+            registroModal.hide();
+            
+            // Recarregar lista de registros
+            loadRegistros();
+        } else {
+            throw new Error(result.message || 'Erro ao atualizar registro');
+        }
+    } catch (error) {
+        console.error('Erro ao atualizar registro:', error);
+        showAlert(`Erro ao atualizar registro: ${error.message}`, 'danger');
+    }
+}
+
+async function deleteRegistro(id) {
+    try {
+        showAlert('Excluindo registro...', 'info');
+        
+        // Enviar para a API
+        const response = await fetch(`${API_URL}?action=excluirRegistro&id=${id}`, {
+            method: 'GET'
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Erro na requisição: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            showAlert('Registro excluído com sucesso!', 'success');
+            
+            // Fechar o modal
+            const confirmDeleteModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+            confirmDeleteModal.hide();
+            
+            // Recarregar lista de registros
+            loadRegistros();
+        } else {
+            throw new Error(result.message || 'Erro ao excluir registro');
+        }
+    } catch (error) {
+        console.error('Erro ao excluir registro:', error);
+        showAlert(`Erro ao excluir registro: ${error.message}`, 'danger');
+    }
+}
+    </script>
 </body>
 </html>
