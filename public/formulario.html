@@ -465,1064 +465,1060 @@
     <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-       // Script corrigido para o formulário COGEX
-// Script corrigido para o formulário COGEX
-// URL da API Google Apps Script
-const API_URL = 'https://script.google.com/macros/s/AKfycbzOGs-MY6Jm9ZcqGs1U5y0xf8RJ6hjtMFLodd_qFvZppMjyMWztBHWjfUaRR10XWYyMQg/exec';
-
-// Elementos do DOM
-const registroForm = document.getElementById('registroForm');
-const participacaoSim = document.getElementById('participacaoSim');
-const participacaoNao = document.getElementById('participacaoNao');
-const camposParticipacaoSim = document.getElementById('camposParticipacaoSim');
-const camposParticipacaoNao = document.getElementById('camposParticipacaoNao');
-const motivoNao = document.getElementById('motivoNao');
-const outroMotivoDiv = document.getElementById('outroMotivoDiv');
-const loadingOverlay = document.querySelector('.loading-overlay');
-const serventiaSelect = document.getElementById('serventia');
-const registrosTableBody = document.getElementById('registrosTableBody');
-const loadingSpinner = document.getElementById('loadingSpinner');
-const noRecordsMessage = document.getElementById('noRecordsMessage');
-const searchInput = document.getElementById('searchInput');
-const searchButton = document.getElementById('searchButton');
-const refreshButton = document.getElementById('refreshButton');
-const limparFormularioBtn = document.getElementById('limparFormulario');
-
-// Inicialização
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Inicializando o formulário COGEX...');
-    
-    // Eventos do formulário
-    setupFormEventListeners();
-    
-    // Carregar lista de serventias diretamente do objeto JSON
-    carregarServentias();
-    
-    // Carregar registros se estamos na aba de listagem
-    const hash = window.location.hash;
-    if (hash === '#list-tab-pane') {
-        document.getElementById('list-tab').click();
-        loadRegistros();
-    }
-    
-    // Adicionar evento para a aba de listagem
-    document.getElementById('list-tab').addEventListener('click', function() {
-        loadRegistros();
-    });
-});
-
-// Configurar event listeners do formulário
-function setupFormEventListeners() {
-    // Alternar campos de participação
-    participacaoSim.addEventListener('change', toggleParticipacaoFields);
-    participacaoNao.addEventListener('change', toggleParticipacaoFields);
-    
-    // Evento para motivo de não participação
-    motivoNao.addEventListener('change', function() {
-        outroMotivoDiv.style.display = this.value === 'Outros' ? 'block' : 'none';
-    });
-    
-    // Evento para limpar formulário
-    limparFormularioBtn.addEventListener('click', resetForm);
-    
-    // Evento para envio do formulário
-    registroForm.addEventListener('submit', handleFormSubmit);
-    
-    // Eventos para pesquisa
-    searchButton.addEventListener('click', searchRegistros);
-    searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            searchRegistros();
-        }
-    });
-    
-    // Evento para atualizar
-    refreshButton.addEventListener('click', function() {
-        // Adicionar classe para animação de rotação
-        const icon = this.querySelector('i');
-        icon.classList.add('fa-spin');
+        // URL da API Google Apps Script
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzOGs-MY6Jm9ZcqGs1U5y0xf8RJ6hjtMFLodd_qFvZppMjyMWztBHWjfUaRR10XWYyMQg/exec';
         
-        // Remover classe após a conclusão
-        loadRegistros().finally(() => {
-            setTimeout(() => {
-                icon.classList.remove('fa-spin');
-            }, 500);
-        });
-    });
-    
-    // Eventos para modais
-    document.getElementById('salvarEdicaoBtn').addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        if (id) {
-            saveRegistroEdit(id);
-        }
-    });
-    
-    document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-        const id = this.getAttribute('data-id');
-        if (id) {
-            deleteRegistro(id);
-        }
-    });
-}
-
-// Carregar lista de serventias do objeto JSON
-async function carregarServentias() {
-    try {
-        showLoading();
-        console.log('Carregando lista de serventias...');
+        // Elementos do DOM
+        const registroForm = document.getElementById('registroForm');
+        const participacaoSim = document.getElementById('participacaoSim');
+        const participacaoNao = document.getElementById('participacaoNao');
+        const camposParticipacaoSim = document.getElementById('camposParticipacaoSim');
+        const camposParticipacaoNao = document.getElementById('camposParticipacaoNao');
+        const motivoNao = document.getElementById('motivoNao');
+        const outroMotivoDiv = document.getElementById('outroMotivoDiv');
+        const loadingOverlay = document.querySelector('.loading-overlay');
+        const serventiaSelect = document.getElementById('serventia');
+        const registrosTableBody = document.getElementById('registrosTableBody');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const noRecordsMessage = document.getElementById('noRecordsMessage');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const limparFormularioBtn = document.getElementById('limparFormulario');
         
-        // Utilizar o objeto JSON diretamente em vez de carregar de um arquivo
-        // Este objeto pode ser inserido diretamente no arquivo HTML ou carregado assincronamente
-        const data = serventias_json; // Supondo que serventias_json é o objeto já carregado
-        
-        // Limpar opções atuais
-        serventiaSelect.innerHTML = '<option value="">Selecione uma serventia...</option>';
-        
-        // Adicionar serventias ao select
-        if (data && data.serventias && Array.isArray(data.serventias)) {
-            // Ordenar alfabeticamente
-            data.serventias.sort((a, b) => a.nome.localeCompare(b.nome));
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Inicializando o formulário COGEX...');
             
-            data.serventias.forEach(serventia => {
-                const option = document.createElement('option');
-                option.value = serventia.nome;
-                option.textContent = serventia.nome;
-                serventiaSelect.appendChild(option);
+            // Eventos do formulário
+            setupFormEventListeners();
+            
+            // Carregar lista de serventias
+            carregarServentias();
+            
+            // Carregar registros se estamos na aba de listagem
+            const hash = window.location.hash;
+            if (hash === '#list-tab-pane') {
+                document.getElementById('list-tab').click();
+                loadRegistros();
+            }
+            
+            // Adicionar evento para a aba de listagem
+            document.getElementById('list-tab').addEventListener('click', function() {
+                loadRegistros();
+            });
+        });
+        
+        // Configurar event listeners do formulário
+        function setupFormEventListeners() {
+            // Alternar campos de participação
+            participacaoSim.addEventListener('change', toggleParticipacaoFields);
+            participacaoNao.addEventListener('change', toggleParticipacaoFields);
+            
+            // Evento para motivo de não participação
+            motivoNao.addEventListener('change', function() {
+                outroMotivoDiv.style.display = this.value === 'Outros' ? 'block' : 'none';
             });
             
-            console.log(`${data.serventias.length} serventias carregadas com sucesso`);
-        } else {
-            console.error('Formato de dados inválido no JSON de serventias');
-            showToast('Erro ao carregar serventias: formato de dados inválido', 'error');
-        }
-        
-        hideLoading();
-    } catch (error) {
-        hideLoading();
-        console.error('Erro ao carregar serventias:', error);
-        showToast('Erro ao carregar lista de serventias. Verifique sua conexão.', 'error');
-    }
-}
-
-// Alternar campos de participação
-function toggleParticipacaoFields() {
-    if (participacaoSim.checked) {
-        camposParticipacaoSim.classList.remove('d-none');
-        camposParticipacaoNao.classList.add('d-none');
-        
-        // Limpar campos de não participação
-        motivoNao.value = '';
-        if (document.getElementById('outroMotivo')) {
-            document.getElementById('outroMotivo').value = '';
-        }
-        outroMotivoDiv.style.display = 'none';
-        
-        // Remover required de campos não visíveis
-        motivoNao.required = false;
-        
-        // Remover classes de validação
-        motivoNao.classList.remove('is-invalid');
-        if (document.getElementById('outroMotivo')) {
-            document.getElementById('outroMotivo').classList.remove('is-invalid');
-        }
-    } else {
-        camposParticipacaoSim.classList.add('d-none');
-        camposParticipacaoNao.classList.remove('d-none');
-        
-        // Zerar campos quantitativos
-        document.getElementById('viasEmitidas').value = '0';
-        document.getElementById('registrosNascimento').value = '0';
-        document.getElementById('averacoesPaternidade').value = '0';
-        document.getElementById('retificacoes').value = '0';
-        document.getElementById('registrosTardios').value = '0';
-        document.getElementById('restauracoes').value = '0';
-        
-        // Limpar campos de texto
-        document.getElementById('acoesRealizadas').value = '';
-        document.getElementById('publicosAtendidos').value = '';
-        
-        // Adicionar required
-        motivoNao.required = true;
-    }
-}
-
-// Resetar formulário
-function resetForm() {
-    registroForm.reset();
-    
-    // Restaurar estado padrão
-    participacaoSim.checked = true;
-    toggleParticipacaoFields();
-    
-    // Remover classes de validação
-    const inputs = registroForm.querySelectorAll('.form-control, .form-select');
-    inputs.forEach(input => input.classList.remove('is-invalid'));
-    
-    showToast('Formulário limpo com sucesso', 'info');
-}
-
-// Validar formulário
-function validateForm() {
-    let isValid = true;
-    
-    // Validar Serventia
-    const serventia = serventiaSelect.value.trim();
-    if (!serventia) {
-        serventiaSelect.classList.add('is-invalid');
-        isValid = false;
-    }
-    
-    // Validar motivo de não participação
-    if (participacaoNao.checked && motivoNao.value === '') {
-        motivoNao.classList.add('is-invalid');
-        isValid = false;
-    }
-    
-    // Validar "Outro motivo" se selecionado
-    if (participacaoNao.checked && motivoNao.value === 'Outros') {
-        const outroMotivo = document.getElementById('outroMotivo');
-        if (!outroMotivo.value.trim()) {
-            outroMotivo.classList.add('is-invalid');
-            isValid = false;
-        }
-    }
-    
-    // Validar Responsável
-    const responsavel = document.getElementById('responsavel').value.trim();
-    if (!responsavel) {
-        document.getElementById('responsavel').classList.add('is-invalid');
-        isValid = false;
-    }
-    
-    if (!isValid) {
-        showToast('Por favor, preencha todos os campos obrigatórios', 'error');
-    }
-    
-    return isValid;
-}
-
-// Submeter formulário
-async function handleFormSubmit(e) {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-        return;
-    }
-    
-    // Desabilitar formulário durante envio
-    const submitButton = document.getElementById('salvarRegistro');
-    submitButton.disabled = true;
-    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
-    
-    try {
-        showLoading();
-        
-        // Coletar dados do formulário
-        const formData = new FormData(registroForm);
-        const data = {};
-        
-        for (let [key, value] of formData.entries()) {
-            // Converter campos numéricos para números
-            if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
-                 'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
-                value = parseInt(value) || 0;
-            }
-            data[key] = value;
-        }
-        
-        // Adicionar timestamp
-        data.timestamp = new Date().toISOString();
-        
-        // Ajustes para participação "Não"
-        if (data.participacao === 'Não') {
-            data.dataInicio = '';
-            data.classificacao = '';
-            data.acoesRealizadas = '';
-            data.publicosAtendidos = '';
-            data.viasEmitidas = 0;
-            data.registrosNascimento = 0;
-            data.averacoesPaternidade = 0;
-            data.retificacoes = 0;
-            data.registrosTardios = 0;
-            data.restauracoes = 0;
-            data.tags = '';
+            // Evento para limpar formulário
+            limparFormularioBtn.addEventListener('click', resetForm);
             
-            // Adicionar motivo específico se for "Outros"
-            if (data.motivoNao === 'Outros' && document.getElementById('outroMotivo')) {
-                data.motivoNao = 'Outros: ' + document.getElementById('outroMotivo').value;
-            }
-        } else {
-            data.motivoNao = '';
-        }
-        
-        console.log('Enviando dados para o servidor:', data);
-        
-        // Enviar para a API
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        
-        if (result.success) {
-            hideLoading();
-            showToast(`Registro #${result.data.id} salvo com sucesso!`, 'success');
+            // Evento para envio do formulário
+            registroForm.addEventListener('submit', handleFormSubmit);
             
-            // Gerar protocolo para exibição
-            const protocolo = result.data.protocolo || `REG-${result.data.id}`;
+            // Eventos para pesquisa
+            searchButton.addEventListener('click', searchRegistros);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchRegistros();
+                }
+            });
             
-            // Exibir confirmação detalhada
-            const confirmMessage = `
-                Registro salvo com sucesso!
+            // Evento para atualizar
+            refreshButton.addEventListener('click', function() {
+                // Adicionar classe para animação de rotação
+                const icon = this.querySelector('i');
+                icon.classList.add('fa-spin');
                 
-                Número do Registro: #${result.data.id}
-                Protocolo: ${protocolo}
-                Serventia: ${data.serventia}
-                
-                Deseja visualizar os detalhes do registro?
-            `;
+                // Remover classe após a conclusão
+                loadRegistros().finally(() => {
+                    setTimeout(() => {
+                        icon.classList.remove('fa-spin');
+                    }, 500);
+                });
+            });
             
-            // Perguntar se deseja ver os detalhes
-            if (confirm(confirmMessage)) {
-                // Mudar para a aba de listagem
-                document.getElementById('list-tab').click();
-                
-                // Aguardar carregamento e destacar o registro
-                setTimeout(() => {
-                    loadRegistros().then(() => {
-                        highlightRow(result.data.id);
-                    });
-                }, 500);
-            }
+            // Eventos para modais
+            document.getElementById('salvarEdicaoBtn').addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                if (id) {
+                    saveRegistroEdit(id);
+                }
+            });
             
-            // Limpar formulário
-            resetForm();
-        } else {
-            throw new Error(result.message || 'Erro ao salvar registro');
-        }
-    } catch (error) {
-        hideLoading();
-        console.error('Erro ao salvar registro:', error);
-        showToast(`Erro ao salvar: ${error.message}`, 'error');
-    } finally {
-        // Restaurar botão de envio
-        submitButton.disabled = false;
-        submitButton.innerHTML = '<i class="fas fa-save me-2"></i>Salvar Registro';
-    }
-}
-
-// Carregar registros
-async function loadRegistros() {
-    try {
-        showLoading();
-        loadingSpinner.classList.remove('d-none');
-        registrosTableBody.innerHTML = '';
-        noRecordsMessage.classList.add('d-none');
-        
-        console.log('Carregando registros da API...');
-        
-        const response = await fetch(`${API_URL}?action=getAll`);
-        
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        
-        hideLoading();
-        loadingSpinner.classList.add('d-none');
-        
-        if (result.success) {
-            if (result.data && result.data.length > 0) {
-                console.log(`${result.data.length} registros carregados com sucesso`);
-                renderRegistros(result.data);
-            } else {
-                console.log('Nenhum registro encontrado');
-                noRecordsMessage.classList.remove('d-none');
-            }
-        } else {
-            throw new Error(result.message || 'Erro ao carregar registros');
-        }
-        
-        return result;
-    } catch (error) {
-        hideLoading();
-        loadingSpinner.classList.add('d-none');
-        console.error('Erro ao carregar registros:', error);
-        showToast(`Erro ao carregar registros: ${error.message}`, 'error');
-    }
-}
-
-// Renderizar registros na tabela
-function renderRegistros(registros) {
-    registrosTableBody.innerHTML = '';
-    
-    // Ordenar por ID (mais recentes primeiro)
-    registros.sort((a, b) => parseInt(b.ID) - parseInt(a.ID));
-    
-    registros.forEach(registro => {
-        // Calcular total de registros
-        const totalRegistros = (
-            parseInt(registro['Registros Nascimento'] || 0) +
-            parseInt(registro['Vias Emitidas'] || 0) +
-            parseInt(registro['Averbações Paternidade'] || 0) +
-            parseInt(registro['Retificações'] || 0) +
-            parseInt(registro['Registros Tardios'] || 0) +
-            parseInt(registro['Restaurações'] || 0)
-        );
-        
-        // Formatar data
-        let dataFormatada = 'N/A';
-        if (registro['Timestamp']) {
-            try {
-                const data = new Date(registro['Timestamp']);
-                dataFormatada = data.toLocaleDateString('pt-BR');
-            } catch (e) {
-                console.error('Erro ao formatar data:', e);
-            }
-        }
-        
-        // Determinar classe de status
-        const statusClass = registro['Participação'] === 'Não' ? 'text-danger' : 'text-success';
-        
-        // Criar linha da tabela
-        const tr = document.createElement('tr');
-        tr.setAttribute('data-id', registro.ID);
-        tr.innerHTML = `
-            <td>${registro.ID}</td>
-            <td>${registro.Serventia || '—'}</td>
-            <td>${registro.Responsável || '—'}</td>
-            <td><span class="${statusClass}">${registro.Participação || 'Sim'}</span></td>
-            <td>${totalRegistros}</td>
-            <td>${dataFormatada}</td>
-            <td>
-                <button class="btn btn-sm btn-primary view-btn" data-id="${registro.ID}" title="Visualizar">
-                    <i class="fas fa-eye"></i>
-                </button>
-                <button class="btn btn-sm btn-warning edit-btn" data-id="${registro.ID}" title="Editar">
-                    <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-sm btn-danger delete-btn" data-id="${registro.ID}" title="Excluir">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </td>
-        `;
-        
-        registrosTableBody.appendChild(tr);
-    });
-    
-    // Adicionar event listeners para botões de ação
-    addActionButtonListeners();
-}
-
-// Adicionar event listeners para botões de ação
-function addActionButtonListeners() {
-    // Botões de visualização
-    document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            viewRegistro(this.getAttribute('data-id'));
-        });
-    });
-    
-    // Botões de edição
-    document.querySelectorAll('.edit-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            editRegistro(this.getAttribute('data-id'));
-        });
-    });
-    
-    // Botões de exclusão
-    document.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            showDeleteConfirmation(this.getAttribute('data-id'));
-        });
-    });
-}
-
-// Função para destacar uma linha
-function highlightRow(id) {
-    const rows = registrosTableBody.querySelectorAll('tr');
-    for (const row of rows) {
-        if (row.getAttribute('data-id') === id.toString()) {
-            row.classList.add('highlight-row');
-            row.scrollIntoView({behavior: 'smooth', block: 'center'});
-            break;
-        }
-    }
-}
-
-// Visualizar registro
-async function viewRegistro(id) {
-    try {
-        showLoading();
-        
-        console.log(`Carregando detalhes do registro #${id}`);
-        
-        const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
-        
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        
-        hideLoading();
-        
-        if (result.success && result.data) {
-            // Preencher modal (somente leitura)
-            fillModalWithData(result.data, true);
-            
-            // Atualizar título
-            document.getElementById('registroModalLabel').textContent = `Visualizar Registro #${id}`;
-            
-            // Esconder botão de salvar
-            document.getElementById('salvarEdicaoBtn').style.display = 'none';
-            
-            // Mostrar modal
-            const modal = new bootstrap.Modal(document.getElementById('registroModal'));
-            modal.show();
-        } else {
-            throw new Error(result.message || 'Erro ao carregar registro');
-        }
-    } catch (error) {
-        hideLoading();
-        console.error('Erro ao visualizar registro:', error);
-        showToast(`Erro ao visualizar: ${error.message}`, 'error');
-    }
-}
-
-// Editar registro
-async function editRegistro(id) {
-    try {
-        showLoading();
-        
-        console.log(`Carregando registro #${id} para edição`);
-        
-        const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
-        
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        
-        hideLoading();
-        
-        if (result.success && result.data) {
-            // Preencher modal (editável)
-            fillModalWithData(result.data, false);
-            
-            // Atualizar título
-            document.getElementById('registroModalLabel').textContent = `Editar Registro #${id}`;
-            
-            // Mostrar botão de salvar
-            const salvarBtn = document.getElementById('salvarEdicaoBtn');
-            salvarBtn.style.display = 'block';
-            salvarBtn.setAttribute('data-id', id);
-            
-            // Mostrar modal
-            const modal = new bootstrap.Modal(document.getElementById('registroModal'));
-            modal.show();
-        } else {
-            throw new Error(result.message || 'Erro ao carregar registro');
-        }
-    } catch (error) {
-        hideLoading();
-        console.error('Erro ao editar registro:', error);
-        showToast(`Erro ao editar: ${error.message}`, 'error');
-    }
-}
-
-// Preencher modal com dados
-function fillModalWithData(data, readonly) {
-    const modalBody = document.querySelector('#registroModal .modal-body');
-    
-    // Calcular total de registros
-    const totalRegistros = (
-        parseInt(data['Registros Nascimento'] || 0) +
-        parseInt(data['Vias Emitidas'] || 0) +
-        parseInt(data['Averbações Paternidade'] || 0) +
-        parseInt(data['Retificações'] || 0) +
-        parseInt(data['Registros Tardios'] || 0) +
-        parseInt(data['Restaurações'] || 0)
-    );
-    
-    // Formatar data
-    let dataFormatada = 'N/A';
-    if (data['Timestamp']) {
-        const timestamp = new Date(data['Timestamp']);
-        dataFormatada = timestamp.toLocaleDateString('pt-BR') + ' ' + 
-                        timestamp.toLocaleTimeString('pt-BR');
-    }
-    
-    // Criar HTML do formulário
-    let html = `
-        <form id="editForm">
-            <div class="row mb-3">
-                <div class="col-md-4">
-                    <label class="form-label">ID:</label>
-                    <input type="text" class="form-control" value="${data['ID']}" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Protocolo:</label>
-                    <input type="text" class="form-control" value="${data['Protocolo'] || ''}" readonly>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Data:</label>
-                    <input type="text" class="form-control" value="${dataFormatada}" readonly>
-                </div>
-            </div>
-            
-            <h5 class="mt-3 mb-3 border-bottom pb-2">Dados da Serventia</h5>
-            <div class="row mb-3">
-                <div class="col-md-8">
-                    <label class="form-label">Serventia:</label>
-                    <input type="text" class="form-control" name="Serventia" value="${data['Serventia']}" ${readonly ? 'readonly' : ''}>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Telefone:</label>
-                    <input type="text" class="form-control" name="Telefone" value="${data['Telefone'] || ''}" ${readonly ? 'readonly' : ''}>
-                </div>
-            </div>
-            
-            <div class="row mb-3">
-                <div class="col-md-8">
-                    <label class="form-label">Responsável:</label>
-                    <input type="text" class="form-control" name="Responsável" value="${data['Responsável']}" ${readonly ? 'readonly' : ''}>
-                </div>
-                <div class="col-md-4">
-                    <label class="form-label">Email:</label>
-                    <input type="email" class="form-control" name="Email" value="${data['Email'] || ''}" ${readonly ? 'readonly' : ''}>
-                </div>
-            </div>
-            
-            <h5 class="mt-3 mb-3 border-bottom pb-2">Participação</h5>
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <label class="form-label">Participou:</label>
-                    <select class="form-select" name="Participação" ${readonly ? 'disabled' : ''} id="modal-participacao">
-                        <option value="Sim" ${data['Participação'] !== 'Não' ? 'selected' : ''}>Sim</option>
-                        <option value="Não" ${data['Participação'] === 'Não' ? 'selected' : ''}>Não</option>
-                    </select>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Data de Início:</label>
-                    <input type="date" class="form-control" name="Data de Início" value="${data['Data de Início'] || ''}" ${readonly ? 'readonly' : ''}>
-                </div>
-            </div>
-    `;
-    
-    // Campos para participação Sim
-    if (data['Participação'] !== 'Não') {
-        html += `
-            <div id="modal-campos-sim">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Classificação:</label>
-                        <select class="form-select" name="Classificação" ${readonly ? 'disabled' : ''}>
-                            <option value="" ${!data['Classificação'] ? 'selected' : ''}>Selecione...</option>
-                            <option value="Integral" ${data['Classificação'] === 'Integral' ? 'selected' : ''}>Integral - Todos os dias</option>
-                            <option value="Parcial" ${data['Classificação'] === 'Parcial' ? 'selected' : ''}>Parcial - Alguns dias</option>
-                            <option value="Pontual" ${data['Classificação'] === 'Pontual' ? 'selected' : ''}>Pontual - Ação específica</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Total de Registros:</label>
-                        <input type="text" class="form-control" value="${totalRegistros}" readonly>
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label">Ações Realizadas:</label>
-                    <textarea class="form-control" name="Ações Realizadas" rows="3" ${readonly ? 'readonly' : ''}>${data['Ações Realizadas'] || ''}</textarea>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label">Públicos Atendidos:</label>
-                    <textarea class="form-control" name="Públicos Atendidos" rows="2" ${readonly ? 'readonly' : ''}>${data['Públicos Atendidos'] || ''}</textarea>
-                </div>
-                
-                <h5 class="mt-3 mb-3 border-bottom pb-2">Dados Quantitativos</h5>
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label">2ª Vias Emitidas:</label>
-                        <input type="number" class="form-control" name="Vias Emitidas" 
-                               value="${data['Vias Emitidas'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Registros de Nascimento:</label>
-                        <input type="number" class="form-control" name="Registros Nascimento" 
-                               value="${data['Registros Nascimento'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Averbações de Paternidade:</label>
-                        <input type="number" class="form-control" name="Averbações Paternidade" 
-                               value="${data['Averbações Paternidade'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                    </div>
-                </div>
-                
-                <div class="row mb-3">
-                    <div class="col-md-4">
-                        <label class="form-label">Retificações:</label>
-                        <input type="number" class="form-control" name="Retificações" 
-                               value="${data['Retificações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Registros Tardios:</label>
-                        <input type="number" class="form-control" name="Registros Tardios" 
-                               value="${data['Registros Tardios'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                    </div>
-                    <div class="col-md-4">
-                        <label class="form-label">Restaurações:</label>
-                        <input type="number" class="form-control" name="Restaurações" 
-                               value="${data['Restaurações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                    </div>
-                </div>
-                
-                <div class="mb-3">
-                    <label class="form-label">Tags/Palavras-chave:</label>
-                    <input type="text" class="form-control" name="Tags" value="${data['Tags'] || ''}" ${readonly ? 'readonly' : ''}>
-                </div>
-            </div>
-        `;
-    } else {
-        html += `
-            <div id="modal-campos-nao">
-                <div class="mb-3">
-                    <label class="form-label">Motivo da Não Participação:</label>
-                    <input type="text" class="form-control" name="Motivo Não Participação" 
-                           value="${data['Motivo Não Participação'] || ''}" ${readonly ? 'readonly' : ''}>
-                </div>
-            </div>
-        `;
-    }
-    
-    // Observações (comum a ambos os casos)
-    html += `
-        <div class="mb-3">
-            <label class="form-label">Observações:</label>
-            <textarea class="form-control" name="Observações" rows="3" ${readonly ? 'readonly' : ''}>${data['Observações'] || ''}</textarea>
-        </div>
-        </form>
-    `;
-    
-    modalBody.innerHTML = html;
-    
-    // Adicionar event listener para alternar campos (quando editável)
-    if (!readonly) {
-        const modalParticipacao = document.getElementById('modal-participacao');
-        if (modalParticipacao) {
-            modalParticipacao.addEventListener('change', function() {
-                const simCampos = document.getElementById('modal-campos-sim');
-                const naoCampos = document.getElementById('modal-campos-nao');
-                
-                if (this.value === 'Sim') {
-                    if (simCampos) simCampos.style.display = 'block';
-                    if (naoCampos) naoCampos.style.display = 'none';
-                } else {
-                    if (simCampos) simCampos.style.display = 'none';
-                    if (naoCampos) naoCampos.style.display = 'block';
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                if (id) {
+                    deleteRegistro(id);
                 }
             });
         }
-    }
-}
-
-// Salvar edição de registro
-async function saveRegistroEdit(id) {
-    try {
-        // Validar formulário
-        const form = document.getElementById('editForm');
-        if (!form) {
-            throw new Error('Formulário não encontrado');
-        }
         
-        // Desabilitar botão durante envio
-        const saveButton = document.getElementById('salvarEdicaoBtn');
-        saveButton.disabled = true;
-        saveButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
-        
-        showLoading();
-        
-        // Coletar dados do formulário
-        const formData = new FormData(form);
-        const data = {};
-        
-        for (let [key, value] of formData.entries()) {
-            // Converter campos numéricos
-            if (['Vias Emitidas', 'Registros Nascimento', 'Averbações Paternidade', 
-                 'Retificações', 'Registros Tardios', 'Restaurações'].includes(key)) {
-                value = parseInt(value) || 0;
+        // Carregar lista de serventias do JSON
+        async function carregarServentias() {
+            try {
+                showLoading();
+                console.log('Carregando lista de serventias...');
+                
+                const response = await fetch('serventias_registre_se.json');
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar JSON: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Limpar opções atuais
+                serventiaSelect.innerHTML = '<option value="">Selecione uma serventia...</option>';
+                
+                // Adicionar serventias ao select
+                if (data && data.serventias && Array.isArray(data.serventias)) {
+                    // Ordenar alfabeticamente
+                    data.serventias.sort((a, b) => a.nome.localeCompare(b.nome));
+                    
+                    data.serventias.forEach(serventia => {
+                        const option = document.createElement('option');
+                        option.value = serventia.nome;
+                        option.textContent = serventia.nome;
+                        serventiaSelect.appendChild(option);
+                    });
+                    
+                    console.log(`${data.serventias.length} serventias carregadas com sucesso`);
+                } else {
+                    console.error('Formato de dados inválido no JSON de serventias');
+                    showToast('Erro ao carregar serventias: formato de dados inválido', 'error');
+                }
+                
+                hideLoading();
+            } catch (error) {
+                hideLoading();
+                console.error('Erro ao carregar serventias:', error);
+                showToast('Erro ao carregar lista de serventias. Verifique sua conexão.', 'error');
             }
-            data[key] = value;
         }
         
-        // Adicionar ID para atualização
-        data.id = id;
-        
-        console.log(`Atualizando registro #${id}:`, data);
-        
-        // Enviar para a API
-        const response = await fetch(`${API_URL}?action=atualizarRegistro`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
+        // Alternar campos de participação
+        function toggleParticipacaoFields() {
+            if (participacaoSim.checked) {
+                camposParticipacaoSim.classList.remove('d-none');
+                camposParticipacaoNao.classList.add('d-none');
+                
+                // Limpar campos de não participação
+                motivoNao.value = '';
+                if (document.getElementById('outroMotivo')) {
+                    document.getElementById('outroMotivo').value = '';
+                }
+                outroMotivoDiv.style.display = 'none';
+                
+                // Remover required de campos não visíveis
+                motivoNao.required = false;
+                
+                // Remover classes de validação
+                motivoNao.classList.remove('is-invalid');
+                if (document.getElementById('outroMotivo')) {
+                    document.getElementById('outroMotivo').classList.remove('is-invalid');
+                }
+            } else {
+                camposParticipacaoSim.classList.add('d-none');
+                camposParticipacaoNao.classList.remove('d-none');
+                
+                // Zerar campos quantitativos
+                document.getElementById('viasEmitidas').value = '0';
+                document.getElementById('registrosNascimento').value = '0';
+                document.getElementById('averacoesPaternidade').value = '0';
+                document.getElementById('retificacoes').value = '0';
+                document.getElementById('registrosTardios').value = '0';
+                document.getElementById('restauracoes').value = '0';
+                
+                // Limpar campos de texto
+                document.getElementById('acoesRealizadas').value = '';
+                document.getElementById('publicosAtendidos').value = '';
+                
+                // Adicionar required
+                motivoNao.required = true;
+            }
         }
         
-        const result = await response.json();
-        
-        hideLoading();
-        
-        if (result.success) {
-            showToast('Registro atualizado com sucesso!', 'success');
+        // Resetar formulário
+        function resetForm() {
+            registroForm.reset();
             
-            // Fechar modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('registroModal'));
-            modal.hide();
+            // Restaurar estado padrão
+            participacaoSim.checked = true;
+            toggleParticipacaoFields();
             
-            // Recarregar registros e destacar o atualizado
-            loadRegistros().then(() => {
-                highlightRow(id);
+            // Remover classes de validação
+            const inputs = registroForm.querySelectorAll('.form-control, .form-select');
+            inputs.forEach(input => input.classList.remove('is-invalid'));
+            
+            showToast('Formulário limpo com sucesso', 'info');
+        }
+        
+        // Validar formulário
+        function validateForm() {
+            let isValid = true;
+            
+            // Validar Serventia
+            const serventia = serventiaSelect.value.trim();
+            if (!serventia) {
+                serventiaSelect.classList.add('is-invalid');
+                isif (participacaoNao.checked && motivoNao.value === '') {
+                    motivoNao.classList.add('is-invalid');
+                    isValid = false;
+                }
+                
+                // Validar "Outro motivo" se selecionado
+                if (participacaoNao.checked && motivoNao.value === 'Outros') {
+                    const outroMotivo = document.getElementById('outroMotivo');
+                    if (!outroMotivo.value.trim()) {
+                        outroMotivo.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                }
+            }
+            
+            // Validar Responsável
+            const responsavel = document.getElementById('responsavel').value.trim();
+            if (!responsavel) {
+                document.getElementById('responsavel').classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            if (!isValid) {
+                showToast('Por favor, preencha todos os campos obrigatórios', 'error');
+            }
+            
+            return isValid;
+        }
+        
+        // Submeter formulário
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Desabilitar formulário durante envio
+            const submitButton = document.getElementById('salvarRegistro');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
+            
+            try {
+                showLoading();
+                
+                // Coletar dados do formulário
+                const formData = new FormData(registroForm);
+                const data = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    // Converter campos numéricos para números
+                    if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
+                         'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
+                        value = parseInt(value) || 0;
+                    }
+                    data[key] = value;
+                }
+                
+                // Adicionar timestamp
+                data.timestamp = new Date().toISOString();
+                
+                // Ajustes para participação "Não"
+                if (data.participacao === 'Não') {
+                    data.dataInicio = '';
+                    data.classificacao = '';
+                    data.acoesRealizadas = '';
+                    data.publicosAtendidos = '';
+                    data.viasEmitidas = 0;
+                    data.registrosNascimento = 0;
+                    data.averacoesPaternidade = 0;
+                    data.retificacoes = 0;
+                    data.registrosTardios = 0;
+                    data.restauracoes = 0;
+                    data.tags = '';
+                    
+                    // Adicionar motivo específico se for "Outros"
+                    if (data.motivoNao === 'Outros' && document.getElementById('outroMotivo')) {
+                        data.motivoNao = 'Outros: ' + document.getElementById('outroMotivo').value;
+                    }
+                } else {
+                    data.motivoNao = '';
+                }
+                
+                console.log('Enviando dados para o servidor:', data);
+                
+                // Enviar para a API
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    hideLoading();
+                    showToast(`Registro #${result.data.id} salvo com sucesso!`, 'success');
+                    
+                    // Gerar protocolo para exibição
+                    const protocolo = result.data.protocolo || `REG-${result.data.id}`;
+                    
+                    // Exibir confirmação detalhada
+                    const confirmMessage = `
+                        Registro salvo com sucesso!
+                        
+                        Número do Registro: #${result.data.id}
+                        Protocolo: ${protocolo}
+                        Serventia: ${data.serventia}
+                        
+                        Deseja visualizar os detalhes do registro?
+                    `;
+                    
+                    // Perguntar se deseja ver os detalhes
+                    if (confirm(confirmMessage)) {
+                        // Mudar para a aba de listagem
+                        document.getElementById('list-tab').click();
+                        
+                        // Aguardar carregamento e destacar o registro
+                        setTimeout(() => {
+                            loadRegistros().then(() => {
+                                highlightRow(result.data.id);
+                            });
+                        }, 500);
+                    }
+                    
+                    // Limpar formulário
+                    resetForm();
+                } else {
+                    throw new Error(result.message || 'Erro ao salvar registro');
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Erro ao salvar registro:', error);
+                showToast(`Erro ao salvar: ${error.message}`, 'error');
+            } finally {
+                // Restaurar botão de envio
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fas fa-save me-2"></i>Salvar Registro';
+            }
+        }
+        
+        // Carregar registros
+        async function loadRegistros() {
+            try {
+                showLoading();
+                loadingSpinner.classList.remove('d-none');
+                registrosTableBody.innerHTML = '';
+                noRecordsMessage.classList.add('d-none');
+                
+                console.log('Carregando registros da API...');
+                
+                const response = await fetch(`${API_URL}?action=getAll`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                hideLoading();
+                loadingSpinner.classList.add('d-none');
+                
+                if (result.success) {
+                    if (result.data && result.data.length > 0) {
+                        console.log(`${result.data.length} registros carregados com sucesso`);
+                        renderRegistros(result.data);
+                    } else {
+                        console.log('Nenhum registro encontrado');
+                        noRecordsMessage.classList.remove('d-none');
+                    }
+                } else {
+                    throw new Error(result.message || 'Erro ao carregar registros');
+                }
+                
+                return result;
+            } catch (error) {
+                hideLoading();
+                loadingSpinner.classList.add('d-none');
+                console.error('Erro ao carregar registros:', error);
+                showToast(`Erro ao carregar registros: ${error.message}`, 'error');
+            }
+        }
+        
+        // Renderizar registros na tabela
+        function renderRegistros(registros) {
+            registrosTableBody.innerHTML = '';
+            
+            // Ordenar por ID (mais recentes primeiro)
+            registros.sort((a, b) => parseInt(b['ID']) - parseInt(a['ID']));
+            
+            registros.forEach(registro => {
+                // Calcular total de registros
+                const totalRegistros = (
+                    parseInt(registro['Registros Nascimento'] || 0) +
+                    parseInt(registro['Vias Emitidas'] || 0) +
+                    parseInt(registro['Averbações Paternidade'] || 0) +
+                    parseInt(registro['Retificações'] || 0) +
+                    parseInt(registro['Registros Tardios'] || 0) +
+                    parseInt(registro['Restaurações'] || 0)
+                );
+                
+                // Formatar data
+                let dataFormatada = 'N/A';
+                if (registro['Timestamp']) {
+                    try {
+                        const data = new Date(registro['Timestamp']);
+                        dataFormatada = data.toLocaleDateString('pt-BR');
+                    } catch (e) {
+                        console.error('Erro ao formatar data:', e);
+                    }
+                }
+                
+                // Determinar classe de status
+                const statusClass = registro['Participação'] === 'Não' ? 'text-danger' : 'text-success';
+                
+                // Criar linha da tabela
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${registro['ID']}</td>
+                    <td>${registro['Serventia'] || '—'}</td>
+                    <td>${registro['Responsável'] || '—'}</td>
+                    <td><span class="${statusClass}">${registro['Participação'] || 'Sim'}</span></td>
+                    <td>${totalRegistros}</td>
+                    <td>${dataFormatada}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary view-btn" data-id="${registro['ID']}" title="Visualizar">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning edit-btn" data-id="${registro['ID']}" title="Editar">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-btn" data-id="${registro['ID']}" title="Excluir">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                registrosTableBody.appendChild(tr);
             });
-        } else {
-            throw new Error(result.message || 'Erro ao atualizar registro');
-        }
-    } catch (error) {
-        hideLoading();
-        console.error('Erro ao atualizar registro:', error);
-        showToast(`Erro ao atualizar: ${error.message}`, 'error');
-    } finally {
-        // Restaurar botão
-        const saveButton = document.getElementById('salvarEdicaoBtn');
-        saveButton.disabled = false;
-        saveButton.innerHTML = 'Salvar Alterações';
-    }
-}
-
-// Mostrar confirmação de exclusão
-function showDeleteConfirmation(id) {
-    // Atualizar texto do modal
-    document.querySelector('#confirmDeleteModal .modal-body').innerHTML = `
-        <p><i class="fas fa-exclamation-triangle text-danger me-2"></i>Tem certeza que deseja excluir o registro <strong>#${id}</strong>?</p>
-        <p class="text-danger"><strong>Esta ação não pode ser desfeita.</strong></p>
-    `;
-    
-    // Atualizar botão de confirmação
-    const confirmBtn = document.getElementById('confirmDeleteBtn');
-    confirmBtn.setAttribute('data-id', id);
-    
-    // Mostrar modal
-    const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-    modal.show();
-}
-
-// Excluir registro
-async function deleteRegistro(id) {
-    try {
-        // Desabilitar botão durante exclusão
-        const deleteButton = document.getElementById('confirmDeleteBtn');
-        deleteButton.disabled = true;
-        deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Excluindo...';
-        
-        showLoading();
-        
-        console.log(`Excluindo registro #${id}`);
-        
-        const response = await fetch(`${API_URL}?action=excluirRegistro&id=${id}`, {
-            method: 'GET'
-        });
-        
-        if (!response.ok) {
-            throw new Error(`Erro na requisição: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        
-        hideLoading();
-        
-        if (result.success) {
-            showToast('Registro excluído com sucesso!', 'success');
             
-            // Fechar modal
-            const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
-            modal.hide();
+            // Adicionar event listeners para botões de ação
+            addActionButtonListeners();
+        }
+        
+        // Adicionar event listeners para botões de ação
+        function addActionButtonListeners() {
+            // Botões de visualização
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    viewRegistro(this.getAttribute('data-id'));
+                });
+            });
             
-            // Recarregar registros
-            loadRegistros();
-        } else {
-            throw new Error(result.message || 'Erro ao excluir registro');
+            // Botões de edição
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    editRegistro(this.getAttribute('data-id'));
+                });
+            });
+            
+            // Botões de exclusão
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showDeleteConfirmation(this.getAttribute('data-id'));
+                });
+            });
         }
-    } catch (error) {
-        hideLoading();
-        console.error('Erro ao excluir registro:', error);
-        showToast(`Erro ao excluir: ${error.message}`, 'error');
-    } finally {
-        // Restaurar botão
-        const deleteButton = document.getElementById('confirmDeleteBtn');
-        deleteButton.disabled = false;
-        deleteButton.innerHTML = 'Excluir';
-    }
-}
-
-// Pesquisar registros
-function searchRegistros() {
-    const searchTerm = searchInput.value.toLowerCase().trim();
-    
-    if (!searchTerm) {
-        loadRegistros();
-        return;
-    }
-    
-    const rows = registrosTableBody.querySelectorAll('tr');
-    
-    // Se não houver registros, carregar primeiro
-    if (rows.length === 0) {
-        loadRegistros().then(() => {
-            filterRows(searchTerm);
-        });
-    } else {
-        filterRows(searchTerm);
-    }
-}
-
-// Filtrar linhas de acordo com o termo de busca
-function filterRows(searchTerm) {
-    let found = false;
-    const rows = registrosTableBody.querySelectorAll('tr');
-    
-    rows.forEach(row => {
-        const text = row.textContent.toLowerCase();
-        if (text.includes(searchTerm)) {
-            row.style.display = '';
-            highlightSearchTerm(row, searchTerm);
-            found = true;
-        } else {
-            row.style.display = 'none';
+        
+        // Função para destacar uma linha
+        function highlightRow(id) {
+            const rows = registrosTableBody.querySelectorAll('tr');
+            for (const row of rows) {
+                const idCell = row.querySelector('td:first-child');
+                if (idCell && idCell.textContent === id.toString()) {
+                    row.classList.add('highlight-row');
+                    row.scrollIntoView({behavior: 'smooth', block: 'center'});
+                    break;
+                }
+            }
         }
-    });
-    
-    // Mostrar mensagem quando não há resultados
-    if (found) {
-        noRecordsMessage.classList.add('d-none');
-    } else {
-        noRecordsMessage.classList.remove('d-none');
-        noRecordsMessage.textContent = `Nenhum registro encontrado contendo "${searchTerm}".`;
-    }
-}
-
-// Destacar termo de busca nas células
-function highlightSearchTerm(row, term) {
-    const cells = row.querySelectorAll('td:not(:last-child)'); // Excluir coluna de ações
-    cells.forEach(cell => {
-        const text = cell.innerText;
-        if (text) {
-            const regex = new RegExp(`(${term})`, 'gi');
-            cell.innerHTML = text.replace(regex, '<mark>$1</mark>');
+        
+        // Visualizar registro
+        async function viewRegistro(id) {
+            try {
+                showLoading();
+                
+                console.log(`Carregando detalhes do registro #${id}`);
+                
+                const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                hideLoading();
+                
+                if (result.success && result.data) {
+                    // Preencher modal (somente leitura)
+                    fillModalWithData(result.data, true);
+                    
+                    // Atualizar título
+                    document.getElementById('registroModalLabel').textContent = `Visualizar Registro #${id}`;
+                    
+                    // Esconder botão de salvar
+                    document.getElementById('salvarEdicaoBtn').style.display = 'none';
+                    
+                    // Mostrar modal
+                    const modal = new bootstrap.Modal(document.getElementById('registroModal'));
+                    modal.show();
+                } else {
+                    throw new Error(result.message || 'Erro ao carregar registro');
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Erro ao visualizar registro:', error);
+                showToast(`Erro ao visualizar: ${error.message}`, 'error');
+            }
         }
-    });
-}
-
-// Mostrar overlay de carregamento
-function showLoading() {
-    loadingOverlay.style.display = 'flex';
-}
-
-// Esconder overlay de carregamento
-function hideLoading() {
-    loadingOverlay.style.display = 'none';
-}
-
-// Mostrar toast de notificação
-function showToast(message, type) {
-    // Criar container se não existir
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-        toastContainer = document.createElement('div');
-        toastContainer.className = 'toast-container';
-        document.body.appendChild(toastContainer);
-    }
-    
-    // Criar toast
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type} show`;
-    
-    // Cabeçalho do toast
-    const header = document.createElement('div');
-    header.className = 'toast-header';
-    
-    // Ícone baseado no tipo
-    let icon = '';
-    let title = '';
-    
-    switch (type) {
-        case 'success':
-            icon = '<i class="fas fa-check-circle me-2"></i>';
-            title = 'Sucesso';
-            break;
-        case 'error':
-            icon = '<i class="fas fa-exclamation-circle me-2"></i>';
-            title = 'Erro';
-            break;
-        case 'info':
-            icon = '<i class="fas fa-info-circle me-2"></i>';
-            title = 'Informação';
-            break;
-        default:
-            icon = '<i class="fas fa-bell me-2"></i>';
-            title = 'Notificação';
-    }
-    
-    header.innerHTML = `
-        ${icon}<strong>${title}</strong>
-        <button type="button" class="btn-close btn-close-white ms-auto" aria-label="Fechar"></button>
-    `;
-    
-    // Corpo do toast
-    const body = document.createElement('div');
-    body.className = 'toast-body';
-    body.textContent = message;
-    
-    // Adicionar elementos ao toast
-    toast.appendChild(header);
-    toast.appendChild(body);
-    
-    // Adicionar toast ao container
-    toastContainer.appendChild(toast);
-    
-    // Adicionar evento para fechar o toast
-    const closeBtn = toast.querySelector('.btn-close');
-    closeBtn.addEventListener('click', () => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    });
-    
-    // Auto-fechar após 5 segundos
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            toast.remove();
-        }, 300);
-    }, 5000);
-}
-
-// Função para inicializar o objeto de serventias a partir do JSON
+        
+        // Editar registro
+        async function editRegistro(id) {
+            try {
+                showLoading();
+                
+                console.log(`Carregando registro #${id} para edição`);
+                
+                const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                hideLoading();
+                
+                if (result.success && result.data) {
+                    // Preencher modal (editável)
+                    fillModalWithData(result.data, false);
+                    
+                    // Atualizar título
+                    document.getElementById('registroModalLabel').textContent = `Editar Registro #${id}`;
+                    
+                    // Mostrar botão de salvar
+                    const salvarBtn = document.getElementById('salvarEdicaoBtn');
+                    salvarBtn.style.display = 'block';
+                    salvarBtn.setAttribute('data-id', id);
+                    
+                    // Mostrar modal
+                    const modal = new bootstrap.Modal(document.getElementById('registroModal'));
+                    modal.show();
+                } else {
+                    throw new Error(result.message || 'Erro ao carregar registro');
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Erro ao editar registro:', error);
+                showToast(`Erro ao editar: ${error.message}`, 'error');
+            }
+        }
+        
+        // Preencher modal com dados
+        function fillModalWithData(data, readonly) {
+            const modalBody = document.querySelector('#registroModal .modal-body');
+            
+            // Calcular total de registros
+            const totalRegistros = (
+                parseInt(data['Registros Nascimento'] || 0) +
+                parseInt(data['Vias Emitidas'] || 0) +
+                parseInt(data['Averbações Paternidade'] || 0) +
+                parseInt(data['Retificações'] || 0) +
+                parseInt(data['Registros Tardios'] || 0) +
+                parseInt(data['Restaurações'] || 0)
+            );
+            
+            // Formatar data
+            let dataFormatada = 'N/A';
+            if (data['Timestamp']) {
+                const timestamp = new Date(data['Timestamp']);
+                dataFormatada = timestamp.toLocaleDateString('pt-BR') + ' ' + 
+                                timestamp.toLocaleTimeString('pt-BR');
+            }
+            
+            // Criar HTML do formulário
+            let html = `
+                <form id="editForm">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">ID:</label>
+                            <input type="text" class="form-control" value="${data['ID']}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Protocolo:</label>
+                            <input type="text" class="form-control" value="${data['Protocolo'] || ''}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Data:</label>
+                            <input type="text" class="form-control" value="${dataFormatada}" readonly>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-3 mb-3 border-bottom pb-2">Dados da Serventia</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Serventia:</label>
+                            <input type="text" class="form-control" name="serventia" value="${data['Serventia']}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Telefone:</label>
+                            <input type="text" class="form-control" name="telefone" value="${data['Telefone'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Responsável:</label>
+                            <input type="text" class="form-control" name="responsavel" value="${data['Responsável']}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control" name="email" value="${data['Email'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-3 mb-3 border-bottom pb-2">Participação</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Participou:</label>
+                            <select class="form-select" name="participacao" ${readonly ? 'disabled' : ''} id="modal-participacao">
+                                <option value="Sim" ${data['Participação'] !== 'Não' ? 'selected' : ''}>Sim</option>
+                                <option value="Não" ${data['Participação'] === 'Não' ? 'selected' : ''}>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Data de Início:</label>
+                            <input type="date" class="form-control" name="dataInicio" value="${data['Data de Início'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+            `;
+            
+            // Campos para participação Sim
+            if (data['Participação'] !== 'Não') {
+                html += `
+                    <div id="modal-campos-sim">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Classificação:</label>
+                                <select class="form-select" name="classificacao" ${readonly ? 'disabled' : ''}>
+                                    <option value="" ${!data['Classificação'] ? 'selected' : ''}>Selecione...</option>
+                                    <option value="Integral" ${data['Classificação'] === 'Integral' ? 'selected' : ''}>Integral - Todos os dias</option>
+                                    <option value="Parcial" ${data['Classificação'] === 'Parcial' ? 'selected' : ''}>Parcial - Alguns dias</option>
+                                    <option value="Pontual" ${data['Classificação'] === 'Pontual' ? 'selected' : ''}>Pontual - Ação específica</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Total de Registros:</label>
+                                <input type="text" class="form-control" value="${totalRegistros}" readonly>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Ações Realizadas:</label>
+                            <textarea class="form-control" name="acoesRealizadas" rows="3" ${readonly ? 'readonly' : ''}>${data['Ações Realizadas'] || ''}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Públicos Atendidos:</label>
+                            <textarea class="form-control" name="publicosAtendidos" rows="2" ${readonly ? 'readonly' : ''}>${data['Públicos Atendidos'] || ''}</textarea>
+                        </div>
+                        
+                        <h5 class="mt-3 mb-3 border-bottom pb-2">Dados Quantitativos</h5>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">2ª Vias Emitidas:</label>
+                                <input type="number" class="form-control" name="viasEmitidas" 
+                                       value="${data['Vias Emitidas'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Registros de Nascimento:</label>
+                                <input type="number" class="form-control" name="registrosNascimento" 
+                                       value="${data['Registros Nascimento'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Averbações de Paternidade:</label>
+                                <input type="number" class="form-control" name="averacoesPaternidade" 
+                                       value="${data['Averbações Paternidade'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label class="form-label">Retificações:</label>
+                                <input type="number" class="form-control" name="retificacoes" 
+                                       value="${data['Retificações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Registros Tardios:</label>
+                                <input type="number" class="form-control" name="registrosTardios" 
+                                       value="${data['Registros Tardios'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Restaurações:</label>
+                                <input type="number" class="form-control" name="restauracoes" 
+                                       value="${data['Restaurações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tags/Palavras-chave:</label>
+                            <input type="text" class="form-control" name="tags" value="${data['Tags'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div id="modal-campos-nao">
+                        <div class="mb-3">
+                            <label class="form-label">Motivo da Não Participação:</label>
+                            <input type="text" class="form-control" name="motivoNao" 
+                                   value="${data['Motivo Não Participação'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Observações (comum a ambos os casos)
+            html += `
+                <div class="mb-3">
+                    <label class="form-label">Observações:</label>
+                    <textarea class="form-control" name="observacoes" rows="3" ${readonly ? 'readonly' : ''}>${data['Observações'] || ''}</textarea>
+                </div>
+                </form>
+            `;
+            
+            modalBody.innerHTML = html;
+            
+            // Adicionar event listener para alternar campos (quando editável)
+            if (!readonly) {
+                const modalParticipacao = document.getElementById('modal-participacao');
+                if (modalParticipacao) {
+                    modalParticipacao.addEventListener('change', function() {
+                        const simCampos = document.getElementById('modal-campos-sim');
+                        const naoCampos = document.getElementById('modal-campos-nao');
+                        
+                        if (this.value === 'Sim') {
+                            if (simCampos) simCampos.style.display = 'block';
+                            if (naoCampos) naoCampos.style.display = 'none';
+                        } else {
+                            if (simCampos) simCampos.style.display = 'none';
+                            if (naoCampos) naoCampos.style.display = 'block';
+                        }
+                    });
+                }
+            }
+        }
+        
+        // Salvar edição de registro
+        async function saveRegistroEdit(id) {
+            try {
+                // Validar formulário
+                const form = document.getElementById('editForm');
+                if (!form) {
+                    throw new Error('Formulário não encontrado');
+                }
+                
+                // Desabilitar botão durante envio
+                const saveButton = document.getElementById('salvarEdicaoBtn');
+                saveButton.disabled = true;
+                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
+                
+                showLoading();
+                
+                // Coletar dados do formulário
+                const formData = new FormData(form);
+                const data = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    // Converter campos numéricos
+                    if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
+                         'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
+                        value = parseInt(value) || 0;
+                    }
+                    data[key] = value;
+                }
+                
+                // Adicionar ID para atualização
+                data.id = id;
+                
+                console.log(`Atualizando registro #${id}:`, data);
+                
+                // Enviar para a API
+                const response = await fetch(`${API_URL}?action=atualizarRegistro`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                hideLoading();
+                
+                if (result.success) {
+                    showToast('Registro atualizado com sucesso!', 'success');
+                    
+                    // Fechar modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('registroModal'));
+                    modal.hide();
+                    
+                    // Recarregar registros e destacar o atualizado
+                    loadRegistros().then(() => {
+                        highlightRow(id);
+                    });
+                } else {
+                    throw new Error(result.message || 'Erro ao atualizar registro');
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Erro ao atualizar registro:', error);
+                showToast(`Erro ao atualizar: ${error.message}`, 'error');
+            } finally {
+                // Restaurar botão
+                const saveButton = document.getElementById('salvarEdicaoBtn');
+                saveButton.disabled = false;
+                saveButton.innerHTML = 'Salvar Alterações';
+            }
+        }
+        
+        // Mostrar confirmação de exclusão
+        function showDeleteConfirmation(id) {
+            // Atualizar texto do modal
+            document.querySelector('#confirmDeleteModal .modal-body').innerHTML = `
+                <p><i class="fas fa-exclamation-triangle text-danger me-2"></i>Tem certeza que deseja excluir o registro <strong>#${id}</strong>?</p>
+                <p class="text-danger"><strong>Esta ação não pode ser desfeita.</strong></p>
+            `;
+            
+            // Atualizar botão de confirmação
+            const confirmBtn = document.getElementById('confirmDeleteBtn');
+            confirmBtn.setAttribute('data-id', id);
+            
+            // Mostrar modal
+            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            modal.show();
+        }
+        
+        // Excluir registro
+        async function deleteRegistro(id) {
+            try {
+                // Desabilitar botão durante exclusão
+                const deleteButton = document.getElementById('confirmDeleteBtn');
+                deleteButton.disabled = true;
+                deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Excluindo...';
+                
+                showLoading();
+                
+                console.log(`Excluindo registro #${id}`);
+                
+                const response = await fetch(`${API_URL}?action=excluirRegistro&id=${id}`, {
+                    method: 'GET'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                hideLoading();
+                
+                if (result.success) {
+                    showToast('Registro excluído com sucesso!', 'success');
+                    
+                    // Fechar modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+                    modal.hide();
+                    
+                    // Recarregar registros
+                    loadRegistros();
+                } else {
+                    throw new Error(result.message || 'Erro ao excluir registro');
+                }
+            } catch (error) {
+                hideLoading();
+                console.error('Erro ao excluir registro:', error);
+                showToast(`Erro ao excluir: ${error.message}`, 'error');
+            } finally {
+                // Restaurar botão
+                const deleteButton = document.getElementById('confirmDeleteBtn');
+                deleteButton.disabled = false;
+                deleteButton.innerHTML = 'Excluir';
+            }
+        }
+        
+        // Pesquisar registros
+        function searchRegistros() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                loadRegistros();
+                return;
+            }
+            
+            const rows = registrosTableBody.querySelectorAll('tr');
+            
+            // Se não houver registros, carregar primeiro
+            if (rows.length === 0) {
+                loadRegistros().then(() => {
+                    filterRows(searchTerm);
+                });
+            } else {
+                filterRows(searchTerm);
+            }
+        }
+        
+        // Filtrar linhas de acordo com o termo de busca
+        function filterRows(searchTerm) {
+            let found = false;
+            const rows = registrosTableBody.querySelectorAll('tr');
+            
+            rows.forEachrows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                    highlightSearchTerm(row, searchTerm);
+                    found = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Mostrar mensagem quando não há resultados
+            if (found) {
+                noRecordsMessage.classList.add('d-none');
+            } else {
+                noRecordsMessage.classList.remove('d-none');
+                noRecordsMessage.textContent = `Nenhum registro encontrado contendo "${searchTerm}".`;
+            }
+        }
+        
+        // Destacar termo de busca nas células
+        function highlightSearchTerm(row, term) {
+            const cells = row.querySelectorAll('td:not(:last-child)'); // Excluir coluna de ações
+            cells.forEach(cell => {
+                const text = cell.innerText;
+                const regex = new RegExp(`(${term})`, 'gi');
+                cell.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
+            });
+        }
+        
+        // Mostrar overlay de carregamento
+        function showLoading() {
+            loadingOverlay.style.display = 'flex';
+        }
+        
+        // Esconder overlay de carregamento
+        function hideLoading() {
+            loadingOverlay.style.display = 'none';
+        }
+        
+        // Mostrar toast de notificação
+        function showToast(message, type) {
+            // Criar container se não existir
+            let toastContainer = document.querySelector('.toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container';
+                document.body.appendChild(toastContainer);
+            }
+            
+            // Criar toast
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type} show`;
+            
+            // Cabeçalho do toast
+            const header = document.createElement('div');
+            header.className = 'toast-header';
+            
+            // Ícone baseado no tipo
+            let icon = '';
+            let title = '';
+            
+            switch (type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle me-2"></i>';
+                    title = 'Sucesso';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-exclamation-circle me-2"></i>';
+                    title = 'Erro';
+                    break;
+                case 'info':
+                    icon = '<i class="fas fa-info-circle me-2"></i>';
+                    title = 'Informação';
+                    break;
+                default:
+                    icon = '<i class="fas fa-bell me-2"></i>';
+                    title = 'Notificação';
+            }
+            
+            header.innerHTML = `
+                ${icon}<strong>${title}</strong>
+                <button type="button" class="btn-close btn-close-white ms-auto" aria-label="Fechar"></button>
+            `;
+            
+            // Corpo do toast
+            const body = document.createElement('div');
+            body.className = 'toast-body';
+            body.textContent = message;
+            
+            // Adicionar elementos ao toast
+            toast.appendChild(header);
+            toast.appendChild(body);
+            
+            // Adicionar toast ao container
+            toastContainer.appendChild(toast);
+            
+            // Adicionar evento para fechar o toast
+            const closeBtn = toast.querySelector('.btn-close');
+            closeBtn.addEventListener('click', () => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            });
+            
+            // Auto-fechar após 5 segundos
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+        // Função para inicializar o objeto de serventias a partir do JSON
 function inicializarServentias() {
     // Este é o objeto JSON de serventias extraído do arquivo paste.txt
     const serventias_json = {
@@ -1564,8 +1560,6 @@ function inicializarServentias() {
     
     return serventias_json;
 }
-
-// Inicializar as serventias quando o documento estiver pronto
-document.addEventListener('DOMContentLoaded', function() {
-    inicializarServentias();
-});
+    </script>    
+</body>
+</html>
