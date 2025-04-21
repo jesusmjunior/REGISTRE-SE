@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COGEX - Formulário Semana Registre-se</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #800020; /* Vinho */
+            --secondary: #ffcc00; /* Amarelo */
+            --dark: #000000; /* Preto */
+            --light: #ffffff;
+            --gray: #f8f9fa;
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.7;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        /* Cabeçalho e Navegação */
+        .topbar {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 8px 0;
+            font-size: 14px;
+        }
+        
+        .main-header {
+            background-color: var(--light);
+            padding: 15px 0;
+            border-bottom: 5px solid var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo-container img {
+            height: 70px;
+        }
+        
+        .nav-link {
+            font-weight: 600;
+            color: var(--primary) !important;
+            padding: 10px 20px !important;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--dark) !important;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+            transform: translateX(-50%);
+        }
+        
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 70%;
+        }
+
+        /* Formulário */
+        .form-section {
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin: 50px 0;
+        }
+        
+        .form-title {
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--secondary);
+        }
+        
+        .form-subtitle {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 30px 0 20px;
+            color: var(--dark);
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.25rem rgba(128, 0, 32, 0.25);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover {
+            background-color: #600018;
+            border-color: #600018;
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #5a6268;
+        }
+        
+        .required-field::after {
+            content: ' *';
+            color: red;
+        }
+        
+        .participacao-section {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .participacao-sim {
+            background-color: #e6f4ea;
+            border-left: 4px solid #34a853;
+        }
+        
+        .participacao-nao {
+            background-color: #fce8e6;
+            border-left: 4px solid #ea4335;
+        }
+        
+        /* Alertas e feedback */
+        .alert {
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .alert-success {
+            background-color: #e6f4ea;
+            border-color: #34a853;
+            color: #1e7e34;
+        }
+        
+        .alert-danger {
+            background-color: #fce8e6;
+            border-color: #ea4335;
+            color: #c53030;
+        }
+        
+        /* Rodapé */
+        .footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 30px 0 0;
+            margin-top: 50px;
+        }
+        
+        .footer-title {
+            color: var(--secondary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+        
+        .footer-bottom {
+            background-color: rgba(0,0,0,0.2);
+            padding: 15px 0;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .footer-bottom p {
+            margin: 0;
+            font-size: 14px;
+        }
+        
+        /* Formulário de pesquisa/listagem */
+        #pesquisaRegistros {
+            margin-bottom: 30px;
+        }
+        
+        .registros-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .registros-table th {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        .registros-table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .registros-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .registros-table tr:hover {
+            background-color: #f1f1f1;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .action-buttons .btn {
+            margin-right: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        
+        /* Loading spinner */
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+        
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+            color: var(--primary);
+        }
+        
+        /* Modal customizado */
+        .modal-header {
+            background-color: var(--primary);
+            color: var(--light);
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #ddd;
+            padding: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-section {
+                padding: 20px;
+                margin: 30px 0;
+            }
+            
+            .form-title {
+                font-size: 1.5rem;
+            }
+            
+            .form-subtitle {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra superior -->
+    <div class="topbar d-none d-md-block">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-md-6">
+                    <div class="d-flex align-items-center">
+                        <span class="me-3"><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</span>
+                        <span><i class="fas fa-phone me-2"></i>(98) 3198-4300</span>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <a href="#" class="text-white me-3"><i class="fab fa-facebook"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-white"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cabeçalho principal -->
+    <header class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-3 col-md-4 col-8">
+                    <div class="logo-container">
+                        <a href="index.html">
+                            <img src="logo-cogex.png" alt="COGEX Logo">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-9 col-md-8 col-4">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarNav">
+                            <ul class="navbar-nav ms-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="index.html">Início</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="quem-somos.html">Sobre</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="formulario.html">Formulário</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="relatorios.html">Relatórios</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Conteúdo principal - Formulário -->
+    <div class="container">
+        <!-- Exibir mensagens de alerta -->
+        <div id="alertMessages"></div>
+        
+        <!-- Abas do sistema -->
+        <ul class="nav nav-tabs mt-5" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-tab-pane" type="button" role="tab" aria-controls="form-tab-pane" aria-selected="true">
+                    <i class="fas fa-file-alt me-2"></i>Novo Registro
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab" aria-controls="list-tab-pane" aria-selected="false">
+                    <i class="fas fa-list me-2"></i>Consultar Registros
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Conteúdo das abas -->
+        <div class="tab-content" id="myTabContent">
+            <!-- Aba do formulário -->
+            <div class="tab-pane fade show active" id="form-tab-pane" role="tabpanel" aria-labelledby="form-tab" tabindex="0">
+                <section class="form-section">
+                    <h2 class="form-title">Formulário de Registro - Semana Registre-se</h2>
+                    <p class="text-muted">Preencha os dados referentes à participação da sua serventia na Semana Registre-se. Os campos marcados com asterisco (*) são obrigatórios.</p>
+                    
+                    <form id="registroForm">
+                        <!-- Dados da Serventia -->
+                        <h3 class="form-subtitle">Dados da Serventia</h3>
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="serventia" class="form-label required-field">Nome da Serventia</label>
+                                <input type="text" class="form-control" id="serventia" name="serventia" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="telefone" class="form-label">Telefone</label>
+                                <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label for="responsavel" class="form-label required-field">Nome do Responsável</label>
+                                <input type="text" class="form-control" id="responsavel" name="responsavel" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+                        </div>
+                        
+                        <!-- Status de Participação -->
+                        <h3 class="form-subtitle">Status de Participação</h3>
+                        <div class="mb-3">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="participacao" id="participacaoSim" value="Sim" checked>
+                                <label class="form-check-label" for="participacaoSim">Participou da Semana Registre-se</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="participacao" id="participacaoNao" value="Não">
+                                <label class="form-check-label" for="participacaoNao">Não participou da Semana Registre-se</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Campos condicionais para Participação Sim -->
+                        <div id="camposParticipacaoSim" class="participacao-section participacao-sim">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="dataInicio" class="form-label">Data de Início das Atividades</label>
+                                    <input type="date" class="form-control" id="dataInicio" name="dataInicio">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="classificacao" class="form-label">Classificação da Participação</label>
+                                    <select class="form-select" id="classificacao" name="classificacao">
+                                        <option value="">Selecione...</option>
+                                        <option value="Integral">Integral - Todos os dias</option>
+                                        <option value="Parcial">Parcial - Alguns dias</option>
+                                        <option value="Pontual">Pontual - Ação específica</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="acoesRealizadas" class="form-label">Ações Realizadas</label>
+                                <textarea class="form-control" id="acoesRealizadas" name="acoesRealizadas" rows="3" placeholder="Descreva as ações realizadas durante a Semana Registre-se..."></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="publicosAtendidos" class="form-label">Públicos Atendidos</label>
+                                <textarea class="form-control" id="publicosAtendidos" name="publicosAtendidos" rows="2" placeholder="Informe os grupos sociais atendidos (ex: indígenas, quilombolas, ribeirinhos, etc.)"></textarea>
+                            </div>
+                            
+                            <h4 class="mt-4 mb-3">Dados Quantitativos</h4>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="viasEmitidas" class="form-label">Total de 2ª Vias Emitidas</label>
+                                    <input type="number" class="form-control" id="viasEmitidas" name="viasEmitidas" min="0" value="0">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="registrosNascimento" class="form-label">Registros de Nascimento</label>
+                                    <input type="number" class="form-control" id="registrosNascimento" name="registrosNascimento" min="0" value="0">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="averacoesPaternidade" class="form-label">Averbações de Paternidade</label>
+                                    <input type="number" class="form-control" id="averacoesPaternidade" name="averacoesPaternidade" min="0" value="0">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="retificacoes" class="form-label">Retificações</label>
+                                    <input type="number" class="form-control" id="retificacoes" name="retificacoes" min="0" value="0">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="registrosTardios" class="form-label">Registros Tardios</label>
+                                    <input type="number" class="form-control" id="registrosTardios" name="registrosTardios" min="0" value="0">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="restauracoes" class="form-label">Restaurações</label>
+                                    <input type="number" class="form-control" id="restauracoes" name="restauracoes" min="0" value="0">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="tags" class="form-label">Tags/Palavras-chave</label>
+                                <input type="text" class="form-control" id="tags" name="tags" placeholder="Palavras-chave separadas por vírgula">
+                            </div>
+                        </div>
+                        
+                        <!-- Campos condicionais para Participação Não -->
+                        <div id="camposParticipacaoNao" class="participacao-section participacao-nao d-none">
+                            <div class="mb-3">
+                                <label for="motivoNao" class="form-label">Motivo da Não Participação</label>
+                                <select class="form-select" id="motivoNao" name="motivoNao">
+                                    <option value="">Selecione...</option>
+                                    <option value="Falta de Pessoal">Falta de Pessoal</option>
+                                    <option value="Falta de Recursos">Falta de Recursos</option>
+                                    <option value="Problemas de Infraestrutura">Problemas de Infraestrutura</option>
+                                    <option value="Não houve Demanda Local">Não houve Demanda Local</option>
+                                    <option value="Outros">Outros</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3" id="outroMotivoDiv" style="display: none;">
+                                <label for="outroMotivo" class="form-label">Especifique o Motivo</label>
+                                <textarea class="form-control" id="outroMotivo" name="outroMotivo" rows="2"></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Campo comum a ambos -->
+                        <div class="mb-3 mt-4">
+                            <label for="observacoes" class="form-label">Observações Adicionais</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="3" placeholder="Informações complementares que julgar relevantes..."></textarea>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-secondary" id="limparFormulario">
+                                <i class="fas fa-eraser me-2"></i>Limpar Formulário
+                            </button>
+                            <button type="submit" class="btn btn-primary" id="salvarRegistro">
+                                <i class="fas fa-save me-2"></i>Salvar Registro
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+            
+            <!-- Aba de listagem -->
+            <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" aria-labelledby="list-tab" tabindex="0">
+                <section class="form-section">
+                    <h2 class="form-title">Consulta de Registros</h2>
+                    
+                    <div id="pesquisaRegistros" class="row mb-4">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="Pesquisar por serventia, responsável..." id="searchInput">
+                                <button class="btn btn-primary" type="button" id="searchButton">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex justify-content-end">
+                            <button class="btn btn-outline-primary" id="refreshButton">
+                                <i class="fas fa-sync-alt me-2"></i>Atualizar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-responsive">
+                        <table class="registros-table" id="registrosTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Serventia</th>
+                                    <th>Responsável</th>
+                                    <th>Participação</th>
+                                    <th>Registros</th>
+                                    <th>Data</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registrosTableBody">
+                                <!-- Os dados serão inseridos aqui via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Loading spinner -->
+                    <div class="spinner-container d-none" id="loadingSpinner">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Carregando...</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Mensagem para quando não houver registros -->
+                    <div id="noRecordsMessage" class="alert alert-info d-none">
+                        Nenhum registro encontrado.
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Visualização/Edição de Registro -->
+    <div class="modal fade" id="registroModal" tabindex="-1" aria-labelledby="registroModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registroModalLabel">Detalhes do Registro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- O conteúdo será inserido dinamicamente via JavaScript -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="salvarEdicaoBtn">Salvar Alterações</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação para Exclusão -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h4 class="footer-title">COGEX</h4>
+                    <p>Corregedoria Geral do Foro Extrajudicial</p>
+                    <p>Tribunal de Justiça do Maranhão</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h4 class="footer-title">Contato</h4>
+                    <p><i class="fas fa-map-marker-alt me-2"></i>Praça Dom Pedro II, s/n - Centro</p>
+                    <p><i class="fas fa-phone me-2"></i>(98) 3198-4300</p>
+                    <p><i class="fas fa-envelope me-2"></i>cogex@tjma.jus.br</p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h4 class="footer-title">Links Úteis</h4>
+                    <ul class="list-unstyled">
+                        <li><a href="https://www.tjma.jus.br" class="text-white">Tribunal de Justiça do Maranhão</a></li>
+                        <li><a href="#" class="text-white">Manual do Usuário</a></li>
+                        <li><a href="#" class="text-white">Perguntas Frequentes</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2024 COGEX - Corregedoria Geral do Foro Extrajudicial - TJMA. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuração da URL da API
+        const API_URL = 'https://script.google.com/macros/s/AKfycbwRjX5DOrbMGKeEbxGB7tHJ2IsSi6zaUOUqXZ13b02mlIeP8OxziECpJMx46MLYRpGiHg/exec'';
+        
+        // Elementos do DOM
+        const registroForm = document.getElementById('registroForm');
+        const participacaoSim = document.getElementById('participacaoSim');
+        const participacaoNao = document.getElementById('participacaoNao');
+        const camposParticipacaoSim = document.getElementById('camposParticipacaoSim');
+        const camposParticipacaoNao = document.getElementById('camposParticipacaoNao');
+        const motivoNao = document.getElementById('motivoNao');
+        const outroMotivoDiv = document.getElementById('outroMotivoDiv');
+        const limparFormularioBtn = document.getElementById('limparFormulario');
+        const searchButton = document.getElementById('searchButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const searchInput = document.getElementById('searchInput');
+        const registrosTableBody = document.getElementById('registrosTableBody');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const noRecordsMessage = document.getElementById('noRecordsMessage');
+        const alertMessages = document.getElementById('alertMessages');
+        
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Alternar entre os campos de participação Sim/Não
+            participacaoSim.addEventListener('change', toggleParticipacaoFields);
+            participacaoNao.addEventListener('change', toggleParticipacaoFields);
+            
+            // Mostrar/ocultar campo de "outro motivo"
+            motivoNao.addEventListener('change', function() {
+                outroMotivoDiv.style.display = this.value === 'Outros' ? 'block' : 'none';
+            });
+            
+            // Limpar formulário
+            limparFormularioBtn.addEventListener('click', resetForm);
+            
+            // Enviar formulário
+            registroForm.addEventListener('submit', handleFormSubmit);
+            
+            // Pesquisar registros
+            searchButton.addEventListener('click', searchRegistros);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchRegistros();
+                }
+            });
+            
+            // Atualizar lista de registros
+            refreshButton.addEventListener('click', loadRegistros);
+            
+            // Carregar registros se estivermos na aba de listagem
+            const listTab = document.getElementById('list-tab');
+            listTab.addEventListener('click', function() {
+                loadRegistros();
+            });
+            
+            // Configurar modais para visualização e exclusão
+            setupModalEvents();
+        });
+        
+        // Funções
+        function toggleParticipacaoFields() {
+            if (participacaoSim.checked) {
+                camposParticipacaoSim.classList.remove('d-none');
+                camposParticipacaoNao.classList.add('d-none');
+                
+                // Limpar campos da opção "Não"
+                motivoNao.value = '';
+                if (document.getElementById('outroMotivo')) {
+                    document.getElementById('outroMotivo').value = '';
+                }
+                outroMotivoDiv.style.display = 'none';
+            } else {
+                camposParticipacaoSim.classList.add('d-none');
+                camposParticipacaoNao.classList.remove('d-none');
+                
+                // Limpar campos quantitativos
+                document.getElementById('viasEmitidas').value = '0';
+                document.getElementById('registrosNascimento').value = '0';
+                document.getElementById('averacoesPaternidade').value = '0';
+                document.getElementById('retificacoes').value = '0';
+                document.getElementById('registrosTardios').value = '0';
+                document.getElementById('restauracoes').value = '0';
+            }
+        }
+        
+        function resetForm() {
+            registroForm.reset();
+            toggleParticipacaoFields();
+            outroMotivoDiv.style.display = 'none';
+            showAlert('Formulário limpo com sucesso.', 'info');
+        }
+        
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            // Validar campos obrigatórios
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Coletar dados do formulário
+            const formData = new FormData(registroForm);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                // Converter campos numéricos para números
+                if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
+                     'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
+                    value = parseInt(value) || 0;
+                }
+                data[key] = value;
+            }
+            
+            // Adicionar timestamp
+            data.timestamp = new Date().toISOString();
+            
+            // Se não participou, zerar campos de participação
+            if (data.participacao === 'Não') {
+                data.dataInicio = '';
+                data.classificacao = '';
+                data.acoesRealizadas = '';
+                data.publicosAtendidos = '';
+                data.viasEmitidas = 0;
+                data.registrosNascimento = 0;
+                data.averacoesPaternidade = 0;
+                data.retificacoes = 0;
+                data.registrosTardios = 0;
+                data.restauracoes = 0;
+                data.tags = '';
+                
+                // Adicionar motivo especificado se for "Outros"
+                if (data.motivoNao === 'Outros' && document.getElementById('outroMotivo')) {
+                    data.motivoNao = 'Outros: ' + document.getElementById('outroMotivo').value;
+                }
+            } else {
+                data.motivoNao = '';
+            }
+            
+            // Enviar dados para a API
+            saveRegistro(data);
+        }
+        
+        function validateForm() {
+            // Validar campos obrigatórios
+            const serventia = document.getElementById('serventia').value.trim();
+            const responsavel = document.getElementById('responsavel').value.trim();
+            
+            if (!serventia) {
+                showAlert('Por favor, informe o nome da serventia.', 'danger');
+                document.getElementById('serventia').focus();
+                return false;
+            }
+            
+            if (!responsavel) {
+                showAlert('Por favor, informe o nome do responsável.', 'danger');
+                document.getElementById('responsavel').focus();
+                return false;
+            }
+            
+            // Validar motivo se não participou
+            if (participacaoNao.checked && !document.getElementById('motivoNao').value) {
+                showAlert('Por favor, informe o motivo da não participação.', 'danger');
+                document.getElementById('motivoNao').focus();
+                return false;
+            }
+            
+            // Se selecionar "Outros" como motivo, verificar se especificou
+            if (participacaoNao.checked && document.getElementById('motivoNao').value === 'Outros' && 
+                document.getElementById('outroMotivo') && 
+                !document.getElementById('outroMotivo').value.trim()) {
+                showAlert('Por favor, especifique o motivo da não participação.', 'danger');
+                document.getElementById('outroMotivo').focus();
+                return false;
+            }
+            
+            return true;
+        }
+        
+        async function saveRegistro(data) {
+            try {
+                showAlert('Enviando dados...', 'info');
+                
+                // Preparar dados para envio
+                const jsonData = JSON.stringify(data);
+                
+                // Enviar para a API do Google Apps Script
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonData
+                });
+                
+                // Verificar se a resposta é válida
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('Registro salvo com sucesso!', 'success');
+                    resetForm();
+                    
+                    // Se tiver um ID de registro, oferecer link para visualização
+                    if (result.data && result.data.id) {
+                        showAlert(`Registro #${result.data.id} criado com sucesso!`, 'success');
+                    }
+                } else {
+                    throw new Error(result.message || 'Erro ao salvar registro');
+                }
+            } catch (error) {
+                console.error('Erro ao salvar registro:', error);
+                showAlert(`Erro ao salvar registro: ${error.message}`, 'danger');
+            }
+        }
+        
+        async function loadRegistros() {
+            try {
+                // Mostrar spinner de carregamento
+                loadingSpinner.classList.remove('d-none');
+                registrosTableBody.innerHTML = '';
+                noRecordsMessage.classList.add('d-none');
+                
+                // Fazer requisição para a API
+                const response = await fetch(`${API_URL}?action=getAll`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                // Esconder spinner
+                loadingSpinner.classList.add('d-none');
+                
+                if (result.success) {
+                    if (result.data && result.data.length > 0) {
+                        // Renderizar registros na tabela
+                        renderRegistros(result.data);
+                    } else {
+                        // Mostrar mensagem de nenhum registro
+                        noRecordsMessage.classList.remove('d-none');
+                    }
+                } else {
+                    throw new Error(result.message || 'Erro ao carregar registros');
+                }
+            } catch (error) {
+                console.error('Erro ao carregar registros:', error);
+                loadingSpinner.classList.add('d-none');
+                showAlert(`Erro ao carregar registros: ${error.message}`, 'danger');
+            }
+        }
+        
+        function renderRegistros(registros) {
+            registrosTableBody.innerHTML = '';
+            
+            registros.forEach(registro => {
+                // Calcular total de registros
+                const totalRegistros = (
+                    parseInt(registro['Registros Nascimento'] || 0) +
+                    parseInt(registro['Vias Emitidas'] || 0) +
+                    parseInt(registro['Averbações Paternidade'] || 0) +
+                    parseInt(registro['Retificações'] || 0) +
+                    parseInt(registro['Registros Tardios'] || 0) +
+                    parseInt(registro['Restaurações'] || 0)
+                );
+                
+                // Formatar data
+                let dataFormatada = 'N/A';
+                if (registro['Timestamp']) {
+                    const data = new Date(registro['Timestamp']);
+                    dataFormatada = data.toLocaleDateString('pt-BR');
+                }
+                
+                // Criar linha da tabela
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${registro['ID']}</td>
+                    <td>${registro['Serventia']}</td>
+                    <td>${registro['Responsável']}</td>
+                    <td>${registro['Participação'] || 'Sim'}</td>
+                    <td>${totalRegistros}</td>
+                    <td>${dataFormatada}</td>
+                    <td class="action-buttons">
+                        <button class="btn btn-sm btn-primary view-btn" data-id="${registro['ID']}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning edit-btn" data-id="${registro['ID']}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-btn" data-id="${registro['ID']}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                registrosTableBody.appendChild(tr);
+            });
+            
+            // Adicionar event listeners para os botões de ação
+            addActionButtonListeners();
+        }
+        
+        function searchRegistros() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            // Se não houver termo de busca, recarregar todos os registros
+            if (!searchTerm) {
+                loadRegistros();
+                return;
+            }
+            
+            // Obter todas as linhas da tabela
+            const rows = registrosTableBody.querySelectorAll('tr');
+            
+            // Se não houver linhas, carregar registros primeiro
+            if (rows.length === 0) {
+                loadRegistros().then(() => {
+                    filterRows(searchTerm);
+                });
+            } else {
+                filterRows(searchTerm);
+            }
+        }
+        
+        function filterRows(searchTerm) {
+            let found = false;
+            const rows = registrosTableBody.querySelectorAll('tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                    found = true;
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Mostrar ou esconder mensagem de nenhum registro
+            if (found) {
+                noRecordsMessage.classList.add('d-none');
+            } else {
+                noRecordsMessage.classList.remove('d-none');
+                noRecordsMessage.textContent = `Nenhum registro encontrado contendo "${searchTerm}".`;
+            }
+        }
+        
+        function addActionButtonListeners() {
+            // Botões de visualização
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    viewRegistro(id);
+                });
+            });
+            
+            // Botões de edição
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    editRegistro(id);
+                });
+            });
+            
+            // Botões de exclusão
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-id');
+                    showDeleteConfirmation(id);
+                });
+            });
+        }
+        
+        function setupModalEvents() {
+            // Configurar botão de salvar edição
+            document.getElementById('salvarEdicaoBtn').addEventListener('click', () => {
+                const id = document.getElementById('salvarEdicaoBtn').getAttribute('data-id');
+                saveRegistroEdit(id);
+            });
+            
+            // Configurar botão de confirmar exclusão
+            document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+                const id = document.getElementById('confirmDeleteBtn').getAttribute('data-id');
+                deleteRegistro(id);
+            });
+        }
+        
+        async function viewRegistro(id) {
+            try {
+                // Fazer requisição para a API para obter os detalhes do registro
+                const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    // Preencher o modal com os dados do registro (somente leitura)
+                    fillModalWithData(result.data, true);
+                    
+                    // Atualizar título do modal
+                    document.getElementById('registroModalLabel').textContent = `Visualizar Registro #${id}`;
+                    
+                    // Esconder botão de salvar
+                    document.getElementById('salvarEdicaoBtn').style.display = 'none';
+                    
+                    // Mostrar o modal
+                    const registroModal = new bootstrap.Modal(document.getElementById('registroModal'));
+                    registroModal.show();
+                } else {
+                    throw new Error(result.message || 'Erro ao carregar registro');
+                }
+            } catch (error) {
+                console.error('Erro ao visualizar registro:', error);
+                showAlert(`Erro ao visualizar registro: ${error.message}`, 'danger');
+            }
+        }
+        
+        async function editRegistro(id) {
+            try {
+                // Fazer requisição para a API para obter os detalhes do registro
+                const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    // Preencher o modal com os dados do registro (editável)
+                    fillModalWithData(result.data, false);
+                    
+                    // Atualizar título do modal
+                    document.getElementById('registroModalLabel').textContent = `Editar Registro #${id}`;
+                    
+                    // Mostrar botão de salvar e adicionar ID para uso posterior
+                    const salvarBtn = document.getElementById('salvarEdicaoBtn');
+                    salvarBtn.style.display = 'block';
+                    salvarBtn.setAttribute('data-id', id);
+                    
+                    // Mostrar o modal
+                    const registroModal = new bootstrap.Modal(document.getElementById('registroModal'));
+                    registroModal.show();
+                } else {
+                    throw new Error(result.message || 'Erro ao carregar registro');
+                }
+            } catch (error) {
+                console.error('Erro ao editar registro:', error);
+                showAlert(`Erro ao editar registro: ${error.message}`, 'danger');
+            }
+        }
+        
+        function fillModalWithData(data, readonly) {
+            // Gerar HTML para o modal
+            const modalBody = document.querySelector('#registroModal .modal-body');
+            
+            // Calcular total de registros
+            const totalRegistros = (
+                parseInt(data['Registros Nascimento'] || 0) +
+                parseInt(data['Vias Emitidas'] || 0) +
+                parseInt(data['Averbações Paternidade'] || 0) +
+                parseInt(data['Retificações'] || 0) +
+                parseInt(data['Registros Tardios'] || 0) +
+                parseInt(data['Restaurações'] || 0)
+            );
+            
+            // Formatar data
+            let dataFormatada = 'N/A';
+            if (data['Timestamp']) {
+                const timestamp = new Date(data['Timestamp']);
+                dataFormatada = timestamp.toLocaleDateString('pt-BR') + ' ' + 
+                               timestamp.toLocaleTimeString('pt-BR');
+            }
+            
+            let html = `
+                <form id="editForm">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">ID:</label>
+                            <input type="text" class="form-control" value="${data['ID']}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Protocolo:</label>
+                            <input type="text" class="form-control" value="${data['Protocolo'] || ''}" readonly>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Data/Hora:</label>
+                            <input type="text" class="form-control" value="${dataFormatada}" readonly>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3 border-bottom pb-2">Dados da Serventia</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Serventia:</label>
+                            <input type="text" class="form-control" name="serventia" value="${data['Serventia']}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Telefone:</label>
+                            <input type="text" class="form-control" name="telefone" value="${data['Telefone'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Responsável:</label>
+                            <input type="text" class="form-control" name="responsavel" value="${data['Responsável']}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control" name="email" value="${data['Email'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3 border-bottom pb-2">Dados da Participação</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Participou:</label>
+                            <select class="form-select" name="participacao" ${readonly ? 'disabled' : ''}>
+                                <option value="Sim" ${data['Participação'] === 'Sim' ? 'selected' : ''}>Sim</option>
+                                <option value="Não" ${data['Participação'] === 'Não' ? 'selected' : ''}>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Data de Início:</label>
+                            <input type="date" class="form-control" name="dataInicio" value="${data['Data de Início'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+            `;
+            
+            // Adicionar campos específicos para participação
+            if (data['Participação'] !== 'Não') {
+                html += `
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Classificação:</label>
+                            <select class="form-select" name="classificacao" ${readonly ? 'disabled' : ''}>
+                                <option value="" ${!data['Classificação'] ? 'selected' : ''}>Selecione...</option>
+                                <option value="Integral" ${data['Classificação'] === 'Integral' ? 'selected' : ''}>Integral - Todos os dias</option>
+                                <option value="Parcial" ${data['Classificação'] === 'Parcial' ? 'selected' : ''}>Parcial - Alguns dias</option>
+                                <option value="Pontual" ${data['Classificação'] === 'Pontual' ? 'selected' : ''}>Pontual - Ação específica</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Total de Registros:</label>
+                            <input type="text" class="form-control" value="${totalRegistros}" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Ações Realizadas:</label>
+                        <textarea class="form-control" name="acoesRealizadas" rows="3" ${readonly ? 'readonly' : ''}>${data['Ações Realizadas'] || ''}</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Públicos Atendidos:</label>
+                        <textarea class="form-control" name="publicosAtendidos" rows="2" ${readonly ? 'readonly' : ''}>${data['Públicos Atendidos'] || ''}</textarea>
+                    </div>
+                    
+                    <h5 class="mt-4 mb-3 border-bottom pb-2">Dados Quantitativos</h5>
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">2ª Vias Emitidas:</label>
+                            <input type="number" class="form-control" name="viasEmitidas" value="${data['Vias Emitidas'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Registros de Nascimento:</label>
+                            <input type="number" class="form-control" name="registrosNascimento" value="${data['Registros Nascimento'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Averbações de Paternidade:</label>
+                            <input type="number" class="form-control" name="averacoesPaternidade" value="${data['Averbações Paternidade'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Retificações:</label>
+                            <input type="number" class="form-control" name="retificacoes" value="${data['Retificações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Registros Tardios:</label>
+                            <input type="number" class="form-control" name="registrosTardios" value="${data['Registros Tardios'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Restaurações:</label>
+                            <input type="number" class="form-control" name="restauracoes" value="${data['Restaurações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Tags/Palavras-chave:</label>
+                        <input type="text" class="form-control" name="tags" value="${data['Tags'] || ''}" ${readonly ? 'readonly' : ''}>
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="mb-3">
+                        <label class="form-label">Motivo da Não Participação:</label>
+                        <input type="text" class="form-control" value="${data['Motivo Não Participação'] || ''}" ${readonly ? 'readonly' : ''} name="motivoNao">
+                    </div>
+                `;
+            }
+            
+            // Observações (comum a ambos os casos)
+            html += `
+                <div class="mb-3">
+                    <label class="form-label">Observações:</label>
+                    <textarea class="form-control" name="observacoes" rows="3" ${readonly ? 'readonly' : ''}>${data['Observações'] || ''}</textarea>
+                </div>
+                </form>
+            `;
+            
+            modalBody.innerHTML = html;
+        }
+        
+        async function saveRegistroEdit(id) {
+            try {
+                // Coletar dados do formulário de edição
+                const form = document.getElementById('editForm');
+                const formData = new FormData(form);
+                const data = {};
+                
+                for (let [key, value] of formData.entries()) {
+                    // Converter campos numéricos para números
+                    if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
+                         'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
+                        value = parseInt(value) || 0;
+                    }
+                    data[key] = value;
+                }
+                
+                // Adicionar ID para atualização
+                data.id = id;
+                
+                showAlert('Atualizando registro...', 'info');
+                
+                // Enviar para a API
+                const response = await fetch(`${API_URL}?action=atualizarRegistro`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('Registro atualizado com sucesso!', 'success');
+                    
+                    // Fechar o modal
+                    const registroModal = bootstrap.Modal.getInstance(document.getElementById('registroModal'));
+                    registroModal.hide();
+                    
+                    // Recarregar lista de registros
+                    loadRegistros();
+                } else {
+                    throw new Error(result.message || 'Erro ao atualizar registro');
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar registro:', error);
+                showAlert(`Erro ao atualizar registro: ${error.message}`, 'danger');
+            }
+        }
+        
+        function showDeleteConfirmation(id) {
+            // Configurar modal de confirmação
+            document.getElementById('confirmDeleteBtn').setAttribute('data-id', id);
+            
+            // Mostrar modal
+            const confirmDeleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            confirmDeleteModal.show();
+        }
+        
+        async function deleteRegistro(id) {
+            try {
+                showAlert('Excluindo registro...', 'info');
+                
+                // Enviar para a API
+                const response = await fetch(`${API_URL}?action=excluirRegistro&id=${id}`, {
+                    method: 'GET'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro na requisição: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert('Registro excluído com sucesso!', 'success');
+                    
+                    // Fechar o modal
+                    const confirmDeleteModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+                    confirmDeleteModal.hide();
+                    
+                    // Recarregar lista de registros
+                    loadRegistros();
+                } else {
+                    throw new Error(result.message || 'Erro ao excluir registro');
+                }
+            } catch (error) {
+                console.error('Erro ao excluir registro:', error);
+                showAlert(`Erro ao excluir registro: ${error.message}`, 'danger');
+            }
+        }
+        
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            `;
+            
+            alertMessages.appendChild(alertDiv);
+            
+            // Auto-remover após 5 segundos
+            setTimeout(() => {
+                alertDiv.classList.remove('show');
+                setTimeout(() => {
+                    alertDiv.remove();
+                }, 150);
+            }, 5000);
+        }
+    </script>
+
+</body>
+</html>
