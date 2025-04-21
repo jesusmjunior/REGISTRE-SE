@@ -23,7 +23,7 @@
             background-color: var(--light);
             padding: 15px 0;
             border-bottom: 5px solid var(--secondary);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
         }
         
         .logo-container img {
@@ -41,7 +41,7 @@
         .form-title {
             color: var(--primary);
             font-weight: 700;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 3px solid var(--secondary);
         }
@@ -57,6 +57,11 @@
         .btn-primary {
             background-color: var(--primary);
             border-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: #600018;
+            border-color: #600018;
         }
         
         .required-field::after {
@@ -81,7 +86,25 @@
         .registros-table th {
             background-color: var(--primary);
             color: var(--light);
-            padding: 10px;
+            padding: 12px;
+        }
+        
+        .registros-table td {
+            vertical-align: middle;
+            padding: 8px;
+        }
+        
+        .registros-table tr:hover {
+            background-color: rgba(255, 204, 0, 0.1);
+        }
+        
+        .highlight-row {
+            animation: highlight-fade 3s ease-in-out;
+        }
+        
+        @keyframes highlight-fade {
+            0% { background-color: rgba(255, 204, 0, 0.5); }
+            100% { background-color: transparent; }
         }
         
         .loading-overlay {
@@ -97,45 +120,76 @@
             z-index: 9999;
         }
         
-        .highlight-row {
-            animation: highlight-fade 3s ease-in-out;
+        /* Toast notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
         }
         
-        @keyframes highlight-fade {
-            0% { background-color: rgba(255, 204, 0, 0.5); }
-            100% { background-color: transparent; }
+        .toast {
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            overflow: hidden;
+            margin-bottom: 10px;
+            min-width: 300px;
         }
         
-        .highlight {
-            background-color: #ffff99;
+        .toast-header {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
             font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .toast-success .toast-header {
+            background-color: #34a853;
+            color: white;
+        }
+        
+        .toast-error .toast-header {
+            background-color: #ea4335;
+            color: white;
+        }
+        
+        .toast-info .toast-header {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .toast-body {
+            padding: 15px;
         }
     </style>
 </head>
 <body>
-    <!-- Cabeçalho -->
+    <!-- Header -->
     <header class="main-header">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-3 col-md-4 col-8">
+                <div class="col-lg-4 col-md-6 col-8">
                     <div class="logo-container">
-                        <img src="logo-cogex.png" alt="COGEX Logo">
+                        <img src="logo-cogex.png" alt="COGEX Logo" id="logo-cogex">
                     </div>
                 </div>
-                <div class="col-lg-9 col-md-8 col-4 text-end">
-                    <h4>COGEX - Semana Registre-se</h4>
+                <div class="col-lg-8 col-md-6 col-4 text-end">
+                    <h2 class="d-none d-md-block">COGEX - Semana Registre-se</h2>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Conteúdo principal -->
+    <!-- Main Content -->
     <div class="container">
-        <!-- Alertas -->
-        <div id="alertMessages"></div>
+        <!-- Toast Container -->
+        <div class="toast-container"></div>
         
-        <!-- Abas do sistema -->
-        <ul class="nav nav-tabs mt-4" id="myTab" role="tablist">
+        <!-- Tabs -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-tab-pane" type="button" role="tab">
                     <i class="fas fa-file-alt me-2"></i>Novo Registro
@@ -148,9 +202,9 @@
             </li>
         </ul>
         
-        <!-- Conteúdo das abas -->
+        <!-- Tab Content -->
         <div class="tab-content" id="myTabContent">
-            <!-- Aba do formulário -->
+            <!-- Form Tab -->
             <div class="tab-pane fade show active" id="form-tab-pane" role="tabpanel" tabindex="0">
                 <section class="form-section">
                     <h2 class="form-title">Formulário de Registro - Semana Registre-se</h2>
@@ -162,11 +216,15 @@
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <label for="serventia" class="form-label required-field">Nome da Serventia</label>
-                                <input type="text" class="form-control" id="serventia" name="serventia" required>
+                                <select class="form-select" id="serventia" name="serventia" required>
+                                    <option value="">Selecione uma serventia...</option>
+                                    <!-- Opções serão carregadas via JavaScript -->
+                                </select>
+                                <div class="invalid-feedback">Por favor, selecione uma serventia.</div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="telefone" class="form-label">Telefone</label>
-                                <input type="tel" class="form-control" id="telefone" name="telefone">
+                                <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000">
                             </div>
                         </div>
                         
@@ -174,6 +232,7 @@
                             <div class="col-md-8 mb-3">
                                 <label for="responsavel" class="form-label required-field">Nome do Responsável</label>
                                 <input type="text" class="form-control" id="responsavel" name="responsavel" required>
+                                <div class="invalid-feedback">Por favor, informe o nome do responsável.</div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="email" class="form-label">E-mail</label>
@@ -194,15 +253,15 @@
                             </div>
                         </div>
                         
-                        <!-- Campos condicionais para Participação Sim -->
+                        <!-- Campos para Participação Sim -->
                         <div id="camposParticipacaoSim" class="participacao-sim">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="dataInicio" class="form-label">Data de Início</label>
+                                    <label for="dataInicio" class="form-label">Data de Início das Atividades</label>
                                     <input type="date" class="form-control" id="dataInicio" name="dataInicio">
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label for="classificacao" class="form-label">Classificação</label>
+                                    <label for="classificacao" class="form-label">Classificação da Participação</label>
                                     <select class="form-select" id="classificacao" name="classificacao">
                                         <option value="">Selecione...</option>
                                         <option value="Integral">Integral - Todos os dias</option>
@@ -214,13 +273,20 @@
                             
                             <div class="mb-3">
                                 <label for="acoesRealizadas" class="form-label">Ações Realizadas</label>
-                                <textarea class="form-control" id="acoesRealizadas" name="acoesRealizadas" rows="3"></textarea>
+                                <textarea class="form-control" id="acoesRealizadas" name="acoesRealizadas" rows="3" 
+                                    placeholder="Descreva as ações realizadas durante a Semana Registre-se..."></textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="publicosAtendidos" class="form-label">Públicos Atendidos</label>
+                                <textarea class="form-control" id="publicosAtendidos" name="publicosAtendidos" rows="2" 
+                                    placeholder="Informe os grupos sociais atendidos (ex: indígenas, quilombolas, ribeirinhos, etc.)"></textarea>
                             </div>
                             
                             <h4 class="mt-4 mb-3">Dados Quantitativos</h4>
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <label for="viasEmitidas" class="form-label">2ª Vias Emitidas</label>
+                                    <label for="viasEmitidas" class="form-label">Total de 2ª Vias Emitidas</label>
                                     <input type="number" class="form-control" id="viasEmitidas" name="viasEmitidas" min="0" value="0">
                                 </div>
                                 <div class="col-md-4 mb-3">
@@ -228,7 +294,7 @@
                                     <input type="number" class="form-control" id="registrosNascimento" name="registrosNascimento" min="0" value="0">
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label for="averacoesPaternidade" class="form-label">Averbações</label>
+                                    <label for="averacoesPaternidade" class="form-label">Averbações de Paternidade</label>
                                     <input type="number" class="form-control" id="averacoesPaternidade" name="averacoesPaternidade" min="0" value="0">
                                 </div>
                             </div>
@@ -247,12 +313,17 @@
                                     <input type="number" class="form-control" id="restauracoes" name="restauracoes" min="0" value="0">
                                 </div>
                             </div>
+                            
+                            <div class="mb-3">
+                                <label for="tags" class="form-label">Tags/Palavras-chave</label>
+                                <input type="text" class="form-control" id="tags" name="tags" placeholder="Palavras-chave separadas por vírgula">
+                            </div>
                         </div>
                         
-                        <!-- Campos condicionais para Participação Não -->
+                        <!-- Campos para Participação Não -->
                         <div id="camposParticipacaoNao" class="participacao-nao d-none">
                             <div class="mb-3">
-                                <label for="motivoNao" class="form-label">Motivo da Não Participação</label>
+                                <label for="motivoNao" class="form-label required-field">Motivo da Não Participação</label>
                                 <select class="form-select" id="motivoNao" name="motivoNao">
                                     <option value="">Selecione...</option>
                                     <option value="Falta de Pessoal">Falta de Pessoal</option>
@@ -261,33 +332,36 @@
                                     <option value="Não houve Demanda Local">Não houve Demanda Local</option>
                                     <option value="Outros">Outros</option>
                                 </select>
+                                <div class="invalid-feedback">Por favor, selecione o motivo da não participação.</div>
                             </div>
                             
                             <div class="mb-3" id="outroMotivoDiv" style="display: none;">
-                                <label for="outroMotivo" class="form-label">Especifique o Motivo</label>
+                                <label for="outroMotivo" class="form-label required-field">Especifique o Motivo</label>
                                 <textarea class="form-control" id="outroMotivo" name="outroMotivo" rows="2"></textarea>
+                                <div class="invalid-feedback">Por favor, especifique o motivo.</div>
                             </div>
                         </div>
                         
                         <!-- Observações -->
                         <div class="mb-3 mt-4">
-                            <label for="observacoes" class="form-label">Observações</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
+                            <label for="observacoes" class="form-label">Observações Adicionais</label>
+                            <textarea class="form-control" id="observacoes" name="observacoes" rows="3" 
+                                placeholder="Informações complementares que julgar relevantes..."></textarea>
                         </div>
                         
                         <div class="d-flex justify-content-between mt-4">
                             <button type="button" class="btn btn-secondary" id="limparFormulario">
-                                <i class="fas fa-eraser me-2"></i>Limpar
+                                <i class="fas fa-eraser me-2"></i>Limpar Formulário
                             </button>
                             <button type="submit" class="btn btn-primary" id="salvarRegistro">
-                                <i class="fas fa-save me-2"></i>Salvar
+                                <i class="fas fa-save me-2"></i>Salvar Registro
                             </button>
                         </div>
                     </form>
                 </section>
             </div>
             
-            <!-- Aba de listagem -->
+            <!-- List Tab -->
             <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" tabindex="0">
                 <section class="form-section">
                     <h2 class="form-title">Consulta de Registros</h2>
@@ -295,7 +369,7 @@
                     <div class="row mb-4">
                         <div class="col-md-8">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Pesquisar..." id="searchInput">
+                                <input type="text" class="form-control" placeholder="Pesquisar por serventia, responsável..." id="searchInput">
                                 <button class="btn btn-primary" type="button" id="searchButton">
                                     <i class="fas fa-search"></i>
                                 </button>
@@ -309,7 +383,7 @@
                     </div>
                     
                     <div class="table-responsive">
-                        <table class="table table-striped" id="registrosTable">
+                        <table class="table table-striped registros-table" id="registrosTable">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -322,19 +396,19 @@
                                 </tr>
                             </thead>
                             <tbody id="registrosTableBody">
-                                <!-- Dados inseridos via JavaScript -->
+                                <!-- Registros serão carregados dinamicamente -->
                             </tbody>
                         </table>
                     </div>
                     
                     <!-- Loading spinner -->
                     <div class="text-center d-none" id="loadingSpinner">
-                        <div class="spinner-border text-primary" role="status">
+                        <div class="spinner-border text-primary my-4" role="status">
                             <span class="visually-hidden">Carregando...</span>
                         </div>
                     </div>
                     
-                    <!-- Mensagem para nenhum registro -->
+                    <!-- Mensagem quando não há registros -->
                     <div id="noRecordsMessage" class="alert alert-info d-none">
                         Nenhum registro encontrado.
                     </div>
@@ -343,7 +417,7 @@
         </div>
     </div>
     
-    <!-- Modal de visualização/edição -->
+    <!-- Modal para visualização/edição de registro -->
     <div class="modal fade" id="registroModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -352,7 +426,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <!-- Conteúdo inserido via JavaScript -->
+                    <!-- Conteúdo será carregado dinamicamente -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -362,7 +436,7 @@
         </div>
     </div>
 
-    <!-- Modal de confirmação de exclusão -->
+    <!-- Modal para confirmação de exclusão -->
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -388,7 +462,7 @@
         </div>
     </div>
 
-    <!-- Scripts JavaScript -->
+    <!-- Scripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
         // URL da API Google Apps Script
@@ -403,70 +477,133 @@
         const motivoNao = document.getElementById('motivoNao');
         const outroMotivoDiv = document.getElementById('outroMotivoDiv');
         const loadingOverlay = document.querySelector('.loading-overlay');
-        const alertMessages = document.getElementById('alertMessages');
+        const serventiaSelect = document.getElementById('serventia');
         const registrosTableBody = document.getElementById('registrosTableBody');
         const loadingSpinner = document.getElementById('loadingSpinner');
         const noRecordsMessage = document.getElementById('noRecordsMessage');
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const limparFormularioBtn = document.getElementById('limparFormulario');
         
         // Inicialização
-        document.addEventListener('DOMContentLoaded', () => {
-            // Event listeners para campos de participação
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Inicializando o formulário COGEX...');
+            
+            // Eventos do formulário
+            setupFormEventListeners();
+            
+            // Carregar lista de serventias
+            carregarServentias();
+            
+            // Carregar registros se estamos na aba de listagem
+            const hash = window.location.hash;
+            if (hash === '#list-tab-pane') {
+                document.getElementById('list-tab').click();
+                loadRegistros();
+            }
+            
+            // Adicionar evento para a aba de listagem
+            document.getElementById('list-tab').addEventListener('click', function() {
+                loadRegistros();
+            });
+        });
+        
+        // Configurar event listeners do formulário
+        function setupFormEventListeners() {
+            // Alternar campos de participação
             participacaoSim.addEventListener('change', toggleParticipacaoFields);
             participacaoNao.addEventListener('change', toggleParticipacaoFields);
             
-            // Event listener para motivo não
+            // Evento para motivo de não participação
             motivoNao.addEventListener('change', function() {
                 outroMotivoDiv.style.display = this.value === 'Outros' ? 'block' : 'none';
             });
             
             // Evento para limpar formulário
-            document.getElementById('limparFormulario').addEventListener('click', resetForm);
+            limparFormularioBtn.addEventListener('click', resetForm);
             
             // Evento para envio do formulário
             registroForm.addEventListener('submit', handleFormSubmit);
             
-            // Evento para pesquisa
-            document.getElementById('searchButton').addEventListener('click', searchRegistros);
-            document.getElementById('searchInput').addEventListener('keypress', e => {
-                if (e.key === 'Enter') searchRegistros();
+            // Eventos para pesquisa
+            searchButton.addEventListener('click', searchRegistros);
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchRegistros();
+                }
             });
             
-            // Evento para atualizar registros
-            document.getElementById('refreshButton').addEventListener('click', loadRegistros);
-            
-            // Eventos para modal de edição
-            document.getElementById('salvarEdicaoBtn').addEventListener('click', () => {
-                const id = document.getElementById('salvarEdicaoBtn').getAttribute('data-id');
-                saveRegistroEdit(id);
+            // Evento para atualizar
+            refreshButton.addEventListener('click', function() {
+                // Adicionar classe para animação de rotação
+                const icon = this.querySelector('i');
+                icon.classList.add('fa-spin');
+                
+                // Remover classe após a conclusão
+                loadRegistros().finally(() => {
+                    setTimeout(() => {
+                        icon.classList.remove('fa-spin');
+                    }, 500);
+                });
             });
             
-            // Eventos para aba de listagem
-            document.getElementById('list-tab').addEventListener('click', loadRegistros);
+            // Eventos para modais
+            document.getElementById('salvarEdicaoBtn').addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                if (id) {
+                    saveRegistroEdit(id);
+                }
+            });
             
-            // Carregar serventias do JSON
-            carregarServentias();
-        });
+            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+                const id = this.getAttribute('data-id');
+                if (id) {
+                    deleteRegistro(id);
+                }
+            });
+        }
         
-        // Carregar lista de serventias
+        // Carregar lista de serventias do JSON
         async function carregarServentias() {
             try {
+                showLoading();
+                console.log('Carregando lista de serventias...');
+                
                 const response = await fetch('serventias_registre_se.json');
-                if (!response.ok) throw new Error(`Erro ao carregar JSON: ${response.status}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Erro ao carregar JSON: ${response.status}`);
+                }
                 
                 const data = await response.json();
-                const select = document.getElementById('serventia');
                 
-                // Limpar e preencher select
-                select.innerHTML = '<option value="">Selecione uma serventia...</option>';
-                data.serventias.forEach(s => {
-                    const option = document.createElement('option');
-                    option.value = s.nome;
-                    option.textContent = s.nome;
-                    select.appendChild(option);
-                });
+                // Limpar opções atuais
+                serventiaSelect.innerHTML = '<option value="">Selecione uma serventia...</option>';
+                
+                // Adicionar serventias ao select
+                if (data && data.serventias && Array.isArray(data.serventias)) {
+                    // Ordenar alfabeticamente
+                    data.serventias.sort((a, b) => a.nome.localeCompare(b.nome));
+                    
+                    data.serventias.forEach(serventia => {
+                        const option = document.createElement('option');
+                        option.value = serventia.nome;
+                        option.textContent = serventia.nome;
+                        serventiaSelect.appendChild(option);
+                    });
+                    
+                    console.log(`${data.serventias.length} serventias carregadas com sucesso`);
+                } else {
+                    console.error('Formato de dados inválido no JSON de serventias');
+                    showToast('Erro ao carregar serventias: formato de dados inválido', 'error');
+                }
+                
+                hideLoading();
             } catch (error) {
+                hideLoading();
                 console.error('Erro ao carregar serventias:', error);
-                showAlert('Erro ao carregar lista de serventias', 'danger');
+                showToast('Erro ao carregar lista de serventias. Verifique sua conexão.', 'error');
             }
         }
         
@@ -476,74 +613,116 @@
                 camposParticipacaoSim.classList.remove('d-none');
                 camposParticipacaoNao.classList.add('d-none');
                 
-                // Limpar campos não
+                // Limpar campos de não participação
                 motivoNao.value = '';
-                if (document.getElementById('outroMotivo')) document.getElementById('outroMotivo').value = '';
+                if (document.getElementById('outroMotivo')) {
+                    document.getElementById('outroMotivo').value = '';
+                }
                 outroMotivoDiv.style.display = 'none';
+                
+                // Remover required de campos não visíveis
+                motivoNao.required = false;
+                
+                // Remover classes de validação
+                motivoNao.classList.remove('is-invalid');
+                if (document.getElementById('outroMotivo')) {
+                    document.getElementById('outroMotivo').classList.remove('is-invalid');
+                }
             } else {
                 camposParticipacaoSim.classList.add('d-none');
                 camposParticipacaoNao.classList.remove('d-none');
                 
                 // Zerar campos quantitativos
-                ['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
-                 'retificacoes', 'registrosTardios', 'restauracoes'].forEach(id => {
-                    document.getElementById(id).value = '0';
-                });
+                document.getElementById('viasEmitidas').value = '0';
+                document.getElementById('registrosNascimento').value = '0';
+                document.getElementById('averacoesPaternidade').value = '0';
+                document.getElementById('retificacoes').value = '0';
+                document.getElementById('registrosTardios').value = '0';
+                document.getElementById('restauracoes').value = '0';
+                
+                // Limpar campos de texto
+                document.getElementById('acoesRealizadas').value = '';
+                document.getElementById('publicosAtendidos').value = '';
+                
+                // Adicionar required
+                motivoNao.required = true;
             }
         }
         
         // Resetar formulário
         function resetForm() {
             registroForm.reset();
+            
+            // Restaurar estado padrão
+            participacaoSim.checked = true;
             toggleParticipacaoFields();
-            showAlert('Formulário limpo com sucesso', 'info');
+            
+            // Remover classes de validação
+            const inputs = registroForm.querySelectorAll('.form-control, .form-select');
+            inputs.forEach(input => input.classList.remove('is-invalid'));
+            
+            showToast('Formulário limpo com sucesso', 'info');
         }
         
         // Validar formulário
         function validateForm() {
-            const serventia = document.getElementById('serventia').value.trim();
-            const responsavel = document.getElementById('responsavel').value.trim();
+            let isValid = true;
             
+            // Validar Serventia
+            const serventia = serventiaSelect.value.trim();
             if (!serventia) {
-                showAlert('Por favor, informe o nome da serventia', 'danger');
-                return false;
+                serventiaSelect.classList.add('is-invalid');
+                isif (participacaoNao.checked && motivoNao.value === '') {
+                    motivoNao.classList.add('is-invalid');
+                    isValid = false;
+                }
+                
+                // Validar "Outro motivo" se selecionado
+                if (participacaoNao.checked && motivoNao.value === 'Outros') {
+                    const outroMotivo = document.getElementById('outroMotivo');
+                    if (!outroMotivo.value.trim()) {
+                        outroMotivo.classList.add('is-invalid');
+                        isValid = false;
+                    }
+                }
             }
             
+            // Validar Responsável
+            const responsavel = document.getElementById('responsavel').value.trim();
             if (!responsavel) {
-                showAlert('Por favor, informe o nome do responsável', 'danger');
-                return false;
+                document.getElementById('responsavel').classList.add('is-invalid');
+                isValid = false;
             }
             
-            if (participacaoNao.checked && !motivoNao.value) {
-                showAlert('Por favor, informe o motivo da não participação', 'danger');
-                return false;
+            if (!isValid) {
+                showToast('Por favor, preencha todos os campos obrigatórios', 'error');
             }
             
-            if (participacaoNao.checked && motivoNao.value === 'Outros' && 
-                !document.getElementById('outroMotivo').value.trim()) {
-                showAlert('Por favor, especifique o motivo', 'danger');
-                return false;
-            }
-            
-            return true;
+            return isValid;
         }
         
         // Submeter formulário
         async function handleFormSubmit(e) {
             e.preventDefault();
             
-            if (!validateForm()) return;
+            if (!validateForm()) {
+                return;
+            }
+            
+            // Desabilitar formulário durante envio
+            const submitButton = document.getElementById('salvarRegistro');
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
             
             try {
                 showLoading();
-                showAlert('Enviando dados...', 'info');
                 
-                // Coletar dados
+                // Coletar dados do formulário
                 const formData = new FormData(registroForm);
                 const data = {};
                 
                 for (let [key, value] of formData.entries()) {
-                    // Converter campos numéricos
+                    // Converter campos numéricos para números
                     if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
                          'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
                         value = parseInt(value) || 0;
@@ -551,33 +730,39 @@
                     data[key] = value;
                 }
                 
-                // Timestamp
+                // Adicionar timestamp
                 data.timestamp = new Date().toISOString();
                 
-                // Ajustes para participação não
+                // Ajustes para participação "Não"
                 if (data.participacao === 'Não') {
                     data.dataInicio = '';
                     data.classificacao = '';
                     data.acoesRealizadas = '';
+                    data.publicosAtendidos = '';
                     data.viasEmitidas = 0;
                     data.registrosNascimento = 0;
                     data.averacoesPaternidade = 0;
                     data.retificacoes = 0;
                     data.registrosTardios = 0;
                     data.restauracoes = 0;
+                    data.tags = '';
                     
-                    // Adicionar motivo específico
-                    if (data.motivoNao === 'Outros') {
+                    // Adicionar motivo específico se for "Outros"
+                    if (data.motivoNao === 'Outros' && document.getElementById('outroMotivo')) {
                         data.motivoNao = 'Outros: ' + document.getElementById('outroMotivo').value;
                     }
                 } else {
                     data.motivoNao = '';
                 }
                 
-                // Enviar para API
+                console.log('Enviando dados para o servidor:', data);
+                
+                // Enviar para a API
                 const response = await fetch(API_URL, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(data)
                 });
                 
@@ -587,27 +772,50 @@
                 
                 const result = await response.json();
                 
-                hideLoading();
-                
                 if (result.success) {
-                    showAlert('Registro salvo com sucesso!', 'success');
-                    resetForm();
+                    hideLoading();
+                    showToast(`Registro #${result.data.id} salvo com sucesso!`, 'success');
                     
-                    if (result.data && result.data.id) {
-                        if (confirm(`Registro #${result.data.id} criado com sucesso! Deseja visualizar os detalhes?`)) {
-                            document.getElementById('list-tab').click();
-                            setTimeout(() => {
-                                loadRegistros().then(() => highlightRow(result.data.id));
-                            }, 500);
-                        }
+                    // Gerar protocolo para exibição
+                    const protocolo = result.data.protocolo || `REG-${result.data.id}`;
+                    
+                    // Exibir confirmação detalhada
+                    const confirmMessage = `
+                        Registro salvo com sucesso!
+                        
+                        Número do Registro: #${result.data.id}
+                        Protocolo: ${protocolo}
+                        Serventia: ${data.serventia}
+                        
+                        Deseja visualizar os detalhes do registro?
+                    `;
+                    
+                    // Perguntar se deseja ver os detalhes
+                    if (confirm(confirmMessage)) {
+                        // Mudar para a aba de listagem
+                        document.getElementById('list-tab').click();
+                        
+                        // Aguardar carregamento e destacar o registro
+                        setTimeout(() => {
+                            loadRegistros().then(() => {
+                                highlightRow(result.data.id);
+                            });
+                        }, 500);
                     }
+                    
+                    // Limpar formulário
+                    resetForm();
                 } else {
                     throw new Error(result.message || 'Erro ao salvar registro');
                 }
             } catch (error) {
                 hideLoading();
-                console.error('Erro ao salvar:', error);
-                showAlert(`Erro ao salvar: ${error.message}`, 'danger');
+                console.error('Erro ao salvar registro:', error);
+                showToast(`Erro ao salvar: ${error.message}`, 'error');
+            } finally {
+                // Restaurar botão de envio
+                submitButton.disabled = false;
+                submitButton.innerHTML = '<i class="fas fa-save me-2"></i>Salvar Registro';
             }
         }
         
@@ -618,6 +826,8 @@
                 loadingSpinner.classList.remove('d-none');
                 registrosTableBody.innerHTML = '';
                 noRecordsMessage.classList.add('d-none');
+                
+                console.log('Carregando registros da API...');
                 
                 const response = await fetch(`${API_URL}?action=getAll`);
                 
@@ -632,8 +842,10 @@
                 
                 if (result.success) {
                     if (result.data && result.data.length > 0) {
+                        console.log(`${result.data.length} registros carregados com sucesso`);
                         renderRegistros(result.data);
                     } else {
+                        console.log('Nenhum registro encontrado');
                         noRecordsMessage.classList.remove('d-none');
                     }
                 } else {
@@ -644,8 +856,8 @@
             } catch (error) {
                 hideLoading();
                 loadingSpinner.classList.add('d-none');
-                console.error('Erro ao carregar:', error);
-                showAlert(`Erro ao carregar registros: ${error.message}`, 'danger');
+                console.error('Erro ao carregar registros:', error);
+                showToast(`Erro ao carregar registros: ${error.message}`, 'error');
             }
         }
         
@@ -654,10 +866,10 @@
             registrosTableBody.innerHTML = '';
             
             // Ordenar por ID (mais recentes primeiro)
-            registros.sort((a, b) => b['ID'] - a['ID']);
+            registros.sort((a, b) => parseInt(b['ID']) - parseInt(a['ID']));
             
             registros.forEach(registro => {
-                // Calcular total
+                // Calcular total de registros
                 const totalRegistros = (
                     parseInt(registro['Registros Nascimento'] || 0) +
                     parseInt(registro['Vias Emitidas'] || 0) +
@@ -674,13 +886,14 @@
                         const data = new Date(registro['Timestamp']);
                         dataFormatada = data.toLocaleDateString('pt-BR');
                     } catch (e) {
-                        dataFormatada = 'Formato inválido';
-                    }}
+                        console.error('Erro ao formatar data:', e);
+                    }
+                }
                 
-                // Status
-                const statusClass = registro['Participação'] === 'Sim' ? 'text-success' : 'text-danger';
+                // Determinar classe de status
+                const statusClass = registro['Participação'] === 'Não' ? 'text-danger' : 'text-success';
                 
-                // Criar linha
+                // Criar linha da tabela
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${registro['ID']}</td>
@@ -705,13 +918,37 @@
                 registrosTableBody.appendChild(tr);
             });
             
-            // Adicionar eventos aos botões
-            addActionButtonEvents();
+            // Adicionar event listeners para botões de ação
+            addActionButtonListeners();
         }
         
-        // Destacar linha
+        // Adicionar event listeners para botões de ação
+        function addActionButtonListeners() {
+            // Botões de visualização
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    viewRegistro(this.getAttribute('data-id'));
+                });
+            });
+            
+            // Botões de edição
+            document.querySelectorAll('.edit-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    editRegistro(this.getAttribute('data-id'));
+                });
+            });
+            
+            // Botões de exclusão
+            document.querySelectorAll('.delete-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    showDeleteConfirmation(this.getAttribute('data-id'));
+                });
+            });
+        }
+        
+        // Função para destacar uma linha
         function highlightRow(id) {
-            const rows = document.querySelectorAll('#registrosTableBody tr');
+            const rows = registrosTableBody.querySelectorAll('tr');
             for (const row of rows) {
                 const idCell = row.querySelector('td:first-child');
                 if (idCell && idCell.textContent === id.toString()) {
@@ -722,34 +959,12 @@
             }
         }
         
-        // Adicionar eventos aos botões de ação
-        function addActionButtonEvents() {
-            // Botões de visualização
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    viewRegistro(btn.getAttribute('data-id'));
-                });
-            });
-            
-            // Botões de edição
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    editRegistro(btn.getAttribute('data-id'));
-                });
-            });
-            
-            // Botões de exclusão
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    showDeleteConfirmation(btn.getAttribute('data-id'));
-                });
-            });
-        }
-        
         // Visualizar registro
         async function viewRegistro(id) {
             try {
                 showLoading();
+                
+                console.log(`Carregando detalhes do registro #${id}`);
                 
                 const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
                 
@@ -779,8 +994,8 @@
                 }
             } catch (error) {
                 hideLoading();
-                console.error('Erro ao visualizar:', error);
-                showAlert(`Erro ao visualizar registro: ${error.message}`, 'danger');
+                console.error('Erro ao visualizar registro:', error);
+                showToast(`Erro ao visualizar: ${error.message}`, 'error');
             }
         }
         
@@ -788,6 +1003,8 @@
         async function editRegistro(id) {
             try {
                 showLoading();
+                
+                console.log(`Carregando registro #${id} para edição`);
                 
                 const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
                 
@@ -819,8 +1036,8 @@
                 }
             } catch (error) {
                 hideLoading();
-                console.error('Erro ao editar:', error);
-                showAlert(`Erro ao editar registro: ${error.message}`, 'danger');
+                console.error('Erro ao editar registro:', error);
+                showToast(`Erro ao editar: ${error.message}`, 'error');
             }
         }
         
@@ -828,7 +1045,7 @@
         function fillModalWithData(data, readonly) {
             const modalBody = document.querySelector('#registroModal .modal-body');
             
-            // Calcular total
+            // Calcular total de registros
             const totalRegistros = (
                 parseInt(data['Registros Nascimento'] || 0) +
                 parseInt(data['Vias Emitidas'] || 0) +
@@ -912,9 +1129,9 @@
                                 <label class="form-label">Classificação:</label>
                                 <select class="form-select" name="classificacao" ${readonly ? 'disabled' : ''}>
                                     <option value="" ${!data['Classificação'] ? 'selected' : ''}>Selecione...</option>
-                                    <option value="Integral" ${data['Classificação'] === 'Integral' ? 'selected' : ''}>Integral</option>
-                                    <option value="Parcial" ${data['Classificação'] === 'Parcial' ? 'selected' : ''}>Parcial</option>
-                                    <option value="Pontual" ${data['Classificação'] === 'Pontual' ? 'selected' : ''}>Pontual</option>
+                                    <option value="Integral" ${data['Classificação'] === 'Integral' ? 'selected' : ''}>Integral - Todos os dias</option>
+                                    <option value="Parcial" ${data['Classificação'] === 'Parcial' ? 'selected' : ''}>Parcial - Alguns dias</option>
+                                    <option value="Pontual" ${data['Classificação'] === 'Pontual' ? 'selected' : ''}>Pontual - Ação específica</option>
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -926,6 +1143,11 @@
                         <div class="mb-3">
                             <label class="form-label">Ações Realizadas:</label>
                             <textarea class="form-control" name="acoesRealizadas" rows="3" ${readonly ? 'readonly' : ''}>${data['Ações Realizadas'] || ''}</textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Públicos Atendidos:</label>
+                            <textarea class="form-control" name="publicosAtendidos" rows="2" ${readonly ? 'readonly' : ''}>${data['Públicos Atendidos'] || ''}</textarea>
                         </div>
                         
                         <h5 class="mt-3 mb-3 border-bottom pb-2">Dados Quantitativos</h5>
@@ -941,7 +1163,7 @@
                                        value="${data['Registros Nascimento'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
                             <div class="col-md-4">
-                                <label class="form-label">Averbações:</label>
+                                <label class="form-label">Averbações de Paternidade:</label>
                                 <input type="number" class="form-control" name="averacoesPaternidade" 
                                        value="${data['Averbações Paternidade'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
@@ -964,6 +1186,11 @@
                                        value="${data['Restaurações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
                         </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Tags/Palavras-chave:</label>
+                            <input type="text" class="form-control" name="tags" value="${data['Tags'] || ''}" ${readonly ? 'readonly' : ''}>
+                        </div>
                     </div>
                 `;
             } else {
@@ -978,7 +1205,7 @@
                 `;
             }
             
-            // Observações
+            // Observações (comum a ambos os casos)
             html += `
                 <div class="mb-3">
                     <label class="form-label">Observações:</label>
@@ -989,35 +1216,48 @@
             
             modalBody.innerHTML = html;
             
-            // Event listener para alternar campos
+            // Adicionar event listener para alternar campos (quando editável)
             if (!readonly) {
-                const participacao = document.getElementById('modal-participacao');
-                if (participacao) {
-                    participacao.addEventListener('change', function() {
-                        const camposSim = document.getElementById('modal-campos-sim');
-                        const camposNao = document.getElementById('modal-campos-nao');
+                const modalParticipacao = document.getElementById('modal-participacao');
+                if (modalParticipacao) {
+                    modalParticipacao.addEventListener('change', function() {
+                        const simCampos = document.getElementById('modal-campos-sim');
+                        const naoCampos = document.getElementById('modal-campos-nao');
                         
                         if (this.value === 'Sim') {
-                            if (camposSim) camposSim.style.display = 'block';
-                            if (camposNao) camposNao.style.display = 'none';
+                            if (simCampos) simCampos.style.display = 'block';
+                            if (naoCampos) naoCampos.style.display = 'none';
                         } else {
-                            if (camposSim) camposSim.style.display = 'none';
-                            if (camposNao) camposNao.style.display = 'block';
+                            if (simCampos) simCampos.style.display = 'none';
+                            if (naoCampos) naoCampos.style.display = 'block';
                         }
                     });
                 }
             }
         }
         
-        // Salvar edição
+        // Salvar edição de registro
         async function saveRegistroEdit(id) {
             try {
-                // Coletar dados do formulário
+                // Validar formulário
                 const form = document.getElementById('editForm');
+                if (!form) {
+                    throw new Error('Formulário não encontrado');
+                }
+                
+                // Desabilitar botão durante envio
+                const saveButton = document.getElementById('salvarEdicaoBtn');
+                saveButton.disabled = true;
+                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
+                
+                showLoading();
+                
+                // Coletar dados do formulário
                 const formData = new FormData(form);
                 const data = {};
                 
                 for (let [key, value] of formData.entries()) {
+                    // Converter campos numéricos
                     if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
                          'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
                         value = parseInt(value) || 0;
@@ -1025,16 +1265,17 @@
                     data[key] = value;
                 }
                 
-                // Adicionar ID
+                // Adicionar ID para atualização
                 data.id = id;
                 
-                showLoading();
-                showAlert('Atualizando registro...', 'info');
+                console.log(`Atualizando registro #${id}:`, data);
                 
-                // Enviar para API
+                // Enviar para a API
                 const response = await fetch(`${API_URL}?action=atualizarRegistro`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify(data)
                 });
                 
@@ -1047,49 +1288,59 @@
                 hideLoading();
                 
                 if (result.success) {
-                    showAlert('Registro atualizado com sucesso!', 'success');
+                    showToast('Registro atualizado com sucesso!', 'success');
                     
                     // Fechar modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('registroModal'));
                     modal.hide();
                     
-                    // Recarregar registros
-                    loadRegistros();
+                    // Recarregar registros e destacar o atualizado
+                    loadRegistros().then(() => {
+                        highlightRow(id);
+                    });
                 } else {
                     throw new Error(result.message || 'Erro ao atualizar registro');
                 }
             } catch (error) {
                 hideLoading();
-                console.error('Erro ao atualizar:', error);
-                showAlert(`Erro ao atualizar registro: ${error.message}`, 'danger');
+                console.error('Erro ao atualizar registro:', error);
+                showToast(`Erro ao atualizar: ${error.message}`, 'error');
+            } finally {
+                // Restaurar botão
+                const saveButton = document.getElementById('salvarEdicaoBtn');
+                saveButton.disabled = false;
+                saveButton.innerHTML = 'Salvar Alterações';
             }
         }
         
-        // Confirmar exclusão
+        // Mostrar confirmação de exclusão
         function showDeleteConfirmation(id) {
+            // Atualizar texto do modal
+            document.querySelector('#confirmDeleteModal .modal-body').innerHTML = `
+                <p><i class="fas fa-exclamation-triangle text-danger me-2"></i>Tem certeza que deseja excluir o registro <strong>#${id}</strong>?</p>
+                <p class="text-danger"><strong>Esta ação não pode ser desfeita.</strong></p>
+            `;
+            
+            // Atualizar botão de confirmação
             const confirmBtn = document.getElementById('confirmDeleteBtn');
             confirmBtn.setAttribute('data-id', id);
             
-            const modalBody = document.querySelector('#confirmDeleteModal .modal-body');
-            modalBody.innerHTML = `
-                <p><i class="fas fa-exclamation-triangle text-danger me-2"></i>Tem certeza que deseja excluir o registro #${id}?</p>
-                <p class="text-danger">Esta ação não pode ser desfeita.</p>
-            `;
-            
+            // Mostrar modal
             const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
             modal.show();
-            
-            // Adicionar evento ao botão
-            confirmBtn.addEventListener('click', function() {
-                deleteRegistro(id);
-            });
         }
         
         // Excluir registro
         async function deleteRegistro(id) {
             try {
+                // Desabilitar botão durante exclusão
+                const deleteButton = document.getElementById('confirmDeleteBtn');
+                deleteButton.disabled = true;
+                deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Excluindo...';
+                
                 showLoading();
-                showAlert('Excluindo registro...', 'info');
+                
+                console.log(`Excluindo registro #${id}`);
                 
                 const response = await fetch(`${API_URL}?action=excluirRegistro&id=${id}`, {
                     method: 'GET'
@@ -1104,7 +1355,7 @@
                 hideLoading();
                 
                 if (result.success) {
-                    showAlert('Registro excluído com sucesso!', 'success');
+                    showToast('Registro excluído com sucesso!', 'success');
                     
                     // Fechar modal
                     const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
@@ -1117,36 +1368,43 @@
                 }
             } catch (error) {
                 hideLoading();
-                console.error('Erro ao excluir:', error);
-                showAlert(`Erro ao excluir registro: ${error.message}`, 'danger');
+                console.error('Erro ao excluir registro:', error);
+                showToast(`Erro ao excluir: ${error.message}`, 'error');
+            } finally {
+                // Restaurar botão
+                const deleteButton = document.getElementById('confirmDeleteBtn');
+                deleteButton.disabled = false;
+                deleteButton.innerHTML = 'Excluir';
             }
         }
         
         // Pesquisar registros
         function searchRegistros() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const searchTerm = searchInput.value.toLowerCase().trim();
             
-            // Se não tiver termo, recarregar tudo
             if (!searchTerm) {
                 loadRegistros();
                 return;
             }
             
-            // Verificar se há linhas na tabela
             const rows = registrosTableBody.querySelectorAll('tr');
+            
+            // Se não houver registros, carregar primeiro
             if (rows.length === 0) {
-                loadRegistros().then(() => filterRows(searchTerm));
+                loadRegistros().then(() => {
+                    filterRows(searchTerm);
+                });
             } else {
                 filterRows(searchTerm);
             }
         }
         
-        // Filtrar linhas
+        // Filtrar linhas de acordo com o termo de busca
         function filterRows(searchTerm) {
             let found = false;
             const rows = registrosTableBody.querySelectorAll('tr');
             
-            rows.forEach(row => {
+            rows.forEachrows.forEach(row => {
                 const text = row.textContent.toLowerCase();
                 if (text.includes(searchTerm)) {
                     row.style.display = '';
@@ -1157,7 +1415,7 @@
                 }
             });
             
-            // Mostrar mensagem se nada for encontrado
+            // Mostrar mensagem quando não há resultados
             if (found) {
                 noRecordsMessage.classList.add('d-none');
             } else {
@@ -1166,35 +1424,14 @@
             }
         }
         
-        // Realçar termo de busca
+        // Destacar termo de busca nas células
         function highlightSearchTerm(row, term) {
-            const cells = row.querySelectorAll('td:not(:last-child)');
+            const cells = row.querySelectorAll('td:not(:last-child)'); // Excluir coluna de ações
             cells.forEach(cell => {
                 const text = cell.innerText;
                 const regex = new RegExp(`(${term})`, 'gi');
                 cell.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
             });
-        }
-        
-        // Mostrar alerta
-        function showAlert(message, type) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
-            alertDiv.innerHTML = `
-                ${type === 'success' ? '<i class="fas fa-check-circle me-2"></i>' : 
-                  type === 'danger' ? '<i class="fas fa-exclamation-circle me-2"></i>' : 
-                  type === 'info' ? '<i class="fas fa-info-circle me-2"></i>' : ''}
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-            `;
-            
-            alertMessages.appendChild(alertDiv);
-            
-            // Auto-remover após 5 segundos
-            setTimeout(() => {
-                alertDiv.classList.remove('show');
-                setTimeout(() => alertDiv.remove(), 150);
-            }, 5000);
         }
         
         // Mostrar overlay de carregamento
@@ -1205,6 +1442,81 @@
         // Esconder overlay de carregamento
         function hideLoading() {
             loadingOverlay.style.display = 'none';
+        }
+        
+        // Mostrar toast de notificação
+        function showToast(message, type) {
+            // Criar container se não existir
+            let toastContainer = document.querySelector('.toast-container');
+            if (!toastContainer) {
+                toastContainer = document.createElement('div');
+                toastContainer.className = 'toast-container';
+                document.body.appendChild(toastContainer);
+            }
+            
+            // Criar toast
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type} show`;
+            
+            // Cabeçalho do toast
+            const header = document.createElement('div');
+            header.className = 'toast-header';
+            
+            // Ícone baseado no tipo
+            let icon = '';
+            let title = '';
+            
+            switch (type) {
+                case 'success':
+                    icon = '<i class="fas fa-check-circle me-2"></i>';
+                    title = 'Sucesso';
+                    break;
+                case 'error':
+                    icon = '<i class="fas fa-exclamation-circle me-2"></i>';
+                    title = 'Erro';
+                    break;
+                case 'info':
+                    icon = '<i class="fas fa-info-circle me-2"></i>';
+                    title = 'Informação';
+                    break;
+                default:
+                    icon = '<i class="fas fa-bell me-2"></i>';
+                    title = 'Notificação';
+            }
+            
+            header.innerHTML = `
+                ${icon}<strong>${title}</strong>
+                <button type="button" class="btn-close btn-close-white ms-auto" aria-label="Fechar"></button>
+            `;
+            
+            // Corpo do toast
+            const body = document.createElement('div');
+            body.className = 'toast-body';
+            body.textContent = message;
+            
+            // Adicionar elementos ao toast
+            toast.appendChild(header);
+            toast.appendChild(body);
+            
+            // Adicionar toast ao container
+            toastContainer.appendChild(toast);
+            
+            // Adicionar evento para fechar o toast
+            const closeBtn = toast.querySelector('.btn-close');
+            closeBtn.addEventListener('click', () => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            });
+            
+            // Auto-fechar após 5 segundos
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
         }
     </script>
 </body>
