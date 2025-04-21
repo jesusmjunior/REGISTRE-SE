@@ -164,6 +164,11 @@
         .toast-body {
             padding: 15px;
         }
+        
+        mark {
+            background-color: #ffcc00;
+            padding: 0 2px;
+        }
     </style>
 </head>
 <body>
@@ -173,7 +178,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-4 col-md-6 col-8">
                     <div class="logo-container">
-                        <img src="logo-cogex.png" alt="COGEX Logo" id="logo-cogex">
+                        <img src="/api/placeholder/200/70" alt="COGEX Logo" id="logo-cogex">
                     </div>
                 </div>
                 <div class="col-lg-8 col-md-6 col-4 text-end">
@@ -216,7 +221,7 @@
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <label for="serventia" class="form-label required-field">Nome da Serventia</label>
-                                <select class="form-select" id="serventia" name="serventia" required>
+                                <select class="form-select" id="serventia" name="Serventia" required>
                                     <option value="">Selecione uma serventia...</option>
                                     <!-- Opções serão carregadas via JavaScript -->
                                 </select>
@@ -224,19 +229,19 @@
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="telefone" class="form-label">Telefone</label>
-                                <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+                                <input type="tel" class="form-control" id="telefone" name="Telefone" placeholder="(00) 00000-0000">
                             </div>
                         </div>
                         
                         <div class="row">
                             <div class="col-md-8 mb-3">
                                 <label for="responsavel" class="form-label required-field">Nome do Responsável</label>
-                                <input type="text" class="form-control" id="responsavel" name="responsavel" required>
+                                <input type="text" class="form-control" id="responsavel" name="Responsável" required>
                                 <div class="invalid-feedback">Por favor, informe o nome do responsável.</div>
                             </div>
                             <div class="col-md-4 mb-3">
                                 <label for="email" class="form-label">E-mail</label>
-                                <input type="email" class="form-control" id="email" name="email">
+                                <input type="email" class="form-control" id="email" name="Email">
                             </div>
                         </div>
                         
@@ -244,11 +249,11 @@
                         <h3 class="form-subtitle">Status de Participação</h3>
                         <div class="mb-3">
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="participacao" id="participacaoSim" value="Sim" checked>
+                                <input class="form-check-input" type="radio" name="Participação" id="participacaoSim" value="Sim" checked>
                                 <label class="form-check-label" for="participacaoSim">Participou da Semana Registre-se</label>
                             </div>
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="participacao" id="participacaoNao" value="Não">
+                                <input class="form-check-input" type="radio" name="Participação" id="participacaoNao" value="Não">
                                 <label class="form-check-label" for="participacaoNao">Não participou da Semana Registre-se</label>
                             </div>
                         </div>
@@ -258,11 +263,11 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="dataInicio" class="form-label">Data de Início das Atividades</label>
-                                    <input type="date" class="form-control" id="dataInicio" name="dataInicio">
+                                    <input type="date" class="form-control" id="dataInicio" name="Data de Início">
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="classificacao" class="form-label">Classificação da Participação</label>
-                                    <select class="form-select" id="classificacao" name="classificacao">
+                                    <select class="form-select" id="classificacao" name="Classificação">
                                         <option value="">Selecione...</option>
                                         <option value="Integral">Integral - Todos os dias</option>
                                         <option value="Parcial">Parcial - Alguns dias</option>
@@ -273,13 +278,13 @@
                             
                             <div class="mb-3">
                                 <label for="acoesRealizadas" class="form-label">Ações Realizadas</label>
-                                <textarea class="form-control" id="acoesRealizadas" name="acoesRealizadas" rows="3" 
+                                <textarea class="form-control" id="acoesRealizadas" name="Ações Realizadas" rows="3" 
                                     placeholder="Descreva as ações realizadas durante a Semana Registre-se..."></textarea>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="publicosAtendidos" class="form-label">Públicos Atendidos</label>
-                                <textarea class="form-control" id="publicosAtendidos" name="publicosAtendidos" rows="2" 
+                                <textarea class="form-control" id="publicosAtendidos" name="Públicos Atendidos" rows="2" 
                                     placeholder="Informe os grupos sociais atendidos (ex: indígenas, quilombolas, ribeirinhos, etc.)"></textarea>
                             </div>
                             
@@ -287,36 +292,36 @@
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="viasEmitidas" class="form-label">Total de 2ª Vias Emitidas</label>
-                                    <input type="number" class="form-control" id="viasEmitidas" name="viasEmitidas" min="0" value="0">
+                                    <input type="number" class="form-control" id="viasEmitidas" name="Vias Emitidas" min="0" value="0">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="registrosNascimento" class="form-label">Registros de Nascimento</label>
-                                    <input type="number" class="form-control" id="registrosNascimento" name="registrosNascimento" min="0" value="0">
+                                    <input type="number" class="form-control" id="registrosNascimento" name="Registros Nascimento" min="0" value="0">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="averacoesPaternidade" class="form-label">Averbações de Paternidade</label>
-                                    <input type="number" class="form-control" id="averacoesPaternidade" name="averacoesPaternidade" min="0" value="0">
+                                    <input type="number" class="form-control" id="averacoesPaternidade" name="Averbações Paternidade" min="0" value="0">
                                 </div>
                             </div>
                             
                             <div class="row">
                                 <div class="col-md-4 mb-3">
                                     <label for="retificacoes" class="form-label">Retificações</label>
-                                    <input type="number" class="form-control" id="retificacoes" name="retificacoes" min="0" value="0">
+                                    <input type="number" class="form-control" id="retificacoes" name="Retificações" min="0" value="0">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="registrosTardios" class="form-label">Registros Tardios</label>
-                                    <input type="number" class="form-control" id="registrosTardios" name="registrosTardios" min="0" value="0">
+                                    <input type="number" class="form-control" id="registrosTardios" name="Registros Tardios" min="0" value="0">
                                 </div>
                                 <div class="col-md-4 mb-3">
                                     <label for="restauracoes" class="form-label">Restaurações</label>
-                                    <input type="number" class="form-control" id="restauracoes" name="restauracoes" min="0" value="0">
+                                    <input type="number" class="form-control" id="restauracoes" name="Restaurações" min="0" value="0">
                                 </div>
                             </div>
                             
                             <div class="mb-3">
                                 <label for="tags" class="form-label">Tags/Palavras-chave</label>
-                                <input type="text" class="form-control" id="tags" name="tags" placeholder="Palavras-chave separadas por vírgula">
+                                <input type="text" class="form-control" id="tags" name="Tags" placeholder="Palavras-chave separadas por vírgula">
                             </div>
                         </div>
                         
@@ -324,7 +329,7 @@
                         <div id="camposParticipacaoNao" class="participacao-nao d-none">
                             <div class="mb-3">
                                 <label for="motivoNao" class="form-label required-field">Motivo da Não Participação</label>
-                                <select class="form-select" id="motivoNao" name="motivoNao">
+                                <select class="form-select" id="motivoNao" name="Motivo Não Participação">
                                     <option value="">Selecione...</option>
                                     <option value="Falta de Pessoal">Falta de Pessoal</option>
                                     <option value="Falta de Recursos">Falta de Recursos</option>
@@ -345,7 +350,7 @@
                         <!-- Observações -->
                         <div class="mb-3 mt-4">
                             <label for="observacoes" class="form-label">Observações Adicionais</label>
-                            <textarea class="form-control" id="observacoes" name="observacoes" rows="3" 
+                            <textarea class="form-control" id="observacoes" name="Observações" rows="3" 
                                 placeholder="Informações complementares que julgar relevantes..."></textarea>
                         </div>
                         
@@ -486,6 +491,42 @@
         const refreshButton = document.getElementById('refreshButton');
         const limparFormularioBtn = document.getElementById('limparFormulario');
         
+        // Dados de serventias estáticos
+        const serventias_json = {
+            "serventias": [
+                { "nome": "Cartório da 1ª Zona de Registro de Imóveis de São Luis" },
+                { "nome": "Cartório do ofício Único de Poção de Pedras" },
+                { "nome": "Cartório da 2ª Zona de Registro de Imóveis de São Luis" },
+                { "nome": "Cartório do 7º Ofício de Imperatriz" },
+                { "nome": "Cartório do 6º Ofício de Imperatriz" },
+                { "nome": "Cartório do 1º Ofício de Caxias" },
+                { "nome": "Cartório do 1º Ofício de São José de Ribamar" },
+                { "nome": "Cartório do 2º Ofício de Açailândia" },
+                { "nome": "Cartório do 1º Ofício de Açailândia" },
+                { "nome": "Cartório do 1º Ofício de Timon" },
+                { "nome": "SERVENTIA EXTRAJUDICIAL DO 1º DE BALSAS  MA" },
+                { "nome": "Cartório do 1º Ofício de Santa Inês" },
+                { "nome": "Cartório do 1º Ofício de Presidente Dutra" },
+                { "nome": "Cartório do 1º Ofício de Codó" },
+                { "nome": "Cartório do 1º Ofício de Bacabal" },
+                { "nome": "Cartório do 1º Ofício de Barra do Corda" },
+                { "nome": "Cartório do 1º Ofício de Pinheiro" },
+                { "nome": "Cartório do 1º Ofício de Chapadinha" },
+                { "nome": "Cartório do 1º Ofício de Santa Luzia" },
+                { "nome": "Cartório do Ofício Único de Buriticupu" },
+                { "nome": "Cartório do 1º Ofício de Grajaú" },
+                { "nome": "Cartório do 1º Ofício de Itapecuru Mirim" },
+                { "nome": "Cartório do 1º Ofício de Coroatá" },
+                { "nome": "Cartório do Ofício Único de Tutóia" },
+                { "nome": "Cartório do 1º Ofício de Vargem Grande" },
+                { "nome": "Cartório de Ofício Único de Viana" },
+                { "nome": "Cartório do 2º Ofício de Zé Doca" },
+                { "nome": "Cartório do 1º Ofício de Lago da Pedra" },
+                { "nome": "Cartório do Ofício Único de Afonso Cunha" },
+                { "nome": "Cartório do Ofício Único de Alcântara" }
+            ]
+        };
+        
         // Inicialização
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Inicializando o formulário COGEX...');
@@ -493,7 +534,7 @@
             // Eventos do formulário
             setupFormEventListeners();
             
-            // Carregar lista de serventias
+            // Carregar lista de serventias do objeto JSON estático
             carregarServentias();
             
             // Carregar registros se estamos na aba de listagem
@@ -564,36 +605,28 @@
             });
         }
         
-        // Carregar lista de serventias do JSON
-        async function carregarServentias() {
+        // Carregar lista de serventias do objeto JSON local
+        function carregarServentias() {
             try {
                 showLoading();
                 console.log('Carregando lista de serventias...');
                 
-                const response = await fetch('serventias_registre_se.json');
-                
-                if (!response.ok) {
-                    throw new Error(`Erro ao carregar JSON: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
                 // Limpar opções atuais
                 serventiaSelect.innerHTML = '<option value="">Selecione uma serventia...</option>';
                 
-                // Adicionar serventias ao select
-                if (data && data.serventias && Array.isArray(data.serventias)) {
+                // Adicionar serventias ao select a partir do objeto JSON estático
+                if (serventias_json && serventias_json.serventias && Array.isArray(serventias_json.serventias)) {
                     // Ordenar alfabeticamente
-                    data.serventias.sort((a, b) => a.nome.localeCompare(b.nome));
+                    serventias_json.serventias.sort((a, b) => a.nome.localeCompare(b.nome));
                     
-                    data.serventias.forEach(serventia => {
+                    serventias_json.serventias.forEach(serventia => {
                         const option = document.createElement('option');
                         option.value = serventia.nome;
                         option.textContent = serventia.nome;
                         serventiaSelect.appendChild(option);
                     });
                     
-                    console.log(`${data.serventias.length} serventias carregadas com sucesso`);
+                    console.log(`${serventias_json.serventias.length} serventias carregadas com sucesso`);
                 } else {
                     console.error('Formato de dados inválido no JSON de serventias');
                     showToast('Erro ao carregar serventias: formato de dados inválido', 'error');
@@ -672,19 +705,7 @@
             const serventia = serventiaSelect.value.trim();
             if (!serventia) {
                 serventiaSelect.classList.add('is-invalid');
-                isif (participacaoNao.checked && motivoNao.value === '') {
-                    motivoNao.classList.add('is-invalid');
-                    isValid = false;
-                }
-                
-                // Validar "Outro motivo" se selecionado
-                if (participacaoNao.checked && motivoNao.value === 'Outros') {
-                    const outroMotivo = document.getElementById('outroMotivo');
-                    if (!outroMotivo.value.trim()) {
-                        outroMotivo.classList.add('is-invalid');
-                        isValid = false;
-                    }
-                }
+                isValid = false;
             }
             
             // Validar Responsável
@@ -692,6 +713,21 @@
             if (!responsavel) {
                 document.getElementById('responsavel').classList.add('is-invalid');
                 isValid = false;
+            }
+            
+            // Validar motivo de não participação
+            if (participacaoNao.checked && motivoNao.value === '') {
+                motivoNao.classList.add('is-invalid');
+                isValid = false;
+            }
+            
+            // Validar "Outro motivo" se selecionado
+            if (participacaoNao.checked && motivoNao.value === 'Outros') {
+                const outroMotivo = document.getElementById('outroMotivo');
+                if (!outroMotivo.value.trim()) {
+                    outroMotivo.classList.add('is-invalid');
+                    isValid = false;
+                }
             }
             
             if (!isValid) {
@@ -723,36 +759,36 @@
                 
                 for (let [key, value] of formData.entries()) {
                     // Converter campos numéricos para números
-                    if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
-                         'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
+                    if (['Vias Emitidas', 'Registros Nascimento', 'Averbações Paternidade', 
+                         'Retificações', 'Registros Tardios', 'Restaurações'].includes(key)) {
                         value = parseInt(value) || 0;
                     }
                     data[key] = value;
                 }
                 
                 // Adicionar timestamp
-                data.timestamp = new Date().toISOString();
+                data.Timestamp = new Date().toISOString();
                 
                 // Ajustes para participação "Não"
-                if (data.participacao === 'Não') {
-                    data.dataInicio = '';
-                    data.classificacao = '';
-                    data.acoesRealizadas = '';
-                    data.publicosAtendidos = '';
-                    data.viasEmitidas = 0;
-                    data.registrosNascimento = 0;
-                    data.averacoesPaternidade = 0;
-                    data.retificacoes = 0;
-                    data.registrosTardios = 0;
-                    data.restauracoes = 0;
-                    data.tags = '';
+                if (data['Participação'] === 'Não') {
+                    data['Data de Início'] = '';
+                    data['Classificação'] = '';
+                    data['Ações Realizadas'] = '';
+                    data['Públicos Atendidos'] = '';
+                    data['Vias Emitidas'] = 0;
+                    data['Registros Nascimento'] = 0;
+                    data['Averbações Paternidade'] = 0;
+                    data['Retificações'] = 0;
+                    data['Registros Tardios'] = 0;
+                    data['Restaurações'] = 0;
+                    data['Tags'] = '';
                     
                     // Adicionar motivo específico se for "Outros"
-                    if (data.motivoNao === 'Outros' && document.getElementById('outroMotivo')) {
-                        data.motivoNao = 'Outros: ' + document.getElementById('outroMotivo').value;
+                    if (data['Motivo Não Participação'] === 'Outros' && document.getElementById('outroMotivo')) {
+                        data['Motivo Não Participação'] = 'Outros: ' + document.getElementById('outroMotivo').value;
                     }
                 } else {
-                    data.motivoNao = '';
+                    data['Motivo Não Participação'] = '';
                 }
                 
                 console.log('Enviando dados para o servidor:', data);
@@ -785,7 +821,7 @@
                         
                         Número do Registro: #${result.data.id}
                         Protocolo: ${protocolo}
-                        Serventia: ${data.serventia}
+                        Serventia: ${data['Serventia']}
                         
                         Deseja visualizar os detalhes do registro?
                     `;
@@ -866,7 +902,7 @@
             registrosTableBody.innerHTML = '';
             
             // Ordenar por ID (mais recentes primeiro)
-            registros.sort((a, b) => parseInt(b['ID']) - parseInt(a['ID']));
+            registros.sort((a, b) => parseInt(b.ID) - parseInt(a.ID));
             
             registros.forEach(registro => {
                 // Calcular total de registros
@@ -895,21 +931,22 @@
                 
                 // Criar linha da tabela
                 const tr = document.createElement('tr');
+                tr.setAttribute('data-id', registro.ID);
                 tr.innerHTML = `
-                    <td>${registro['ID']}</td>
+                    <td>${registro.ID}</td>
                     <td>${registro['Serventia'] || '—'}</td>
                     <td>${registro['Responsável'] || '—'}</td>
                     <td><span class="${statusClass}">${registro['Participação'] || 'Sim'}</span></td>
                     <td>${totalRegistros}</td>
                     <td>${dataFormatada}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary view-btn" data-id="${registro['ID']}" title="Visualizar">
+                        <button class="btn btn-sm btn-primary view-btn" data-id="${registro.ID}" title="Visualizar">
                             <i class="fas fa-eye"></i>
                         </button>
-                        <button class="btn btn-sm btn-warning edit-btn" data-id="${registro['ID']}" title="Editar">
+                        <button class="btn btn-sm btn-warning edit-btn" data-id="${registro.ID}" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button class="btn btn-sm btn-danger delete-btn" data-id="${registro['ID']}" title="Excluir">
+                        <button class="btn btn-sm btn-danger delete-btn" data-id="${registro.ID}" title="Excluir">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>
@@ -950,8 +987,7 @@
         function highlightRow(id) {
             const rows = registrosTableBody.querySelectorAll('tr');
             for (const row of rows) {
-                const idCell = row.querySelector('td:first-child');
-                if (idCell && idCell.textContent === id.toString()) {
+                if (row.getAttribute('data-id') === id.toString()) {
                     row.classList.add('highlight-row');
                     row.scrollIntoView({behavior: 'smooth', block: 'center'});
                     break;
@@ -1085,22 +1121,22 @@
                     <div class="row mb-3">
                         <div class="col-md-8">
                             <label class="form-label">Serventia:</label>
-                            <input type="text" class="form-control" name="serventia" value="${data['Serventia']}" ${readonly ? 'readonly' : ''}>
+                            <input type="text" class="form-control" name="Serventia" value="${data['Serventia']}" ${readonly ? 'readonly' : ''}>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Telefone:</label>
-                            <input type="text" class="form-control" name="telefone" value="${data['Telefone'] || ''}" ${readonly ? 'readonly' : ''}>
+                            <input type="text" class="form-control" name="Telefone" value="${data['Telefone'] || ''}" ${readonly ? 'readonly' : ''}>
                         </div>
                     </div>
                     
                     <div class="row mb-3">
                         <div class="col-md-8">
                             <label class="form-label">Responsável:</label>
-                            <input type="text" class="form-control" name="responsavel" value="${data['Responsável']}" ${readonly ? 'readonly' : ''}>
+                            <input type="text" class="form-control" name="Responsável" value="${data['Responsável']}" ${readonly ? 'readonly' : ''}>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Email:</label>
-                            <input type="email" class="form-control" name="email" value="${data['Email'] || ''}" ${readonly ? 'readonly' : ''}>
+                            <input type="email" class="form-control" name="Email" value="${data['Email'] || ''}" ${readonly ? 'readonly' : ''}>
                         </div>
                     </div>
                     
@@ -1108,14 +1144,14 @@
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <label class="form-label">Participou:</label>
-                            <select class="form-select" name="participacao" ${readonly ? 'disabled' : ''} id="modal-participacao">
+                            <select class="form-select" name="Participação" ${readonly ? 'disabled' : ''} id="modal-participacao">
                                 <option value="Sim" ${data['Participação'] !== 'Não' ? 'selected' : ''}>Sim</option>
                                 <option value="Não" ${data['Participação'] === 'Não' ? 'selected' : ''}>Não</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label">Data de Início:</label>
-                            <input type="date" class="form-control" name="dataInicio" value="${data['Data de Início'] || ''}" ${readonly ? 'readonly' : ''}>
+                            <input type="date" class="form-control" name="Data de Início" value="${data['Data de Início'] || ''}" ${readonly ? 'readonly' : ''}>
                         </div>
                     </div>
             `;
@@ -1127,7 +1163,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">Classificação:</label>
-                                <select class="form-select" name="classificacao" ${readonly ? 'disabled' : ''}>
+                                <select class="form-select" name="Classificação" ${readonly ? 'disabled' : ''}>
                                     <option value="" ${!data['Classificação'] ? 'selected' : ''}>Selecione...</option>
                                     <option value="Integral" ${data['Classificação'] === 'Integral' ? 'selected' : ''}>Integral - Todos os dias</option>
                                     <option value="Parcial" ${data['Classificação'] === 'Parcial' ? 'selected' : ''}>Parcial - Alguns dias</option>
@@ -1142,29 +1178,29 @@
                         
                         <div class="mb-3">
                             <label class="form-label">Ações Realizadas:</label>
-                            <textarea class="form-control" name="acoesRealizadas" rows="3" ${readonly ? 'readonly' : ''}>${data['Ações Realizadas'] || ''}</textarea>
+                            <textarea class="form-control" name="Ações Realizadas" rows="3" ${readonly ? 'readonly' : ''}>${data['Ações Realizadas'] || ''}</textarea>
                         </div>
                         
                         <div class="mb-3">
                             <label class="form-label">Públicos Atendidos:</label>
-                            <textarea class="form-control" name="publicosAtendidos" rows="2" ${readonly ? 'readonly' : ''}>${data['Públicos Atendidos'] || ''}</textarea>
+                            <textarea class="form-control" name="Públicos Atendidos" rows="2" ${readonly ? 'readonly' : ''}>${data['Públicos Atendidos'] || ''}</textarea>
                         </div>
                         
                         <h5 class="mt-3 mb-3 border-bottom pb-2">Dados Quantitativos</h5>
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label class="form-label">2ª Vias Emitidas:</label>
-                                <input type="number" class="form-control" name="viasEmitidas" 
+                                <input type="number" class="form-control" name="Vias Emitidas" 
                                        value="${data['Vias Emitidas'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Registros de Nascimento:</label>
-                                <input type="number" class="form-control" name="registrosNascimento" 
+                                <input type="number" class="form-control" name="Registros Nascimento" 
                                        value="${data['Registros Nascimento'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Averbações de Paternidade:</label>
-                                <input type="number" class="form-control" name="averacoesPaternidade" 
+                                <input type="number" class="form-control" name="Averbações Paternidade" 
                                        value="${data['Averbações Paternidade'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
                         </div>
@@ -1172,24 +1208,24 @@
                         <div class="row mb-3">
                             <div class="col-md-4">
                                 <label class="form-label">Retificações:</label>
-                                <input type="number" class="form-control" name="retificacoes" 
+                                <input type="number" class="form-control" name="Retificações" 
                                        value="${data['Retificações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Registros Tardios:</label>
-                                <input type="number" class="form-control" name="registrosTardios" 
+                                <input type="number" class="form-control" name="Registros Tardios" 
                                        value="${data['Registros Tardios'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Restaurações:</label>
-                                <input type="number" class="form-control" name="restauracoes" 
+                                <input type="number" class="form-control" name="Restaurações" 
                                        value="${data['Restaurações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
                             </div>
                         </div>
                         
                         <div class="mb-3">
                             <label class="form-label">Tags/Palavras-chave:</label>
-                            <input type="text" class="form-control" name="tags" value="${data['Tags'] || ''}" ${readonly ? 'readonly' : ''}>
+                            <input type="text" class="form-control" name="Tags" value="${data['Tags'] || ''}" ${readonly ? 'readonly' : ''}>
                         </div>
                     </div>
                 `;
@@ -1198,7 +1234,7 @@
                     <div id="modal-campos-nao">
                         <div class="mb-3">
                             <label class="form-label">Motivo da Não Participação:</label>
-                            <input type="text" class="form-control" name="motivoNao" 
+                            <input type="text" class="form-control" name="Motivo Não Participação" 
                                    value="${data['Motivo Não Participação'] || ''}" ${readonly ? 'readonly' : ''}>
                         </div>
                     </div>
@@ -1209,7 +1245,7 @@
             html += `
                 <div class="mb-3">
                     <label class="form-label">Observações:</label>
-                    <textarea class="form-control" name="observacoes" rows="3" ${readonly ? 'readonly' : ''}>${data['Observações'] || ''}</textarea>
+                    <textarea class="form-control" name="Observações" rows="3" ${readonly ? 'readonly' : ''}>${data['Observações'] || ''}</textarea>
                 </div>
                 </form>
             `;
@@ -1258,8 +1294,8 @@
                 
                 for (let [key, value] of formData.entries()) {
                     // Converter campos numéricos
-                    if (['viasEmitidas', 'registrosNascimento', 'averacoesPaternidade', 
-                         'retificacoes', 'registrosTardios', 'restauracoes'].includes(key)) {
+                    if (['Vias Emitidas', 'Registros Nascimento', 'Averbações Paternidade', 
+                         'Retificações', 'Registros Tardios', 'Restaurações'].includes(key)) {
                         value = parseInt(value) || 0;
                     }
                     data[key] = value;
@@ -1404,7 +1440,7 @@
             let found = false;
             const rows = registrosTableBody.querySelectorAll('tr');
             
-            rows.forEachrows.forEach(row => {
+            rows.forEach(row => {
                 const text = row.textContent.toLowerCase();
                 if (text.includes(searchTerm)) {
                     row.style.display = '';
@@ -1429,8 +1465,10 @@
             const cells = row.querySelectorAll('td:not(:last-child)'); // Excluir coluna de ações
             cells.forEach(cell => {
                 const text = cell.innerText;
-                const regex = new RegExp(`(${term})`, 'gi');
-                cell.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
+                if (text) {
+                    const regex = new RegExp(`(${term})`, 'gi');
+                    cell.innerHTML = text.replace(regex, '<mark>$1</mark>');
+                }
             });
         }
         
@@ -1518,48 +1556,6 @@
                 }, 300);
             }, 5000);
         }
-        // Função para inicializar o objeto de serventias a partir do JSON
-function inicializarServentias() {
-    // Este é o objeto JSON de serventias extraído do arquivo paste.txt
-    const serventias_json = {
-        "serventias": [
-            { "nome": "Cartório da 1ª Zona de Registro de Imóveis de São Luis" },
-            { "nome": "Cartório do ofício Único de Poção de Pedras" },
-            { "nome": "Cartório da 2ª Zona de Registro de Imóveis de São Luis" },
-            { "nome": "Cartório do 7º Ofício de Imperatriz" },
-            { "nome": "Cartório do 6º Ofício de Imperatriz" },
-            { "nome": "Cartório do 1º Ofício de Caxias" },
-            { "nome": "Cartório do 1º Ofício de São José de Ribamar" },
-            { "nome": "Cartório do 2º Ofício de Açailândia" },
-            { "nome": "Cartório do 1º Ofício de Açailândia" },
-            { "nome": "Cartório do 1º Ofício de Timon" },
-            { "nome": "SERVENTIA EXTRAJUDICIAL DO 1º DE BALSAS  MA" },
-            { "nome": "Cartório do 1º Ofício de Santa Inês" },
-            { "nome": "Cartório do 1º Ofício de Presidente Dutra" },
-            { "nome": "Cartório do 1º Ofício de Codó" },
-            { "nome": "Cartório do 1º Ofício de Bacabal" },
-            { "nome": "Cartório do 1º Ofício de Barra do Corda" },
-            { "nome": "Cartório do 1º Ofício de Pinheiro" },
-            { "nome": "Cartório do 1º Ofício de Chapadinha" },
-            { "nome": "Cartório do 1º Ofício de Santa Luzia" },
-            { "nome": "Cartório do Ofício Único de Buriticupu" },
-            { "nome": "Cartório do 1º Ofício de Grajaú" },
-            { "nome": "Cartório do 1º Ofício de Itapecuru Mirim" },
-            { "nome": "Cartório do 1º Ofício de Coroatá" },
-            { "nome": "Cartório do Ofício Único de Tutóia" },
-            { "nome": "Cartório do 1º Ofício de Vargem Grande" },
-            { "nome": "Cartório de Ofício Único de Viana" },
-            { "nome": "Cartório do 2º Ofício de Zé Doca" },
-            { "nome": "Cartório do 1º Ofício de Lago da Pedra" }
-            // [... Restante das serventias pode ser adicionado aqui ...]
-        ]
-    };
-    
-    // Disponibiliza o objeto globalmente
-    window.serventias_json = serventias_json;
-    
-    return serventias_json;
-}
-    </script>    
+    </script>
 </body>
 </html>
