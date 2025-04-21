@@ -1,7 +1,7 @@
 // Configuração da API Google Apps Script
 const API_CONFIG = {
   // URL da implantação do Google Apps Script
-  URL: 'https://script.google.com/macros/s/AKfycbwRjX5DOrbMGKeEbxGB7tHJ2IsSi6zaUOUqXZ13b02mlIeP8OxziECpJMx46MLYRpGiHg/exec',
+  URL: 'https://script.google.com/macros/s/AKfycbzOGs-MY6Jm9ZcqGs1U5y0xf8RJ6hjtMFLodd_qFvZppMjyMWztBHWjfUaRR10XWYyMQg/exec',
 };
 
 // Funções para comunicação com a API
