@@ -674,7 +674,23 @@
         
         // Configuração da URL da API
 const API_URL = 'https://script.google.com/macros/s/AKfycbzOGs-MY6Jm9ZcqGs1U5y0xf8RJ6hjtMFLodd_qFvZppMjyMWztBHWjfUaRR10XWYyMQg/exec';
-        
+        // Configuração da API Google Apps Script
+        // Elementos do DOM
+        const registroForm = document.getElementById('registroForm');
+        const participacaoSim = document.getElementById('participacaoSim');
+        const participacaoNao = document.getElementById('participacaoNao');
+        const camposParticipacaoSim = document.getElementById('camposParticipacaoSim');
+        const camposParticipacaoNao = document.getElementById('camposParticipacaoNao');
+        const motivoNao = document.getElementById('motivoNao');
+        const outroMotivoDiv = document.getElementById('outroMotivoDiv');
+        const limparFormularioBtn = document.getElementById('limparFormulario');
+        const searchButton = document.getElementById('searchButton');
+        const refreshButton = document.getElementById('refreshButton');
+        const searchInput = document.getElementById('searchInput');
+        const registrosTableBody = document.getElementById('registrosTableBody');
+        const loadingSpinner = document.getElementById('loadingSpinner');
+        const noRecordsMessage = document.getElementById('noRecordsMessage');
+        const alertMessages = document.getElementById('alertMessages');
         // Event Listeners
         document.addEventListener('DOMContentLoaded', function() {
             // Alternar entre os campos de participação Sim/Não
