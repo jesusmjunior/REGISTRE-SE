@@ -1,5 +1,5 @@
 // Configuração da URL da API Google Apps Script
-const API_URL = 'https://script.google.com/macros/s/AKfycbzOGs-MY6Jm9ZcqGs1U5y0xf8RJ6hjtMFLodd_qFvZppMjyMWztBHWjfUaRR10XWYyMQg/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbwIgWqPw2z0_Ah60B0fr3QBgTWpRQ5iaXtp9PY2FRHUoX9esiUfeubzBvmdQEuWgEvaAQ/exec'';
 
 // Variáveis globais para elementos do DOM
 let registroForm;
