@@ -1,8 +1,5 @@
-# Core Python libraries (built-in, no installation needed)
-uuid
-datetime
-json
-os
-
 # External libraries
 pandas>=2.0.0
+
+# Note: uuid, datetime, json, and os are built-in Python libraries
+# No additional installation needed for these
