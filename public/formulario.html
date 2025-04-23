@@ -1,1561 +1,1655 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COGEX - Formulário Semana Registre-se</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #800020; /* Vinho */
-            --secondary: #ffcc00; /* Amarelo */
-            --dark: #000000; /* Preto */
-            --light: #ffffff;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
-        }
-        
-        .main-header {
-            background-color: var(--light);
-            padding: 15px 0;
-            border-bottom: 5px solid var(--secondary);
-            margin-bottom: 20px;
-        }
-        
-        .logo-container img {
-            height: 70px;
-        }
-        
-        .form-section {
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            padding: 30px;
-            margin: 30px 0;
-        }
-        
-        .form-title {
-            color: var(--primary);
-            font-weight: 700;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 3px solid var(--secondary);
-        }
-        
-        .form-subtitle {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin: 20px 0;
-            border-left: 4px solid var(--primary);
-            padding-left: 10px;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            border-color: var(--primary);
-        }
-        
-        .btn-primary:hover {
-            background-color: #600018;
-            border-color: #600018;
-        }
-        
-        .required-field::after {
-            content: ' *';
-            color: red;
-        }
-        
-        .participacao-sim {
-            background-color: #e6f4ea;
-            border-left: 4px solid #34a853;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        
-        .participacao-nao {
-            background-color: #fce8e6;
-            border-left: 4px solid #ea4335;
-            padding: 15px;
-            border-radius: 5px;
-        }
-        
-        .registros-table th {
-            background-color: var(--primary);
-            color: var(--light);
-            padding: 12px;
-        }
-        
-        .registros-table td {
-            vertical-align: middle;
-            padding: 8px;
-        }
-        
-        .registros-table tr:hover {
-            background-color: rgba(255, 204, 0, 0.1);
-        }
-        
-        .highlight-row {
-            animation: highlight-fade 3s ease-in-out;
-        }
-        
-        @keyframes highlight-fade {
-            0% { background-color: rgba(255, 204, 0, 0.5); }
-            100% { background-color: transparent; }
-        }
-        
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-        
-        /* Toast notification */
-        .toast-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 9999;
-        }
-        
-        .toast {
-            background-color: #fff;
-            border-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            overflow: hidden;
-            margin-bottom: 10px;
-            min-width: 300px;
-        }
-        
-        .toast-header {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            font-weight: bold;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .toast-success .toast-header {
-            background-color: #34a853;
-            color: white;
-        }
-        
-        .toast-error .toast-header {
-            background-color: #ea4335;
-            color: white;
-        }
-        
-        .toast-info .toast-header {
-            background-color: #4285f4;
-            color: white;
-        }
-        
-        .toast-body {
-            padding: 15px;
-        }
-        
-        mark {
-            background-color: #ffcc00;
-            padding: 0 2px;
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="main-header">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-4 col-md-6 col-8">
-                    <div class="logo-container">
-                        <img src="/api/placeholder/200/70" alt="COGEX Logo" id="logo-cogex">
-                    </div>
-                </div>
-                <div class="col-lg-8 col-md-6 col-4 text-end">
-                    <h2 class="d-none d-md-block">COGEX - Semana Registre-se</h2>
-                </div>
-            </div>
-        </div>
-    </header>
+import React, { useState, useEffect } from 'react';
+import { AlertCircle, CheckCircle, Info, X, Eye, Edit2, Trash2, RefreshCw, Search, Save, FileText, List, ArrowUp } from 'lucide-react';
 
-    <!-- Main Content -->
-    <div class="container">
-        <!-- Toast Container -->
-        <div class="toast-container"></div>
-        
-        <!-- Tabs -->
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="form-tab" data-bs-toggle="tab" data-bs-target="#form-tab-pane" type="button" role="tab">
-                    <i class="fas fa-file-alt me-2"></i>Novo Registro
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="list-tab" data-bs-toggle="tab" data-bs-target="#list-tab-pane" type="button" role="tab">
-                    <i class="fas fa-list me-2"></i>Consultar Registros
-                </button>
-            </li>
-        </ul>
-        
-        <!-- Tab Content -->
-        <div class="tab-content" id="myTabContent">
-            <!-- Form Tab -->
-            <div class="tab-pane fade show active" id="form-tab-pane" role="tabpanel" tabindex="0">
-                <section class="form-section">
-                    <h2 class="form-title">Formulário de Registro - Semana Registre-se</h2>
-                    <p class="text-muted">Preencha os dados referentes à participação da sua serventia na Semana Registre-se.</p>
-                    
-                    <form id="registroForm">
-                        <!-- Dados da Serventia -->
-                        <h3 class="form-subtitle">Dados da Serventia</h3>
-                        <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <label for="serventia" class="form-label required-field">Nome da Serventia</label>
-                                <select class="form-select" id="serventia" name="Serventia" required>
-                                    <option value="">Selecione uma serventia...</option>
-                                    <!-- Opções serão carregadas via JavaScript -->
-                                </select>
-                                <div class="invalid-feedback">Por favor, selecione uma serventia.</div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="telefone" class="form-label">Telefone</label>
-                                <input type="tel" class="form-control" id="telefone" name="Telefone" placeholder="(00) 00000-0000">
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-8 mb-3">
-                                <label for="responsavel" class="form-label required-field">Nome do Responsável</label>
-                                <input type="text" class="form-control" id="responsavel" name="Responsável" required>
-                                <div class="invalid-feedback">Por favor, informe o nome do responsável.</div>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="email" class="form-label">E-mail</label>
-                                <input type="email" class="form-control" id="email" name="Email">
-                            </div>
-                        </div>
-                        
-                        <!-- Status de Participação -->
-                        <h3 class="form-subtitle">Status de Participação</h3>
-                        <div class="mb-3">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="Participação" id="participacaoSim" value="Sim" checked>
-                                <label class="form-check-label" for="participacaoSim">Participou da Semana Registre-se</label>
-                            </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="Participação" id="participacaoNao" value="Não">
-                                <label class="form-check-label" for="participacaoNao">Não participou da Semana Registre-se</label>
-                            </div>
-                        </div>
-                        
-                        <!-- Campos para Participação Sim -->
-                        <div id="camposParticipacaoSim" class="participacao-sim">
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="dataInicio" class="form-label">Data de Início das Atividades</label>
-                                    <input type="date" class="form-control" id="dataInicio" name="Data de Início">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="classificacao" class="form-label">Classificação da Participação</label>
-                                    <select class="form-select" id="classificacao" name="Classificação">
-                                        <option value="">Selecione...</option>
-                                        <option value="Integral">Integral - Todos os dias</option>
-                                        <option value="Parcial">Parcial - Alguns dias</option>
-                                        <option value="Pontual">Pontual - Ação específica</option>
-                                    </select>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="acoesRealizadas" class="form-label">Ações Realizadas</label>
-                                <textarea class="form-control" id="acoesRealizadas" name="Ações Realizadas" rows="3" 
-                                    placeholder="Descreva as ações realizadas durante a Semana Registre-se..."></textarea>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="publicosAtendidos" class="form-label">Públicos Atendidos</label>
-                                <textarea class="form-control" id="publicosAtendidos" name="Públicos Atendidos" rows="2" 
-                                    placeholder="Informe os grupos sociais atendidos (ex: indígenas, quilombolas, ribeirinhos, etc.)"></textarea>
-                            </div>
-                            
-                            <h4 class="mt-4 mb-3">Dados Quantitativos</h4>
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="viasEmitidas" class="form-label">Total de 2ª Vias Emitidas</label>
-                                    <input type="number" class="form-control" id="viasEmitidas" name="Vias Emitidas" min="0" value="0">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="registrosNascimento" class="form-label">Registros de Nascimento</label>
-                                    <input type="number" class="form-control" id="registrosNascimento" name="Registros Nascimento" min="0" value="0">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="averacoesPaternidade" class="form-label">Averbações de Paternidade</label>
-                                    <input type="number" class="form-control" id="averacoesPaternidade" name="Averbações Paternidade" min="0" value="0">
-                                </div>
-                            </div>
-                            
-                            <div class="row">
-                                <div class="col-md-4 mb-3">
-                                    <label for="retificacoes" class="form-label">Retificações</label>
-                                    <input type="number" class="form-control" id="retificacoes" name="Retificações" min="0" value="0">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="registrosTardios" class="form-label">Registros Tardios</label>
-                                    <input type="number" class="form-control" id="registrosTardios" name="Registros Tardios" min="0" value="0">
-                                </div>
-                                <div class="col-md-4 mb-3">
-                                    <label for="restauracoes" class="form-label">Restaurações</label>
-                                    <input type="number" class="form-control" id="restauracoes" name="Restaurações" min="0" value="0">
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <label for="tags" class="form-label">Tags/Palavras-chave</label>
-                                <input type="text" class="form-control" id="tags" name="Tags" placeholder="Palavras-chave separadas por vírgula">
-                            </div>
-                        </div>
-                        
-                        <!-- Campos para Participação Não -->
-                        <div id="camposParticipacaoNao" class="participacao-nao d-none">
-                            <div class="mb-3">
-                                <label for="motivoNao" class="form-label required-field">Motivo da Não Participação</label>
-                                <select class="form-select" id="motivoNao" name="Motivo Não Participação">
-                                    <option value="">Selecione...</option>
-                                    <option value="Falta de Pessoal">Falta de Pessoal</option>
-                                    <option value="Falta de Recursos">Falta de Recursos</option>
-                                    <option value="Problemas de Infraestrutura">Problemas de Infraestrutura</option>
-                                    <option value="Não houve Demanda Local">Não houve Demanda Local</option>
-                                    <option value="Outros">Outros</option>
-                                </select>
-                                <div class="invalid-feedback">Por favor, selecione o motivo da não participação.</div>
-                            </div>
-                            
-                            <div class="mb-3" id="outroMotivoDiv" style="display: none;">
-                                <label for="outroMotivo" class="form-label required-field">Especifique o Motivo</label>
-                                <textarea class="form-control" id="outroMotivo" name="outroMotivo" rows="2"></textarea>
-                                <div class="invalid-feedback">Por favor, especifique o motivo.</div>
-                            </div>
-                        </div>
-                        
-                        <!-- Observações -->
-                        <div class="mb-3 mt-4">
-                            <label for="observacoes" class="form-label">Observações Adicionais</label>
-                            <textarea class="form-control" id="observacoes" name="Observações" rows="3" 
-                                placeholder="Informações complementares que julgar relevantes..."></textarea>
-                        </div>
-                        
-                        <div class="d-flex justify-content-between mt-4">
-                            <button type="button" class="btn btn-secondary" id="limparFormulario">
-                                <i class="fas fa-eraser me-2"></i>Limpar Formulário
-                            </button>
-                            <button type="submit" class="btn btn-primary" id="salvarRegistro">
-                                <i class="fas fa-save me-2"></i>Salvar Registro
-                            </button>
-                        </div>
-                    </form>
-                </section>
-            </div>
-            
-            <!-- List Tab -->
-            <div class="tab-pane fade" id="list-tab-pane" role="tabpanel" tabindex="0">
-                <section class="form-section">
-                    <h2 class="form-title">Consulta de Registros</h2>
-                    
-                    <div class="row mb-4">
-                        <div class="col-md-8">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Pesquisar por serventia, responsável..." id="searchInput">
-                                <button class="btn btn-primary" type="button" id="searchButton">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-md-4 d-flex justify-content-end">
-                            <button class="btn btn-outline-primary" id="refreshButton">
-                                <i class="fas fa-sync-alt me-2"></i>Atualizar
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="table-responsive">
-                        <table class="table table-striped registros-table" id="registrosTable">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Serventia</th>
-                                    <th>Responsável</th>
-                                    <th>Participação</th>
-                                    <th>Registros</th>
-                                    <th>Data</th>
-                                    <th>Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody id="registrosTableBody">
-                                <!-- Registros serão carregados dinamicamente -->
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <!-- Loading spinner -->
-                    <div class="text-center d-none" id="loadingSpinner">
-                        <div class="spinner-border text-primary my-4" role="status">
-                            <span class="visually-hidden">Carregando...</span>
-                        </div>
-                    </div>
-                    
-                    <!-- Mensagem quando não há registros -->
-                    <div id="noRecordsMessage" class="alert alert-info d-none">
-                        Nenhum registro encontrado.
-                    </div>
-                </section>
-            </div>
-        </div>
-    </div>
+// Configuração da API
+const API_CONFIG = {
+  URL: 'https://script.google.com/macros/s/AKfycbwRjX5DOrbMGKeEbxGB7tHJ2IsSi6zaUOUqXZ13b02mlIeP8OxziECpJMx46MLYRpGiHg/exec',
+};
+
+// Lista de serventias
+const SERVENTIAS = [
+  "Cartório da 1ª Zona de Registro de Imóveis de São Luis",
+  "Cartório do ofício Único de Poção de Pedras",
+  "Cartório da 2ª Zona de Registro de Imóveis de São Luis",
+  "Cartório do 7º Ofício de Imperatriz",
+  "Cartório do 6º Ofício de Imperatriz",
+  "Cartório do 1º Ofício de Caxias",
+  "Cartório do 1º Ofício de São José de Ribamar",
+  "Cartório do 2º Ofício de Açailândia",
+  "Cartório do 1º Ofício de Açailândia",
+  "Cartório do 1º Ofício de Timon",
+  "SERVENTIA EXTRAJUDICIAL DO 1º DE BALSAS  MA",
+  "Cartório do 1º Ofício de Santa Inês",
+  "Cartório do 1º Ofício de Presidente Dutra",
+  "Cartório do 1º Ofício de Codó",
+  "Cartório do 1º Ofício de Bacabal",
+  "Cartório do 1º Ofício de Barra do Corda",
+  "Cartório do 1º Ofício de Pinheiro",
+  "Cartório do 1º Ofício de Chapadinha",
+  "Cartório do 1º Ofício de Santa Luzia",
+  "Cartório do Ofício Único de Buriticupu",
+  "Cartório do 1º Ofício de Grajaú",
+  "Cartório do 1º Ofício de Itapecuru Mirim",
+  "Cartório do 1º Ofício de Coroatá",
+  "Cartório do Ofício Único de Tutóia",
+  "Cartório do 1º Ofício de Vargem Grande",
+  "Cartório de Ofício Único de Viana",
+  "Cartório do 2º Ofício de Zé Doca",
+  "Cartório do 1º Ofício de Lago da Pedra",
+  "Cartório do Ofício Único de Afonso Cunha",
+  "Cartório do Ofício Único de Alcântara"
+].sort();
+
+const CogexRegistreApp = () => {
+  // Estado para controle de abas
+  const [activeTab, setActiveTab] = useState('form');
+  
+  // Estado para o formulário
+  const [formData, setFormData] = useState({
+    serventia: '',
+    telefone: '',
+    responsavel: '',
+    email: '',
+    participacao: 'Sim',
+    dataInicio: '',
+    classificacao: '',
+    acoesRealizadas: '',
+    publicosAtendidos: '',
+    viasEmitidas: 0,
+    registrosNascimento: 0,
+    averacoesPaternidade: 0,
+    retificacoes: 0,
+    registrosTardios: 0,
+    restauracoes: 0,
+    tags: '',
+    motivoNao: '',
+    outroMotivo: '',
+    observacoes: ''
+  });
+  
+  // Estados para validação
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Estados para lista de registros
+  const [registros, setRegistros] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredRegistros, setFilteredRegistros] = useState([]);
+  
+  // Estados para modais
+  const [viewModal, setViewModal] = useState({ show: false, data: null, readonly: true });
+  const [deleteModal, setDeleteModal] = useState({ show: false, id: null });
+  
+  // Estado para notificações toast
+  const [toasts, setToasts] = useState([]);
+
+  // Efeitos
+  useEffect(() => {
+    // Carregar registros se a aba ativa for 'list'
+    if (activeTab === 'list') {
+      loadRegistros();
+    }
+  }, [activeTab]);
+  
+  // Efeito para filtrar registros de acordo com o termo de busca
+  useEffect(() => {
+    if (registros.length > 0 && searchTerm) {
+      const term = searchTerm.toLowerCase();
+      const filtered = registros.filter(reg => {
+        return (
+          (reg.Serventia && reg.Serventia.toLowerCase().includes(term)) ||
+          (reg.Responsável && reg.Responsável.toLowerCase().includes(term)) ||
+          (reg.Participação && reg.Participação.toLowerCase().includes(term)) ||
+          (reg.ID && reg.ID.toString().includes(term))
+        );
+      });
+      setFilteredRegistros(filtered);
+    } else {
+      setFilteredRegistros(registros);
+    }
+  }, [searchTerm, registros]);
+
+  // Manipuladores de eventos para o formulário
+  const handleInputChange = (e) => {
+    const { name, value, type } = e.target;
     
-    <!-- Modal para visualização/edição de registro -->
-    <div class="modal fade" id="registroModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="registroModalLabel">Detalhes do Registro</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Conteúdo será carregado dinamicamente -->
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" id="salvarEdicaoBtn">Salvar Alterações</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para confirmação de exclusão -->
-    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title">Confirmar Exclusão</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                    <p>Tem certeza que deseja excluir este registro? Esta ação não pode ser desfeita.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Excluir</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Loading overlay -->
-    <div class="loading-overlay">
-        <div class="spinner-border text-light" style="width: 3rem; height: 3rem;" role="status">
-            <span class="visually-hidden">Carregando...</span>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // URL da API Google Apps Script
-        const API_URL = 'https://script.google.com/macros/s/AKfycbwIgWqPw2z0_Ah60B0fr3QBgTWpRQ5iaXtp9PY2FRHUoX9esiUfeubzBvmdQEuWgEvaAQ/exec';
+    // Tratar campos numéricos
+    if (type === 'number') {
+      setFormData({
+        ...formData,
+        [name]: parseInt(value) || 0
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
+    
+    // Limpar erro se o campo foi preenchido
+    if (formErrors[name]) {
+      setFormErrors({
+        ...formErrors,
+        [name]: null
+      });
+    }
+  };
+  
+  const handleParticipacaoChange = (e) => {
+    const value = e.target.value;
+    setFormData({
+      ...formData,
+      participacao: value
+    });
+  };
+  
+  const handleMotivoNaoChange = (e) => {
+    const value = e.target.value;
+    setFormData({
+      ...formData,
+      motivoNao: value
+    });
+  };
+  
+  const resetForm = () => {
+    setFormData({
+      serventia: '',
+      telefone: '',
+      responsavel: '',
+      email: '',
+      participacao: 'Sim',
+      dataInicio: '',
+      classificacao: '',
+      acoesRealizadas: '',
+      publicosAtendidos: '',
+      viasEmitidas: 0,
+      registrosNascimento: 0,
+      averacoesPaternidade: 0,
+      retificacoes: 0,
+      registrosTardios: 0,
+      restauracoes: 0,
+      tags: '',
+      motivoNao: '',
+      outroMotivo: '',
+      observacoes: ''
+    });
+    setFormErrors({});
+    addToast('Formulário limpo com sucesso', 'info');
+  };
+  
+  const validateForm = () => {
+    const errors = {};
+    
+    // Validar campos obrigatórios
+    if (!formData.serventia) {
+      errors.serventia = 'Por favor, selecione uma serventia';
+    }
+    
+    if (!formData.responsavel) {
+      errors.responsavel = 'Por favor, informe o nome do responsável';
+    }
+    
+    // Validar campos específicos baseado na participação
+    if (formData.participacao === 'Não') {
+      if (!formData.motivoNao) {
+        errors.motivoNao = 'Por favor, selecione o motivo da não participação';
+      }
+      
+      if (formData.motivoNao === 'Outros' && !formData.outroMotivo) {
+        errors.outroMotivo = 'Por favor, especifique o motivo';
+      }
+    }
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+  
+  // Função para enviar o formulário
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Preparar dados para API
+      const apiData = {
+        Serventia: formData.serventia,
+        Telefone: formData.telefone,
+        Responsável: formData.responsavel,
+        Email: formData.email,
+        Participação: formData.participacao,
+        Timestamp: new Date().toISOString()
+      };
+      
+      // Adicionar campos baseados na participação
+      if (formData.participacao === 'Sim') {
+        apiData['Data de Início'] = formData.dataInicio;
+        apiData['Classificação'] = formData.classificacao;
+        apiData['Ações Realizadas'] = formData.acoesRealizadas;
+        apiData['Públicos Atendidos'] = formData.publicosAtendidos;
+        apiData['Vias Emitidas'] = formData.viasEmitidas;
+        apiData['Registros Nascimento'] = formData.registrosNascimento;
+        apiData['Averbações Paternidade'] = formData.averacoesPaternidade;
+        apiData['Retificações'] = formData.retificacoes;
+        apiData['Registros Tardios'] = formData.registrosTardios;
+        apiData['Restaurações'] = formData.restauracoes;
+        apiData['Tags'] = formData.tags;
+      } else {
+        apiData['Motivo Não Participação'] = formData.motivoNao === 'Outros' 
+          ? `Outros: ${formData.outroMotivo}` 
+          : formData.motivoNao;
+      }
+      
+      apiData['Observações'] = formData.observacoes;
+      
+      // Enviar para a API
+      const response = await fetch(API_CONFIG.URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(apiData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        addToast(`Registro #${result.data.id} salvo com sucesso!`, 'success');
+        resetForm();
         
-        // Elementos do DOM
-        const registroForm = document.getElementById('registroForm');
-        const participacaoSim = document.getElementById('participacaoSim');
-        const participacaoNao = document.getElementById('participacaoNao');
-        const camposParticipacaoSim = document.getElementById('camposParticipacaoSim');
-        const camposParticipacaoNao = document.getElementById('camposParticipacaoNao');
-        const motivoNao = document.getElementById('motivoNao');
-        const outroMotivoDiv = document.getElementById('outroMotivoDiv');
-        const loadingOverlay = document.querySelector('.loading-overlay');
-        const serventiaSelect = document.getElementById('serventia');
-        const registrosTableBody = document.getElementById('registrosTableBody');
-        const loadingSpinner = document.getElementById('loadingSpinner');
-        const noRecordsMessage = document.getElementById('noRecordsMessage');
-        const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
-        const refreshButton = document.getElementById('refreshButton');
-        const limparFormularioBtn = document.getElementById('limparFormulario');
-        
-        // Dados de serventias estáticos
-        const serventias_json = {
-            "serventias": [
-                { "nome": "Cartório da 1ª Zona de Registro de Imóveis de São Luis" },
-                { "nome": "Cartório do ofício Único de Poção de Pedras" },
-                { "nome": "Cartório da 2ª Zona de Registro de Imóveis de São Luis" },
-                { "nome": "Cartório do 7º Ofício de Imperatriz" },
-                { "nome": "Cartório do 6º Ofício de Imperatriz" },
-                { "nome": "Cartório do 1º Ofício de Caxias" },
-                { "nome": "Cartório do 1º Ofício de São José de Ribamar" },
-                { "nome": "Cartório do 2º Ofício de Açailândia" },
-                { "nome": "Cartório do 1º Ofício de Açailândia" },
-                { "nome": "Cartório do 1º Ofício de Timon" },
-                { "nome": "SERVENTIA EXTRAJUDICIAL DO 1º DE BALSAS  MA" },
-                { "nome": "Cartório do 1º Ofício de Santa Inês" },
-                { "nome": "Cartório do 1º Ofício de Presidente Dutra" },
-                { "nome": "Cartório do 1º Ofício de Codó" },
-                { "nome": "Cartório do 1º Ofício de Bacabal" },
-                { "nome": "Cartório do 1º Ofício de Barra do Corda" },
-                { "nome": "Cartório do 1º Ofício de Pinheiro" },
-                { "nome": "Cartório do 1º Ofício de Chapadinha" },
-                { "nome": "Cartório do 1º Ofício de Santa Luzia" },
-                { "nome": "Cartório do Ofício Único de Buriticupu" },
-                { "nome": "Cartório do 1º Ofício de Grajaú" },
-                { "nome": "Cartório do 1º Ofício de Itapecuru Mirim" },
-                { "nome": "Cartório do 1º Ofício de Coroatá" },
-                { "nome": "Cartório do Ofício Único de Tutóia" },
-                { "nome": "Cartório do 1º Ofício de Vargem Grande" },
-                { "nome": "Cartório de Ofício Único de Viana" },
-                { "nome": "Cartório do 2º Ofício de Zé Doca" },
-                { "nome": "Cartório do 1º Ofício de Lago da Pedra" },
-                { "nome": "Cartório do Ofício Único de Afonso Cunha" },
-                { "nome": "Cartório do Ofício Único de Alcântara" }
-            ]
-        };
-        
-        // Inicialização
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Inicializando o formulário COGEX...');
-            
-            // Eventos do formulário
-            setupFormEventListeners();
-            
-            // Carregar lista de serventias do objeto JSON estático
-            carregarServentias();
-            
-            // Carregar registros se estamos na aba de listagem
-            const hash = window.location.hash;
-            if (hash === '#list-tab-pane') {
-                document.getElementById('list-tab').click();
-                loadRegistros();
-            }
-            
-            // Adicionar evento para a aba de listagem
-            document.getElementById('list-tab').addEventListener('click', function() {
-                loadRegistros();
+        // Perguntar se deseja ver os detalhes
+        if (window.confirm(`Registro #${result.data.id} salvo com sucesso! Deseja visualizar os detalhes?`)) {
+          setActiveTab('list');
+          // Aguardar carregamento e destacar o registro
+          setTimeout(() => {
+            loadRegistros().then(() => {
+              highlightRow(result.data.id);
             });
+          }, 500);
+        }
+      } else {
+        throw new Error(result.message || 'Erro ao salvar registro');
+      }
+    } catch (error) {
+      addToast(`Erro ao salvar: ${error.message}`, 'error');
+      console.error('Erro ao salvar registro:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
+  // Funções para o sistema de notificações toast
+  const addToast = (message, type = 'info') => {
+    const id = Date.now();
+    setToasts([...toasts, { id, message, type }]);
+    
+    // Auto-remover após 5 segundos
+    setTimeout(() => {
+      setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id));
+    }, 5000);
+  };
+  
+  const removeToast = (id) => {
+    setToasts(prevToasts => prevToasts.filter(toast => toast.id !== id));
+  };
+  
+  // Funções para lidar com a listagem de registros
+  const loadRegistros = async () => {
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch(`${API_CONFIG.URL}?action=getAll`);
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        // Ordenar por ID (mais recentes primeiro)
+        const sortedRegistros = result.data.sort((a, b) => parseInt(b.ID) - parseInt(a.ID));
+        setRegistros(sortedRegistros);
+        setFilteredRegistros(sortedRegistros);
+      } else {
+        throw new Error(result.message || 'Erro ao carregar registros');
+      }
+    } catch (error) {
+      addToast(`Erro ao carregar registros: ${error.message}`, 'error');
+      console.error('Erro ao carregar registros:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleSearch = () => {
+    // A filtragem é feita pelo useEffect que observa searchTerm
+  };
+  
+  const handleRefresh = () => {
+    setSearchTerm('');
+    loadRegistros();
+  };
+  
+  const highlightRow = (id) => {
+    // Implementar destaque visual para a linha com o ID específico
+    const row = document.querySelector(`tr[data-id="${id}"]`);
+    if (row) {
+      row.classList.add('highlight-row');
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  };
+  
+  // Funções para modais
+  const handleViewRegistro = async (id) => {
+    try {
+      setIsLoading(true);
+      
+      const response = await fetch(`${API_CONFIG.URL}?action=getRegistro&id=${id}`);
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setViewModal({
+          show: true,
+          data: result.data,
+          readonly: true
         });
-        
-        // Configurar event listeners do formulário
-        function setupFormEventListeners() {
-            // Alternar campos de participação
-            participacaoSim.addEventListener('change', toggleParticipacaoFields);
-            participacaoNao.addEventListener('change', toggleParticipacaoFields);
-            
-            // Evento para motivo de não participação
-            motivoNao.addEventListener('change', function() {
-                outroMotivoDiv.style.display = this.value === 'Outros' ? 'block' : 'none';
-            });
-            
-            // Evento para limpar formulário
-            limparFormularioBtn.addEventListener('click', resetForm);
-            
-            // Evento para envio do formulário
-            registroForm.addEventListener('submit', handleFormSubmit);
-            
-            // Eventos para pesquisa
-            searchButton.addEventListener('click', searchRegistros);
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    searchRegistros();
-                }
-            });
-            
-            // Evento para atualizar
-            refreshButton.addEventListener('click', function() {
-                // Adicionar classe para animação de rotação
-                const icon = this.querySelector('i');
-                icon.classList.add('fa-spin');
-                
-                // Remover classe após a conclusão
-                loadRegistros().finally(() => {
-                    setTimeout(() => {
-                        icon.classList.remove('fa-spin');
-                    }, 500);
-                });
-            });
-            
-            // Eventos para modais
-            document.getElementById('salvarEdicaoBtn').addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                if (id) {
-                    saveRegistroEdit(id);
-                }
-            });
-            
-            document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                if (id) {
-                    deleteRegistro(id);
-                }
-            });
+      } else {
+        throw new Error(result.message || 'Erro ao carregar registro');
+      }
+    } catch (error) {
+      addToast(`Erro ao visualizar: ${error.message}`, 'error');
+      console.error('Erro ao visualizar registro:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleEditRegistro = async (id) => {
+    try {
+      setIsLoading(true);
+      
+      const response = await fetch(`${API_CONFIG.URL}?action=getRegistro&id=${id}`);
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        setViewModal({
+          show: true,
+          data: result.data,
+          readonly: false
+        });
+      } else {
+        throw new Error(result.message || 'Erro ao carregar registro');
+      }
+    } catch (error) {
+      addToast(`Erro ao editar: ${error.message}`, 'error');
+      console.error('Erro ao editar registro:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleSaveEdit = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Coletar dados do modal de edição
+      const formEl = document.getElementById('editForm');
+      if (!formEl) {
+        throw new Error('Formulário de edição não encontrado');
+      }
+      
+      const formData = new FormData(formEl);
+      const data = {};
+      
+      for (let [key, value] of formData.entries()) {
+        // Converter campos numéricos
+        if (['Vias Emitidas', 'Registros Nascimento', 'Averbações Paternidade', 
+             'Retificações', 'Registros Tardios', 'Restaurações'].includes(key)) {
+          value = parseInt(value) || 0;
         }
+        data[key] = value;
+      }
+      
+      // Adicionar ID
+      data.id = viewModal.data.ID;
+      
+      // Enviar para a API
+      const response = await fetch(`${API_CONFIG.URL}?action=atualizarRegistro`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        addToast('Registro atualizado com sucesso!', 'success');
+        setViewModal({ show: false, data: null, readonly: true });
+        loadRegistros();
+      } else {
+        throw new Error(result.message || 'Erro ao atualizar registro');
+      }
+    } catch (error) {
+      addToast(`Erro ao atualizar: ${error.message}`, 'error');
+      console.error('Erro ao atualizar registro:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  const handleDeleteClick = (id) => {
+    setDeleteModal({
+      show: true,
+      id
+    });
+  };
+  
+  const handleDeleteConfirm = async () => {
+    try {
+      setIsLoading(true);
+      
+      const id = deleteModal.id;
+      
+      const response = await fetch(`${API_CONFIG.URL}?action=excluirRegistro&id=${id}`, {
+        method: 'GET'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      const result = await response.json();
+      
+      if (result.success) {
+        addToast('Registro excluído com sucesso!', 'success');
+        setDeleteModal({ show: false, id: null });
+        loadRegistros();
+      } else {
+        throw new Error(result.message || 'Erro ao excluir registro');
+      }
+    } catch (error) {
+      addToast(`Erro ao excluir: ${error.message}`, 'error');
+      console.error('Erro ao excluir registro:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // Componente para o formulário
+  const FormTab = () => (
+    <div className="bg-white rounded-lg shadow-md p-6 my-6">
+      <h2 className="text-2xl font-bold text-red-900 mb-4 pb-2 border-b-2 border-yellow-400">
+        Formulário de Registro - Semana Registre-se
+      </h2>
+      <p className="text-gray-600 mb-6">
+        Preencha os dados referentes à participação da sua serventia na Semana Registre-se.
+      </p>
+      
+      <form onSubmit={handleFormSubmit}>
+        {/* Dados da Serventia */}
+        <h3 className="text-xl font-semibold mb-4 border-l-4 border-red-900 pl-2">
+          Dados da Serventia
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
+          <div className="md:col-span-8">
+            <label className="block text-gray-700 font-semibold mb-2">
+              Nome da Serventia <span className="text-red-500">*</span>
+            </label>
+            <select
+              className={`w-full p-2 border rounded-md ${formErrors.serventia ? 'border-red-500' : 'border-gray-300'}`}
+              name="serventia"
+              value={formData.serventia}
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">Selecione uma serventia...</option>
+              {SERVENTIAS.map((serventia, index) => (
+                <option key={index} value={serventia}>{serventia}</option>
+              ))}
+            </select>
+            {formErrors.serventia && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.serventia}</p>
+            )}
+          </div>
+          <div className="md:col-span-4">
+            <label className="block text-gray-700 font-semibold mb-2">
+              Telefone
+            </label>
+            <input
+              type="tel"
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="telefone"
+              value={formData.telefone}
+              onChange={handleInputChange}
+              placeholder="(00) 00000-0000"
+            />
+          </div>
+        </div>
         
-        // Carregar lista de serventias do objeto JSON local
-        function carregarServentias() {
-            try {
-                showLoading();
-                console.log('Carregando lista de serventias...');
-                
-                // Limpar opções atuais
-                serventiaSelect.innerHTML = '<option value="">Selecione uma serventia...</option>';
-                
-                // Adicionar serventias ao select a partir do objeto JSON estático
-                if (serventias_json && serventias_json.serventias && Array.isArray(serventias_json.serventias)) {
-                    // Ordenar alfabeticamente
-                    serventias_json.serventias.sort((a, b) => a.nome.localeCompare(b.nome));
-                    
-                    serventias_json.serventias.forEach(serventia => {
-                        const option = document.createElement('option');
-                        option.value = serventia.nome;
-                        option.textContent = serventia.nome;
-                        serventiaSelect.appendChild(option);
-                    });
-                    
-                    console.log(`${serventias_json.serventias.length} serventias carregadas com sucesso`);
-                } else {
-                    console.error('Formato de dados inválido no JSON de serventias');
-                    showToast('Erro ao carregar serventias: formato de dados inválido', 'error');
-                }
-                
-                hideLoading();
-            } catch (error) {
-                hideLoading();
-                console.error('Erro ao carregar serventias:', error);
-                showToast('Erro ao carregar lista de serventias. Verifique sua conexão.', 'error');
-            }
-        }
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-6">
+          <div className="md:col-span-8">
+            <label className="block text-gray-700 font-semibold mb-2">
+              Nome do Responsável <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className={`w-full p-2 border rounded-md ${formErrors.responsavel ? 'border-red-500' : 'border-gray-300'}`}
+              name="responsavel"
+              value={formData.responsavel}
+              onChange={handleInputChange}
+              required
+            />
+            {formErrors.responsavel && (
+              <p className="text-red-500 text-sm mt-1">{formErrors.responsavel}</p>
+            )}
+          </div>
+          <div className="md:col-span-4">
+            <label className="block text-gray-700 font-semibold mb-2">
+              E-mail
+            </label>
+            <input
+              type="email"
+              className="w-full p-2 border border-gray-300 rounded-md"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
         
-        // Alternar campos de participação
-        function toggleParticipacaoFields() {
-            if (participacaoSim.checked) {
-                camposParticipacaoSim.classList.remove('d-none');
-                camposParticipacaoNao.classList.add('d-none');
-                
-                // Limpar campos de não participação
-                motivoNao.value = '';
-                if (document.getElementById('outroMotivo')) {
-                    document.getElementById('outroMotivo').value = '';
-                }
-                outroMotivoDiv.style.display = 'none';
-                
-                // Remover required de campos não visíveis
-                motivoNao.required = false;
-                
-                // Remover classes de validação
-                motivoNao.classList.remove('is-invalid');
-                if (document.getElementById('outroMotivo')) {
-                    document.getElementById('outroMotivo').classList.remove('is-invalid');
-                }
-            } else {
-                camposParticipacaoSim.classList.add('d-none');
-                camposParticipacaoNao.classList.remove('d-none');
-                
-                // Zerar campos quantitativos
-                document.getElementById('viasEmitidas').value = '0';
-                document.getElementById('registrosNascimento').value = '0';
-                document.getElementById('averacoesPaternidade').value = '0';
-                document.getElementById('retificacoes').value = '0';
-                document.getElementById('registrosTardios').value = '0';
-                document.getElementById('restauracoes').value = '0';
-                
-                // Limpar campos de texto
-                document.getElementById('acoesRealizadas').value = '';
-                document.getElementById('publicosAtendidos').value = '';
-                
-                // Adicionar required
-                motivoNao.required = true;
-            }
-        }
+        {/* Status de Participação */}
+        <h3 className="text-xl font-semibold mb-4 border-l-4 border-red-900 pl-2">
+          Status de Participação
+        </h3>
+        <div className="mb-6">
+          <div className="flex flex-wrap gap-4">
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="participacao"
+                value="Sim"
+                checked={formData.participacao === 'Sim'}
+                onChange={handleParticipacaoChange}
+                className="form-radio text-red-900"
+              />
+              <span className="ml-2">Participou da Semana Registre-se</span>
+            </label>
+            <label className="inline-flex items-center">
+              <input
+                type="radio"
+                name="participacao"
+                value="Não"
+                checked={formData.participacao === 'Não'}
+                onChange={handleParticipacaoChange}
+                className="form-radio text-red-900"
+              />
+              <span className="ml-2">Não participou da Semana Registre-se</span>
+            </label>
+          </div>
+        </div>
         
-        // Resetar formulário
-        function resetForm() {
-            registroForm.reset();
+        {/* Campos para Participação Sim */}
+        {formData.participacao === 'Sim' && (
+          <div className="bg-green-50 border-l-4 border-green-500 p-4 rounded-md mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Data de Início das Atividades
+                </label>
+                <input
+                  type="date"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  name="dataInicio"
+                  value={formData.dataInicio}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Classificação da Participação
+                </label>
+                <select
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  name="classificacao"
+                  value={formData.classificacao}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Selecione...</option>
+                  <option value="Integral">Integral - Todos os dias</option>
+                  <option value="Parcial">Parcial - Alguns dias</option>
+                  <option value="Pontual">Pontual - Ação específica</option>
+                </select>
+              </div>
+            </div>
             
-            // Restaurar estado padrão
-            participacaoSim.checked = true;
-            toggleParticipacaoFields();
+            <div className="mb-4">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Ações Realizadas
+              </label>
+              <textarea
+                className="w-full p-2 border border-gray-300 rounded-md"
+                name="acoesRealizadas"
+                value={formData.acoesRealizadas}
+                onChange={handleInputChange}
+                rows="3"
+                placeholder="Descreva as ações realizadas durante a Semana Registre-se..."
+              ></textarea>
+            </div>
             
-            // Remover classes de validação
-            const inputs = registroForm.querySelectorAll('.form-control, .form-select');
-            inputs.forEach(input => input.classList.remove('is-invalid'));
+            <div className="mb-4">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Públicos Atendidos
+              </label>
+              <textarea
+                className="w-full p-2 border border-gray-300 rounded-md"
+                name="publicosAtendidos"
+                value={formData.publicosAtendidos}
+                onChange={handleInputChange}
+                rows="2"
+                placeholder="Informe os grupos sociais atendidos (ex: indígenas, quilombolas, ribeirinhos, etc.)"
+              ></textarea>
+            </div>
             
-            showToast('Formulário limpo com sucesso', 'info');
-        }
+            <h4 className="text-lg font-semibold mb-3 mt-6">Dados Quantitativos</h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Total de 2ª Vias Emitidas
+                </label>
+                <input
+                  type="number"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  name="viasEmitidas"
+                  value={formData.viasEmitidas}
+                  onChange={handleInputChange}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Registros de Nascimento
+                </label>
+                <input
+                  type="number"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  name="registrosNascimento"
+                  value={formData.registrosNascimento}
+                  onChange={handleInputChange}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Averbações de Paternidade
+                </label>
+                <input
+                  type="number"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  name="averacoesPaternidade"
+                  value={formData.averacoesPaternidade}
+                  onChange={handleInputChange}
+                  min="0"
+                />
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Retificações
+                </label>
+                <input
+                  type="number"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  name="retificacoes"
+                  value={formData.retificacoes}
+                  onChange={handleInputChange}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Registros Tardios
+                </label>
+                <input
+                  type="number"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  name="registrosTardios"
+                  value={formData.registrosTardios}
+                  onChange={handleInputChange}
+                  min="0"
+                />
+              </div>
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Restaurações
+                </label>
+                <input
+                  type="number"
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  name="restauracoes"
+                  value={formData.restauracoes}
+                  onChange={handleInputChange}
+                  min="0"
+                />
+              </div>
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Tags/Palavras-chave
+              </label>
+              <input
+                type="text"
+                className="w-full p-2 border border-gray-300 rounded-md"
+                name="tags"
+                value={formData.tags}
+                onChange={handleInputChange}
+                placeholder="Palavras-chave separadas por vírgula"
+              />
+            </div>
+          </div>
+        )}
         
-        // Validar formulário
-        function validateForm() {
-            let isValid = true;
+        {/* Campos para Participação Não */}
+        {formData.participacao === 'Não' && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-md mb-6">
+            <div className="mb-4">
+              <label className="block text-gray-700 font-semibold mb-2">
+                Motivo da Não Participação <span className="text-red-500">*</span>
+              </label>
+              <select
+                className={`w-full p-2 border rounded-md ${formErrors.motivoNao ? 'border-red-500' : 'border-gray-300'}`}
+                name="motivoNao"
+                value={formData.motivoNao}
+                onChange={handleMotivoNaoChange}
+                required={formData.participacao === 'Não'}
+              >
+                <option value="">Selecione...</option>
+                <option value="Falta de Pessoal">Falta de Pessoal</option>
+                <option value="Falta de Recursos">Falta de Recursos</option>
+                <option value="Problemas de Infraestrutura">Problemas de Infraestrutura</option>
+                <option value="Não houve Demanda Local">Não houve Demanda Local</option>
+                <option value="Outros">Outros</option>
+              </select>
+              {formErrors.motivoNao && (
+                <p className="text-red-500 text-sm mt-1">{formErrors.motivoNao}</p>
+              )}
+            </div>
             
-            // Validar Serventia
-            const serventia = serventiaSelect.value.trim();
-            if (!serventia) {
-                serventiaSelect.classList.add('is-invalid');
-                isValid = false;
-            }
-            
-            // Validar Responsável
-            const responsavel = document.getElementById('responsavel').value.trim();
-            if (!responsavel) {
-                document.getElementById('responsavel').classList.add('is-invalid');
-                isValid = false;
-            }
-            
-            // Validar motivo de não participação
-            if (participacaoNao.checked && motivoNao.value === '') {
-                motivoNao.classList.add('is-invalid');
-                isValid = false;
-            }
-            
-            // Validar "Outro motivo" se selecionado
-            if (participacaoNao.checked && motivoNao.value === 'Outros') {
-                const outroMotivo = document.getElementById('outroMotivo');
-                if (!outroMotivo.value.trim()) {
-                    outroMotivo.classList.add('is-invalid');
-                    isValid = false;
-                }
-            }
-            
-            if (!isValid) {
-                showToast('Por favor, preencha todos os campos obrigatórios', 'error');
-            }
-            
-            return isValid;
-        }
+            {formData.motivoNao === 'Outros' && (
+              <div className="mb-4">
+                <label className="block text-gray-700 font-semibold mb-2">
+                  Especifique o Motivo <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  className={`w-full p-2 border rounded-md ${formErrors.outroMotivo ? 'border-red-500' : 'border-gray-300'}`}
+                  name="outroMotivo"
+                  value={formData.outroMotivo}
+                  onChange={handleInputChange}
+                  rows="2"
+                  required={formData.motivoNao === 'Outros'}
+                ></textarea>
+                {formErrors.outroMotivo && (
+                  <p className="text-red-500 text-sm mt-1">{formErrors.outroMotivo}</p>
+                )}
+              </div>
+            )}
+          </div>
+        )}
         
-        // Submeter formulário
-        async function handleFormSubmit(e) {
-            e.preventDefault();
-            
-            if (!validateForm()) {
-                return;
-            }
-            
-            // Desabilitar formulário durante envio
-            const submitButton = document.getElementById('salvarRegistro');
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
-            
-            try {
-                showLoading();
-                
-                // Coletar dados do formulário
-                const formData = new FormData(registroForm);
-                const data = {};
-                
-                for (let [key, value] of formData.entries()) {
-                    // Converter campos numéricos para números
-                    if (['Vias Emitidas', 'Registros Nascimento', 'Averbações Paternidade', 
-                         'Retificações', 'Registros Tardios', 'Restaurações'].includes(key)) {
-                        value = parseInt(value) || 0;
-                    }
-                    data[key] = value;
-                }
-                
-                // Adicionar timestamp
-                data.Timestamp = new Date().toISOString();
-                
-                // Ajustes para participação "Não"
-                if (data['Participação'] === 'Não') {
-                    data['Data de Início'] = '';
-                    data['Classificação'] = '';
-                    data['Ações Realizadas'] = '';
-                    data['Públicos Atendidos'] = '';
-                    data['Vias Emitidas'] = 0;
-                    data['Registros Nascimento'] = 0;
-                    data['Averbações Paternidade'] = 0;
-                    data['Retificações'] = 0;
-                    data['Registros Tardios'] = 0;
-                    data['Restaurações'] = 0;
-                    data['Tags'] = '';
-                    
-                    // Adicionar motivo específico se for "Outros"
-                    if (data['Motivo Não Participação'] === 'Outros' && document.getElementById('outroMotivo')) {
-                        data['Motivo Não Participação'] = 'Outros: ' + document.getElementById('outroMotivo').value;
-                    }
-                } else {
-                    data['Motivo Não Participação'] = '';
-                }
-                
-                console.log('Enviando dados para o servidor:', data);
-                
-                // Enviar para a API
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                if (result.success) {
-                    hideLoading();
-                    showToast(`Registro #${result.data.id} salvo com sucesso!`, 'success');
-                    
-                    // Gerar protocolo para exibição
-                    const protocolo = result.data.protocolo || `REG-${result.data.id}`;
-                    
-                    // Exibir confirmação detalhada
-                    const confirmMessage = `
-                        Registro salvo com sucesso!
-                        
-                        Número do Registro: #${result.data.id}
-                        Protocolo: ${protocolo}
-                        Serventia: ${data['Serventia']}
-                        
-                        Deseja visualizar os detalhes do registro?
-                    `;
-                    
-                    // Perguntar se deseja ver os detalhes
-                    if (confirm(confirmMessage)) {
-                        // Mudar para a aba de listagem
-                        document.getElementById('list-tab').click();
-                        
-                        // Aguardar carregamento e destacar o registro
-                        setTimeout(() => {
-                            loadRegistros().then(() => {
-                                highlightRow(result.data.id);
-                            });
-                        }, 500);
-                    }
-                    
-                    // Limpar formulário
-                    resetForm();
-                } else {
-                    throw new Error(result.message || 'Erro ao salvar registro');
-                }
-            } catch (error) {
-                hideLoading();
-                console.error('Erro ao salvar registro:', error);
-                showToast(`Erro ao salvar: ${error.message}`, 'error');
-            } finally {
-                // Restaurar botão de envio
-                submitButton.disabled = false;
-                submitButton.innerHTML = '<i class="fas fa-save me-2"></i>Salvar Registro';
-            }
-        }
+        {/* Observações */}
+        <div className="mb-6">
+          <label className="block text-gray-700 font-semibold mb-2">
+            Observações Adicionais
+          </label>
+          <textarea
+            className="w-full p-2 border border-gray-300 rounded-md"
+            name="observacoes"
+            value={formData.observacoes}
+            onChange={handleInputChange}
+            rows="3"
+            placeholder="Informações complementares que julgar relevantes..."
+          ></textarea>
+        </div>
         
-        // Carregar registros
-        async function loadRegistros() {
-            try {
-                showLoading();
-                loadingSpinner.classList.remove('d-none');
-                registrosTableBody.innerHTML = '';
-                noRecordsMessage.classList.add('d-none');
-                
-                console.log('Carregando registros da API...');
-                
-                const response = await fetch(`${API_URL}?action=getAll`);
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                hideLoading();
-                loadingSpinner.classList.add('d-none');
-                
-                if (result.success) {
-                    if (result.data && result.data.length > 0) {
-                        console.log(`${result.data.length} registros carregados com sucesso`);
-                        renderRegistros(result.data);
-                    } else {
-                        console.log('Nenhum registro encontrado');
-                        noRecordsMessage.classList.remove('d-none');
-                    }
-                } else {
-                    throw new Error(result.message || 'Erro ao carregar registros');
-                }
-                
-                return result;
-            } catch (error) {
-                hideLoading();
-                loadingSpinner.classList.add('d-none');
-                console.error('Erro ao carregar registros:', error);
-                showToast(`Erro ao carregar registros: ${error.message}`, 'error');
-            }
-        }
-        
-        // Renderizar registros na tabela
-        function renderRegistros(registros) {
-            registrosTableBody.innerHTML = '';
-            
-            // Ordenar por ID (mais recentes primeiro)
-            registros.sort((a, b) => parseInt(b.ID) - parseInt(a.ID));
-            
-            registros.forEach(registro => {
+        <div className="flex flex-wrap justify-between gap-2 mt-8">
+          <button
+            type="button"
+            className="py-2 px-4 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
+            onClick={resetForm}
+            disabled={isSubmitting}
+          >
+            <i className="mr-2"></i>Limpar Formulário
+          </button>
+          <button
+            type="submit"
+            className="py-2 px-4 bg-red-900 text-white rounded-md hover:bg-red-700 transition"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <i className="mr-2 animate-spin"></i>Salvando...
+              </>
+            ) : (
+              <>
+                <Save className="inline mr-2 h-5 w-5" />
+                Salvar Registro
+              </>
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+  
+  // Componente para a lista de registros
+  const ListTab = () => (
+    <div className="bg-white rounded-lg shadow-md p-6 my-6">
+      <h2 className="text-2xl font-bold text-red-900 mb-4 pb-2 border-b-2 border-yellow-400">
+        Consulta de Registros
+      </h2>
+      
+      <div className="flex flex-wrap gap-3 mb-6">
+        <div className="flex-grow">
+          <div className="flex">
+            <input
+              type="text"
+              className="w-full p-2 border border-gray-300 rounded-l-md"
+              placeholder="Pesquisar por serventia, responsável..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+            />
+            <button
+              className="bg-red-900 text-white p-2 rounded-r-md hover:bg-red-700 transition"
+              onClick={handleSearch}
+            >
+              <Search className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
+        <button
+          className="py-2 px-4 border border-red-900 text-red-900 rounded-md hover:bg-red-50 transition"
+          onClick={handleRefresh}
+        >
+          <RefreshCw className="inline mr-2 h-4 w-4" />
+          Atualizar
+        </button>
+      </div>
+      
+      {isLoading ? (
+        <div className="text-center py-8">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-red-900 border-t-transparent"></div>
+          <p className="mt-2 text-gray-600">Carregando registros...</p>
+        </div>
+      ) : filteredRegistros.length > 0 ? (
+        <div className="overflow-x-auto">
+          <table className="min-w-full border-collapse">
+            <thead>
+              <tr className="bg-red-900 text-white">
+                <th className="px-4 py-3 text-left">ID</th>
+                <th className="px-4 py-3 text-left">Serventia</th>
+                <th className="px-4 py-3 text-left">Responsável</th>
+                <th className="px-4 py-3 text-left">Participação</th>
+                <th className="px-4 py-3 text-left">Registros</th>
+                <th className="px-4 py-3 text-left">Data</th>
+                <th className="px-4 py-3 text-left">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredRegistros.map((registro) => {
                 // Calcular total de registros
                 const totalRegistros = (
-                    parseInt(registro['Registros Nascimento'] || 0) +
-                    parseInt(registro['Vias Emitidas'] || 0) +
-                    parseInt(registro['Averbações Paternidade'] || 0) +
-                    parseInt(registro['Retificações'] || 0) +
-                    parseInt(registro['Registros Tardios'] || 0) +
-                    parseInt(registro['Restaurações'] || 0)
+                  parseInt(registro['Registros Nascimento'] || 0) +
+                  parseInt(registro['Vias Emitidas'] || 0) +
+                  parseInt(registro['Averbações Paternidade'] || 0) +
+                  parseInt(registro['Retificações'] || 0) +
+                  parseInt(registro['Registros Tardios'] || 0) +
+                  parseInt(registro['Restaurações'] || 0)
                 );
                 
                 // Formatar data
                 let dataFormatada = 'N/A';
                 if (registro['Timestamp']) {
-                    try {
-                        const data = new Date(registro['Timestamp']);
-                        dataFormatada = data.toLocaleDateString('pt-BR');
-                    } catch (e) {
-                        console.error('Erro ao formatar data:', e);
-                    }
+                  try {
+                    const data = new Date(registro['Timestamp']);
+                    dataFormatada = data.toLocaleDateString('pt-BR');
+                  } catch (e) {
+                    console.error('Erro ao formatar data:', e);
+                  }
                 }
                 
-                // Determinar classe de status
-                const statusClass = registro['Participação'] === 'Não' ? 'text-danger' : 'text-success';
-                
-                // Criar linha da tabela
-                const tr = document.createElement('tr');
-                tr.setAttribute('data-id', registro.ID);
-                tr.innerHTML = `
-                    <td>${registro.ID}</td>
-                    <td>${registro['Serventia'] || '—'}</td>
-                    <td>${registro['Responsável'] || '—'}</td>
-                    <td><span class="${statusClass}">${registro['Participação'] || 'Sim'}</span></td>
-                    <td>${totalRegistros}</td>
-                    <td>${dataFormatada}</td>
-                    <td>
-                        <button class="btn btn-sm btn-primary view-btn" data-id="${registro.ID}" title="Visualizar">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                        <button class="btn btn-sm btn-warning edit-btn" data-id="${registro.ID}" title="Editar">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger delete-btn" data-id="${registro.ID}" title="Excluir">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                return (
+                  <tr 
+                    key={registro.ID} 
+                    data-id={registro.ID}
+                    className="border-b border-gray-200 hover:bg-yellow-50 transition"
+                  >
+                    <td className="px-4 py-3">{registro.ID}</td>
+                    <td className="px-4 py-3">{registro['Serventia'] || '—'}</td>
+                    <td className="px-4 py-3">{registro['Responsável'] || '—'}</td>
+                    <td className="px-4 py-3">
+                      <span className={registro['Participação'] === 'Não' ? 'text-red-600' : 'text-green-600'}>
+                        {registro['Participação'] || 'Sim'}
+                      </span>
                     </td>
-                `;
-                
-                registrosTableBody.appendChild(tr);
-            });
-            
-            // Adicionar event listeners para botões de ação
-            addActionButtonListeners();
-        }
-        
-        // Adicionar event listeners para botões de ação
-        function addActionButtonListeners() {
-            // Botões de visualização
-            document.querySelectorAll('.view-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    viewRegistro(this.getAttribute('data-id'));
-                });
-            });
-            
-            // Botões de edição
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    editRegistro(this.getAttribute('data-id'));
-                });
-            });
-            
-            // Botões de exclusão
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    showDeleteConfirmation(this.getAttribute('data-id'));
-                });
-            });
-        }
-        
-        // Função para destacar uma linha
-        function highlightRow(id) {
-            const rows = registrosTableBody.querySelectorAll('tr');
-            for (const row of rows) {
-                if (row.getAttribute('data-id') === id.toString()) {
-                    row.classList.add('highlight-row');
-                    row.scrollIntoView({behavior: 'smooth', block: 'center'});
-                    break;
-                }
-            }
-        }
-        
-        // Visualizar registro
-        async function viewRegistro(id) {
-            try {
-                showLoading();
-                
-                console.log(`Carregando detalhes do registro #${id}`);
-                
-                const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                hideLoading();
-                
-                if (result.success && result.data) {
-                    // Preencher modal (somente leitura)
-                    fillModalWithData(result.data, true);
-                    
-                    // Atualizar título
-                    document.getElementById('registroModalLabel').textContent = `Visualizar Registro #${id}`;
-                    
-                    // Esconder botão de salvar
-                    document.getElementById('salvarEdicaoBtn').style.display = 'none';
-                    
-                    // Mostrar modal
-                    const modal = new bootstrap.Modal(document.getElementById('registroModal'));
-                    modal.show();
-                } else {
-                    throw new Error(result.message || 'Erro ao carregar registro');
-                }
-            } catch (error) {
-                hideLoading();
-                console.error('Erro ao visualizar registro:', error);
-                showToast(`Erro ao visualizar: ${error.message}`, 'error');
-            }
-        }
-        
-        // Editar registro
-        async function editRegistro(id) {
-            try {
-                showLoading();
-                
-                console.log(`Carregando registro #${id} para edição`);
-                
-                const response = await fetch(`${API_URL}?action=getRegistro&id=${id}`);
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                hideLoading();
-                
-                if (result.success && result.data) {
-                    // Preencher modal (editável)
-                    fillModalWithData(result.data, false);
-                    
-                    // Atualizar título
-                    document.getElementById('registroModalLabel').textContent = `Editar Registro #${id}`;
-                    
-                    // Mostrar botão de salvar
-                    const salvarBtn = document.getElementById('salvarEdicaoBtn');
-                    salvarBtn.style.display = 'block';
-                    salvarBtn.setAttribute('data-id', id);
-                    
-                    // Mostrar modal
-                    const modal = new bootstrap.Modal(document.getElementById('registroModal'));
-                    modal.show();
-                } else {
-                    throw new Error(result.message || 'Erro ao carregar registro');
-                }
-            } catch (error) {
-                hideLoading();
-                console.error('Erro ao editar registro:', error);
-                showToast(`Erro ao editar: ${error.message}`, 'error');
-            }
-        }
-        
-        // Preencher modal com dados
-        function fillModalWithData(data, readonly) {
-            const modalBody = document.querySelector('#registroModal .modal-body');
-            
-            // Calcular total de registros
-            const totalRegistros = (
-                parseInt(data['Registros Nascimento'] || 0) +
-                parseInt(data['Vias Emitidas'] || 0) +
-                parseInt(data['Averbações Paternidade'] || 0) +
-                parseInt(data['Retificações'] || 0) +
-                parseInt(data['Registros Tardios'] || 0) +
-                parseInt(data['Restaurações'] || 0)
-            );
-            
-            // Formatar data
-            let dataFormatada = 'N/A';
-            if (data['Timestamp']) {
-                const timestamp = new Date(data['Timestamp']);
-                dataFormatada = timestamp.toLocaleDateString('pt-BR') + ' ' + 
-                                timestamp.toLocaleTimeString('pt-BR');
-            }
-            
-            // Criar HTML do formulário
-            let html = `
-                <form id="editForm">
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label class="form-label">ID:</label>
-                            <input type="text" class="form-control" value="${data['ID']}" readonly>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Protocolo:</label>
-                            <input type="text" class="form-control" value="${data['Protocolo'] || ''}" readonly>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Data:</label>
-                            <input type="text" class="form-control" value="${dataFormatada}" readonly>
-                        </div>
-                    </div>
-                    
-                    <h5 class="mt-3 mb-3 border-bottom pb-2">Dados da Serventia</h5>
-                    <div class="row mb-3">
-                        <div class="col-md-8">
-                            <label class="form-label">Serventia:</label>
-                            <input type="text" class="form-control" name="Serventia" value="${data['Serventia']}" ${readonly ? 'readonly' : ''}>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Telefone:</label>
-                            <input type="text" class="form-control" name="Telefone" value="${data['Telefone'] || ''}" ${readonly ? 'readonly' : ''}>
-                        </div>
-                    </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-8">
-                            <label class="form-label">Responsável:</label>
-                            <input type="text" class="form-control" name="Responsável" value="${data['Responsável']}" ${readonly ? 'readonly' : ''}>
-                        </div>
-                        <div class="col-md-4">
-                            <label class="form-label">Email:</label>
-                            <input type="email" class="form-control" name="Email" value="${data['Email'] || ''}" ${readonly ? 'readonly' : ''}>
-                        </div>
-                    </div>
-                    
-                    <h5 class="mt-3 mb-3 border-bottom pb-2">Participação</h5>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label class="form-label">Participou:</label>
-                            <select class="form-select" name="Participação" ${readonly ? 'disabled' : ''} id="modal-participacao">
-                                <option value="Sim" ${data['Participação'] !== 'Não' ? 'selected' : ''}>Sim</option>
-                                <option value="Não" ${data['Participação'] === 'Não' ? 'selected' : ''}>Não</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Data de Início:</label>
-                            <input type="date" class="form-control" name="Data de Início" value="${data['Data de Início'] || ''}" ${readonly ? 'readonly' : ''}>
-                        </div>
-                    </div>
-            `;
-            
-            // Campos para participação Sim
-            if (data['Participação'] !== 'Não') {
-                html += `
-                    <div id="modal-campos-sim">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Classificação:</label>
-                                <select class="form-select" name="Classificação" ${readonly ? 'disabled' : ''}>
-                                    <option value="" ${!data['Classificação'] ? 'selected' : ''}>Selecione...</option>
-                                    <option value="Integral" ${data['Classificação'] === 'Integral' ? 'selected' : ''}>Integral - Todos os dias</option>
-                                    <option value="Parcial" ${data['Classificação'] === 'Parcial' ? 'selected' : ''}>Parcial - Alguns dias</option>
-                                    <option value="Pontual" ${data['Classificação'] === 'Pontual' ? 'selected' : ''}>Pontual - Ação específica</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Total de Registros:</label>
-                                <input type="text" class="form-control" value="${totalRegistros}" readonly>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Ações Realizadas:</label>
-                            <textarea class="form-control" name="Ações Realizadas" rows="3" ${readonly ? 'readonly' : ''}>${data['Ações Realizadas'] || ''}</textarea>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Públicos Atendidos:</label>
-                            <textarea class="form-control" name="Públicos Atendidos" rows="2" ${readonly ? 'readonly' : ''}>${data['Públicos Atendidos'] || ''}</textarea>
-                        </div>
-                        
-                        <h5 class="mt-3 mb-3 border-bottom pb-2">Dados Quantitativos</h5>
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">2ª Vias Emitidas:</label>
-                                <input type="number" class="form-control" name="Vias Emitidas" 
-                                       value="${data['Vias Emitidas'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Registros de Nascimento:</label>
-                                <input type="number" class="form-control" name="Registros Nascimento" 
-                                       value="${data['Registros Nascimento'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Averbações de Paternidade:</label>
-                                <input type="number" class="form-control" name="Averbações Paternidade" 
-                                       value="${data['Averbações Paternidade'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                            </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label class="form-label">Retificações:</label>
-                                <input type="number" class="form-control" name="Retificações" 
-                                       value="${data['Retificações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Registros Tardios:</label>
-                                <input type="number" class="form-control" name="Registros Tardios" 
-                                       value="${data['Registros Tardios'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Restaurações:</label>
-                                <input type="number" class="form-control" name="Restaurações" 
-                                       value="${data['Restaurações'] || 0}" min="0" ${readonly ? 'readonly' : ''}>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <label class="form-label">Tags/Palavras-chave:</label>
-                            <input type="text" class="form-control" name="Tags" value="${data['Tags'] || ''}" ${readonly ? 'readonly' : ''}>
-                        </div>
-                    </div>
-                `;
-            } else {
-                html += `
-                    <div id="modal-campos-nao">
-                        <div class="mb-3">
-                            <label class="form-label">Motivo da Não Participação:</label>
-                            <input type="text" class="form-control" name="Motivo Não Participação" 
-                                   value="${data['Motivo Não Participação'] || ''}" ${readonly ? 'readonly' : ''}>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            // Observações (comum a ambos os casos)
-            html += `
-                <div class="mb-3">
-                    <label class="form-label">Observações:</label>
-                    <textarea class="form-control" name="Observações" rows="3" ${readonly ? 'readonly' : ''}>${data['Observações'] || ''}</textarea>
+                    <td className="px-4 py-3">{totalRegistros}</td>
+                    <td className="px-4 py-3">{dataFormatada}</td>
+                    <td className="px-4 py-3 flex gap-1">
+                      <button
+                        className="p-1 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                        onClick={() => handleViewRegistro(registro.ID)}
+                        title="Visualizar"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </button>
+                      <button
+                        className="p-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition"
+                        onClick={() => handleEditRegistro(registro.ID)}
+                        title="Editar"
+                      >
+                        <Edit2 className="h-4 w-4" />
+                      </button>
+                      <button
+                        className="p-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                        onClick={() => handleDeleteClick(registro.ID)}
+                        title="Excluir"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="bg-blue-50 text-blue-700 p-4 rounded-md border border-blue-200">
+          <Info className="inline mr-2 h-5 w-5" />
+          Nenhum registro encontrado.
+        </div>
+      )}
+    </div>
+  );
+  
+  // Componente para o sistema de notificações toast
+  const Toast = ({ id, message, type, onClose }) => {
+    let bgColor, icon;
+    
+    switch (type) {
+      case 'success':
+        bgColor = 'bg-green-500';
+        icon = <CheckCircle className="h-5 w-5" />;
+        break;
+      case 'error':
+        bgColor = 'bg-red-500';
+        icon = <AlertCircle className="h-5 w-5" />;
+        break;
+      default:
+        bgColor = 'bg-blue-500';
+        icon = <Info className="h-5 w-5" />;
+    }
+    
+    return (
+      <div className={`flex items-center text-white p-3 rounded-md shadow-md mb-3 ${bgColor}`}>
+        <div className="mr-3">{icon}</div>
+        <div className="flex-grow">{message}</div>
+        <button className="ml-3" onClick={() => onClose(id)}>
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+    );
+  };
+  
+  // Modal para visualização/edição de registro
+  const RegistroModal = () => {
+    if (!viewModal.show) return null;
+    
+    const registro = viewModal.data;
+    const readonly = viewModal.readonly;
+    
+    // Calcular total de registros
+    const totalRegistros = (
+      parseInt(registro['Registros Nascimento'] || 0) +
+      parseInt(registro['Vias Emitidas'] || 0) +
+      parseInt(registro['Averbações Paternidade'] || 0) +
+      parseInt(registro['Retificações'] || 0) +
+      parseInt(registro['Registros Tardios'] || 0) +
+      parseInt(registro['Restaurações'] || 0)
+    );
+    
+    // Formatar data
+    let dataFormatada = 'N/A';
+    if (registro['Timestamp']) {
+      try {
+        const data = new Date(registro['Timestamp']);
+        dataFormatada = data.toLocaleDateString('pt-BR') + ' ' + 
+                       data.toLocaleTimeString('pt-BR');
+      } catch (e) {
+        console.error('Erro ao formatar data:', e);
+      }
+    }
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+          <div className="bg-red-900 text-white px-6 py-4 flex justify-between items-center">
+            <h3 className="text-xl font-bold">
+              {readonly ? `Visualizar Registro #${registro.ID}` : `Editar Registro #${registro.ID}`}
+            </h3>
+            <button 
+              className="text-white hover:text-gray-200"
+              onClick={() => setViewModal({ show: false, data: null, readonly: true })}
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          
+          <div className="p-6">
+            <form id="editForm">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">ID:</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100" 
+                    value={registro.ID} 
+                    readOnly 
+                  />
                 </div>
-                </form>
-            `;
-            
-            modalBody.innerHTML = html;
-            
-            // Adicionar event listener para alternar campos (quando editável)
-            if (!readonly) {
-                const modalParticipacao = document.getElementById('modal-participacao');
-                if (modalParticipacao) {
-                    modalParticipacao.addEventListener('change', function() {
-                        const simCampos = document.getElementById('modal-campos-sim');
-                        const naoCampos = document.getElementById('modal-campos-nao');
-                        
-                        if (this.value === 'Sim') {
-                            if (simCampos) simCampos.style.display = 'block';
-                            if (naoCampos) naoCampos.style.display = 'none';
-                        } else {
-                            if (simCampos) simCampos.style.display = 'none';
-                            if (naoCampos) naoCampos.style.display = 'block';
-                        }
-                    });
-                }
-            }
-        }
-        
-        // Salvar edição de registro
-        async function saveRegistroEdit(id) {
-            try {
-                // Validar formulário
-                const form = document.getElementById('editForm');
-                if (!form) {
-                    throw new Error('Formulário não encontrado');
-                }
-                
-                // Desabilitar botão durante envio
-                const saveButton = document.getElementById('salvarEdicaoBtn');
-                saveButton.disabled = true;
-                saveButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Salvando...';
-                
-                showLoading();
-                
-                // Coletar dados do formulário
-                const formData = new FormData(form);
-                const data = {};
-                
-                for (let [key, value] of formData.entries()) {
-                    // Converter campos numéricos
-                    if (['Vias Emitidas', 'Registros Nascimento', 'Averbações Paternidade', 
-                         'Retificações', 'Registros Tardios', 'Restaurações'].includes(key)) {
-                        value = parseInt(value) || 0;
-                    }
-                    data[key] = value;
-                }
-                
-                // Adicionar ID para atualização
-                data.id = id;
-                
-                console.log(`Atualizando registro #${id}:`, data);
-                
-                // Enviar para a API
-                const response = await fetch(`${API_URL}?action=atualizarRegistro`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                hideLoading();
-                
-                if (result.success) {
-                    showToast('Registro atualizado com sucesso!', 'success');
-                    
-                    // Fechar modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('registroModal'));
-                    modal.hide();
-                    
-                    // Recarregar registros e destacar o atualizado
-                    loadRegistros().then(() => {
-                        highlightRow(id);
-                    });
-                } else {
-                    throw new Error(result.message || 'Erro ao atualizar registro');
-                }
-            } catch (error) {
-                hideLoading();
-                console.error('Erro ao atualizar registro:', error);
-                showToast(`Erro ao atualizar: ${error.message}`, 'error');
-            } finally {
-                // Restaurar botão
-                const saveButton = document.getElementById('salvarEdicaoBtn');
-                saveButton.disabled = false;
-                saveButton.innerHTML = 'Salvar Alterações';
-            }
-        }
-        
-        // Mostrar confirmação de exclusão
-        function showDeleteConfirmation(id) {
-            // Atualizar texto do modal
-            document.querySelector('#confirmDeleteModal .modal-body').innerHTML = `
-                <p><i class="fas fa-exclamation-triangle text-danger me-2"></i>Tem certeza que deseja excluir o registro <strong>#${id}</strong>?</p>
-                <p class="text-danger"><strong>Esta ação não pode ser desfeita.</strong></p>
-            `;
-            
-            // Atualizar botão de confirmação
-            const confirmBtn = document.getElementById('confirmDeleteBtn');
-            confirmBtn.setAttribute('data-id', id);
-            
-            // Mostrar modal
-            const modal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
-            modal.show();
-        }
-        
-        // Excluir registro
-        async function deleteRegistro(id) {
-            try {
-                // Desabilitar botão durante exclusão
-                const deleteButton = document.getElementById('confirmDeleteBtn');
-                deleteButton.disabled = true;
-                deleteButton.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Excluindo...';
-                
-                showLoading();
-                
-                console.log(`Excluindo registro #${id}`);
-                
-                const response = await fetch(`${API_URL}?action=excluirRegistro&id=${id}`, {
-                    method: 'GET'
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na requisição: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                hideLoading();
-                
-                if (result.success) {
-                    showToast('Registro excluído com sucesso!', 'success');
-                    
-                    // Fechar modal
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
-                    modal.hide();
-                    
-                    // Recarregar registros
-                    loadRegistros();
-                } else {
-                    throw new Error(result.message || 'Erro ao excluir registro');
-                }
-            } catch (error) {
-                hideLoading();
-                console.error('Erro ao excluir registro:', error);
-                showToast(`Erro ao excluir: ${error.message}`, 'error');
-            } finally {
-                // Restaurar botão
-                const deleteButton = document.getElementById('confirmDeleteBtn');
-                deleteButton.disabled = false;
-                deleteButton.innerHTML = 'Excluir';
-            }
-        }
-        
-        // Pesquisar registros
-        function searchRegistros() {
-            const searchTerm = searchInput.value.toLowerCase().trim();
-            
-            if (!searchTerm) {
-                loadRegistros();
-                return;
-            }
-            
-            const rows = registrosTableBody.querySelectorAll('tr');
-            
-            // Se não houver registros, carregar primeiro
-            if (rows.length === 0) {
-                loadRegistros().then(() => {
-                    filterRows(searchTerm);
-                });
-            } else {
-                filterRows(searchTerm);
-            }
-        }
-        
-        // Filtrar linhas de acordo com o termo de busca
-        function filterRows(searchTerm) {
-            let found = false;
-            const rows = registrosTableBody.querySelectorAll('tr');
-            
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                if (text.includes(searchTerm)) {
-                    row.style.display = '';
-                    highlightSearchTerm(row, searchTerm);
-                    found = true;
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-            
-            // Mostrar mensagem quando não há resultados
-            if (found) {
-                noRecordsMessage.classList.add('d-none');
-            } else {
-                noRecordsMessage.classList.remove('d-none');
-                noRecordsMessage.textContent = `Nenhum registro encontrado contendo "${searchTerm}".`;
-            }
-        }
-        
-        // Destacar termo de busca nas células
-        function highlightSearchTerm(row, term) {
-            const cells = row.querySelectorAll('td:not(:last-child)'); // Excluir coluna de ações
-            cells.forEach(cell => {
-                const text = cell.innerText;
-                if (text) {
-                    const regex = new RegExp(`(${term})`, 'gi');
-                    cell.innerHTML = text.replace(regex, '<mark>$1</mark>');
-                }
-            });
-        }
-        
-        // Mostrar overlay de carregamento
-        function showLoading() {
-            loadingOverlay.style.display = 'flex';
-        }
-        
-        // Esconder overlay de carregamento
-        function hideLoading() {
-            loadingOverlay.style.display = 'none';
-        }
-        
-        // Mostrar toast de notificação
-        function showToast(message, type) {
-            // Criar container se não existir
-            let toastContainer = document.querySelector('.toast-container');
-            if (!toastContainer) {
-                toastContainer = document.createElement('div');
-                toastContainer.className = 'toast-container';
-                document.body.appendChild(toastContainer);
-            }
-            
-            // Criar toast
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type} show`;
-            
-            // Cabeçalho do toast
-            const header = document.createElement('div');
-            header.className = 'toast-header';
-            
-            // Ícone baseado no tipo
-            let icon = '';
-            let title = '';
-            
-            switch (type) {
-                case 'success':
-                    icon = '<i class="fas fa-check-circle me-2"></i>';
-                    title = 'Sucesso';
-                    break;
-                case 'error':
-                    icon = '<i class="fas fa-exclamation-circle me-2"></i>';
-                    title = 'Erro';
-                    break;
-                case 'info':
-                    icon = '<i class="fas fa-info-circle me-2"></i>';
-                    title = 'Informação';
-                    break;
-                default:
-                    icon = '<i class="fas fa-bell me-2"></i>';
-                    title = 'Notificação';
-            }
-            
-            header.innerHTML = `
-                ${icon}<strong>${title}</strong>
-                <button type="button" class="btn-close btn-close-white ms-auto" aria-label="Fechar"></button>
-            `;
-            
-            // Corpo do toast
-            const body = document.createElement('div');
-            body.className = 'toast-body';
-            body.textContent = message;
-            
-            // Adicionar elementos ao toast
-            toast.appendChild(header);
-            toast.appendChild(body);
-            
-            // Adicionar toast ao container
-            toastContainer.appendChild(toast);
-            
-            // Adicionar evento para fechar o toast
-            const closeBtn = toast.querySelector('.btn-close');
-            closeBtn.addEventListener('click', () => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            });
-            
-            // Auto-fechar após 5 segundos
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 300);
-            }, 5000);
-        }
-    </script>
-</body>
-</html>
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">Protocolo:</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100" 
+                    value={registro.Protocolo || ''} 
+                    readOnly 
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">Data/Hora:</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border border-gray-300 rounded-md bg-gray-100" 
+                    value={dataFormatada} 
+                    readOnly 
+                  />
+                </div>
+              </div>
+              
+              <h4 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-200 mt-4">
+                Dados da Serventia
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+                <div className="md:col-span-8">
+                  <label className="block text-gray-700 font-semibold mb-2">Serventia:</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border border-gray-300 rounded-md" 
+                    name="Serventia" 
+                    defaultValue={registro.Serventia} 
+                    readOnly={readonly} 
+                  />
+                </div>
+                <div className="md:col-span-4">
+                  <label className="block text-gray-700 font-semibold mb-2">Telefone:</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border border-gray-300 rounded-md" 
+                    name="Telefone" 
+                    defaultValue={registro.Telefone || ''} 
+                    readOnly={readonly} 
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-4">
+                <div className="md:col-span-8">
+                  <label className="block text-gray-700 font-semibold mb-2">Responsável:</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border border-gray-300 rounded-md" 
+                    name="Responsavel" 
+                    defaultValue={registro.Responsável} 
+                    readOnly={readonly} 
+                  />
+                </div>
+                <div className="md:col-span-4">
+                  <label className="block text-gray-700 font-semibold mb-2">Email:</label>
+                  <input 
+                    type="email" 
+                    className="w-full p-2 border border-gray-300 rounded-md" 
+                    name="Email" 
+                    defaultValue={registro.Email || ''} 
+                    readOnly={readonly} 
+                  />
+                </div>
+              </div>
+              
+              <h4 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-200 mt-4">
+                Participação
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">Participou:</label>
+                  <select 
+                    className="w-full p-2 border border-gray-300 rounded-md" 
+                    name="Participacao" 
+                    defaultValue={registro.Participação || 'Sim'} 
+                    disabled={readonly}
+                  >
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-2">Data de Início:</label>
+                  <input 
+                    type="date" 
+                    className="w-full p-2 border border-gray-300 rounded-md" 
+                    name="Data de Início" 
+                    defaultValue={registro['Data de Início'] || ''} 
+                    readOnly={readonly} 
+                  />
+                </div>
+              </div>
+              
+              {registro.Participação !== 'Não' ? (
+                <div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Classificação:</label>
+                      <select 
+                        className="w-full p-2 border border-gray-300 rounded-md" 
+                        name="Classificação" 
+                        defaultValue={registro.Classificação || ''} 
+                        disabled={readonly}
+                      >
+                        <option value="">Selecione...</option>
+                        <option value="Integral">Integral - Todos os dias</option>
+                        <option value="Parcial">Parcial - Alguns dias</option>
+                        <option value="Pontual">Pontual - Ação específica</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Total de Registros:</label>
+                      <input 
+                        type="text" 
+                        className="w-full p-2 border border-gray-300 rounded-md bg-gray-100" 
+                        value={totalRegistros} 
+                        readOnly 
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label className="block text-gray-700 font-semibold mb-2">Ações Realizadas:</label>
+                    <textarea 
+                      className="w-full p-2 border border-gray-300 rounded-md" 
+                      name="Ações Realizadas" 
+                      defaultValue={registro['Ações Realizadas'] || ''} 
+                      readOnly={readonly}
+                      rows="3"
+                    ></textarea>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label className="block text-gray-700 font-semibold mb-2">Públicos Atendidos:</label>
+                    <textarea 
+                      className="w-full p-2 border border-gray-300 rounded-md" 
+                      name="Públicos Atendidos" 
+                      defaultValue={registro['Públicos Atendidos'] || ''} 
+                      readOnly={readonly}
+                      rows="2"
+                    ></textarea>
+                  </div>
+                  
+                  <h4 className="text-lg font-semibold mb-3 pb-2 border-b border-gray-200 mt-4">
+                    Dados Quantitativos
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">2ª Vias Emitidas:</label>
+                      <input 
+                        type="number" 
+                        className="w-full p-2 border border-gray-300 rounded-md" 
+                        name="Vias Emitidas" 
+                        defaultValue={registro['Vias Emitidas'] || 0} 
+                        readOnly={readonly}
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Registros de Nascimento:</label>
+                      <input 
+                        type="number" 
+                        className="w-full p-2 border border-gray-300 rounded-md" 
+                        name="Registros Nascimento" 
+                        defaultValue={registro['Registros Nascimento'] || 0} 
+                        readOnly={readonly}
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Averbações de Paternidade:</label>
+                      <input 
+                        type="number" 
+                        className="w-full p-2 border border-gray-300 rounded-md" 
+                        name="Averbações Paternidade" 
+                        defaultValue={registro['Averbações Paternidade'] || 0} 
+                        readOnly={readonly}
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Retificações:</label>
+                      <input 
+                        type="number" 
+                        className="w-full p-2 border border-gray-300 rounded-md" 
+                        name="Retificações" 
+                        defaultValue={registro['Retificações'] || 0} 
+                        readOnly={readonly}
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Registros Tardios:</label>
+                      <input 
+                        type="number" 
+                        className="w-full p-2 border border-gray-300 rounded-md" 
+                        name="Registros Tardios" 
+                        defaultValue={registro['Registros Tardios'] || 0} 
+                        readOnly={readonly}
+                        min="0"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-gray-700 font-semibold mb-2">Restaurações:</label>
+                      <input 
+                        type="number" 
+                        className="w-full p-2 border border-gray-300 rounded-md" 
+                        name="Restaurações" 
+                        defaultValue={registro['Restaurações'] || 0} 
+                        readOnly={readonly}
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <label className="block text-gray-700 font-semibold mb-2">Tags/Palavras-chave:</label>
+                    <input 
+                      type="text" 
+                      className="w-full p-2 border border-gray-300 rounded-md" 
+                      name="Tags" 
+                      defaultValue={registro['Tags'] || ''} 
+                      readOnly={readonly}
+                    />
+                  </div>
+                </div>
+              ) : (
+                <div className="mb-4">
+                  <label className="block text-gray-700 font-semibold mb-2">Motivo da Não Participação:</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border border-gray-300 rounded-md" 
+                    name="Motivo Não Participação" 
+                    defaultValue={registro['Motivo Não Participação'] || ''} 
+                    readOnly={readonly}
+                  />
+                </div>
+              )}
+              
+              <div className="mb-4">
+                <label className="block text-gray-700 font-semibold mb-2">Observações:</label>
+                <textarea 
+                  className="w-full p-2 border border-gray-300 rounded-md" 
+                  name="Observações" 
+                  defaultValue={registro['Observações'] || ''} 
+                  readOnly={readonly}
+                  rows="3"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+          
+          <div className="bg-gray-100 px-6 py-4 flex justify-end gap-2">
+            <button 
+              className="py-2 px-4 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition"
+              onClick={() => setViewModal({ show: false, data: null, readonly: true })}
+            >
+              Fechar
+            </button>
+            {!readonly && (
+              <button 
+                className="py-2 px-4 bg-red-900 text-white rounded-md hover:bg-red-700 transition"
+                onClick={handleSaveEdit}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <i className="mr-2 animate-spin"></i>Salvando...
+                  </>
+                ) : (
+                  <>
+                    <Save className="inline mr-2 h-5 w-5" />
+                    Salvar Alterações
+                  </>
+                )}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  // Modal para confirmação de exclusão
+  const DeleteConfirmModal = () => {
+    if (!deleteModal.show) return null;
+    
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
+          <div className="bg-red-600 text-white px-6 py-4 flex justify-between items-center">
+            <h3 className="text-xl font-bold">Confirmar Exclusão</h3>
+            <button 
+              className="text-white hover:text-gray-200"
+              onClick={() => setDeleteModal({ show: false, id: null })}
+            >
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          
+          <div className="p-6">
+            <div className="flex items-start">
+              <AlertCircle className="text-red-600 mr-4 h-10 w-10 flex-shrink-0" />
+              <div>
+                <p className="mb-2">
+                  Tem certeza que deseja excluir o registro <strong>#{deleteModal.id}</strong>?
+                </p>
+                <p className="text-red-600 font-semibold">
+                  Esta ação não pode ser desfeita.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-gray-100 px-6 py-4 flex justify-end gap-2">
+            <button 
+              className="py-2 px-4 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition"
+              onClick={() => setDeleteModal({ show: false, id: null })}
+            >
+              Cancelar
+            </button>
+            <button 
+              className="py-2 px-4 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+              onClick={handleDeleteConfirm}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <i className="mr-2 animate-spin"></i>Excluindo...
+                </>
+              ) : (
+                <>
+                  <Trash2 className="inline mr-2 h-5 w-5" />
+                  Excluir
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+  
+  return (
+    <div className="min-h-screen bg-gray-100 p-4">
+      <header className="bg-white py-4 px-6 shadow-md rounded-lg flex flex-col md:flex-row items-center justify-between mb-6">
+        <div className="flex items-center mb-4 md:mb-0">
+          <img src="/api/placeholder/200/70" alt="COGEX Logo" className="h-16" />
+          <h1 className="text-2xl font-bold text-red-900 ml-4 hidden md:block">
+            COGEX - Semana Registre-se
+          </h1>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-700">Sistema de Gestão de Registros</h2>
+        </div>
+      </header>
+      
+      {/* Tabs de navegação */}
+      <div className="bg-white rounded-lg shadow-md mb-6">
+        <div className="flex border-b">
+          <button
+            className={`px-4 py-3 font-medium ${
+              activeTab === 'form'
+                ? 'border-b-2 border-red-900 text-red-900'
+                : 'text-gray-600 hover:text-red-900'
+            }`}
+            onClick={() => setActiveTab('form')}
+          >
+            <FileText className="inline mr-2 h-5 w-5" />
+            Novo Registro
+          </button>
+          <button
+            className={`px-4 py-3 font-medium ${
+              activeTab === 'list'
+                ? 'border-b-2 border-red-900 text-red-900'
+                : 'text-gray-600 hover:text-red-900'
+            }`}
+            onClick={() => setActiveTab('list')}
+          >
+            <List className="inline mr-2 h-5 w-5" />
+            Consultar Registros
+          </button>
+        </div>
+      </div>
+      
+      {/* Conteúdo das abas */}
+      <div className="tab-content">
+        {activeTab === 'form' ? <FormTab /> : <ListTab />}
+      </div>
+      
+      {/* Sistema de toast notifications */}
+      <div className="fixed top-5 right-5 z-50">
+        {toasts.map(toast => (
+          <Toast
+            key={toast.id}
+            id={toast.id}
+            message={toast.message}
+            type={toast.type}
+            onClose={removeToast}
+          />
+        ))}
+      </div>
+      
+      {/* Modais */}
+      <RegistroModal />
+      <DeleteConfirmModal />
+      
+      {/* Botão voltar ao topo */}
+      <button
+        className="fixed bottom-5 right-5 bg-red-900 text-white p-3 rounded-full shadow-lg hover:bg-red-700 transition"
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        <ArrowUp className="h-5 w-5" />
+      </button>
+    </div>
+  );
+};
+
+// Configuração do componente PostgreSQL API
+const modifyForPostgreSQL = () => {
+  // Modificar a forma como os dados são enviados à API
+  const API_BASE_URL = 'https://cogex-api-URL.a.run.app/api';
+  
+  const transformDataForPostgreSQL = (data) => {
+    // Ajustar formato dos dados para o backend Python/PostgreSQL
+    return {
+      Serventia: data.serventia,
+      Responsavel: data.responsavel,
+      Email: data.email,
+      Telefone: data.telefone,
+      Participação: data.participacao,
+      "Data de Início": data.dataInicio,
+      Classificação: data.classificacao,
+      "Ações Realizadas": data.acoesRealizadas,
+      "Públicos Atendidos": data.publicosAtendidos,
+      "Vias Emitidas": data.viasEmitidas,
+      "Registros Nascimento": data.registrosNascimento,
+      "Averbações Paternidade": data.averacoesPaternidade,
+      "Retificações": data.retificacoes,
+      "Registros Tardios": data.registrosTardios,
+      "Restaurações": data.restauracoes,
+      "Motivo Não Participação": data.motivoNao === 'Outros' 
+        ? `Outros: ${data.outroMotivo}` 
+        : data.motivoNao,
+      "Tags": data.tags,
+      "Observações": data.observacoes
+    };
+  };
+  
+  // Função adaptada para enviar dados para a API PostgreSQL
+  const saveRegistro = async (formData) => {
+    const transformedData = transformDataForPostgreSQL(formData);
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/registrar`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transformedData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Erro ao salvar registro:', error);
+      throw error;
+    }
+  };
+  
+  // Função adaptada para carregar registros da API PostgreSQL
+  const loadRegistros = async (filtro = '') => {
+    try {
+      const url = filtro 
+        ? `${API_BASE_URL}/consultar?filtro=${encodeURIComponent(filtro)}`
+        : `${API_BASE_URL}/consultar`;
+      
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Erro ao carregar registros:', error);
+      throw error;
+    }
+  };
+  
+  // Função adaptada para obter um registro específico
+  const getRegistro = async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/getRegistro?id=${id}`);
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Erro ao obter registro:', error);
+      throw error;
+    }
+  };
+  
+  // Função adaptada para atualizar um registro
+  const updateRegistro = async (id, formData) => {
+    const transformedData = transformDataForPostgreSQL(formData);
+    transformedData.id = id;
+    
+    try {
+      const response = await fetch(`${API_BASE_URL}/atualizarRegistro`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transformedData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Erro ao atualizar registro:', error);
+      throw error;
+    }
+  };
+  
+  // Função adaptada para excluir um registro
+  const deleteRegistro = async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/excluirRegistro?id=${id}`);
+      
+      if (!response.ok) {
+        throw new Error(`Erro HTTP: ${response.status}`);
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Erro ao excluir registro:', error);
+      throw error;
+    }
+  };
+  
+  return {
+    saveRegistro,
+    loadRegistros,
+    getRegistro,
+    updateRegistro,
+    deleteRegistro
+  };
+};
+
+// Exportar o componente
+export default CogexRegistreApp;
